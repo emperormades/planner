@@ -1,0 +1,4 @@
+project_id = "planner"
+
+[functions.mcp]
+verify_jwt = false
