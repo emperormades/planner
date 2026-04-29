@@ -1,0 +1,96 @@
+-- ════════════════════════════════════════════════════════════════
+-- Planner EUA 2026 — Setup completo (schema + RLS)
+-- Idempotente: pode rodar em projeto novo ou re-rodar com segurança.
+-- Modelo: single-user. Acesso liberado para qualquer sessão autenticada.
+-- ════════════════════════════════════════════════════════════════
+
+-- ──────────────── METAS ────────────────
+CREATE TABLE IF NOT EXISTS public.metas (
+  id          bigserial PRIMARY KEY,
+  nome        text        NOT NULL,
+  descricao   text,
+  categoria   text        NOT NULL DEFAULT 'Outro',
+  prazo       date,
+  progresso   int         NOT NULL DEFAULT 0 CHECK (progresso BETWEEN 0 AND 100),
+  status      text        NOT NULL DEFAULT 'ativa'
+                          CHECK (status IN ('ativa','concluida','pausada')),
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_metas_status     ON public.metas (status);
+CREATE INDEX IF NOT EXISTS idx_metas_created_at ON public.metas (created_at DESC);
+
+-- ──────────────── GASTOS ────────────────
+CREATE TABLE IF NOT EXISTS public.gastos (
+  id          bigserial PRIMARY KEY,
+  descricao   text         NOT NULL,
+  valor       numeric(12,2) NOT NULL CHECK (valor >= 0),
+  categoria   text         NOT NULL DEFAULT 'Outro',
+  mes         int          NOT NULL CHECK (mes BETWEEN 1 AND 12),
+  ano         int          NOT NULL CHECK (ano BETWEEN 2024 AND 2040),
+  created_at  timestamptz  NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_gastos_periodo    ON public.gastos (ano DESC, mes DESC);
+CREATE INDEX IF NOT EXISTS idx_gastos_categoria  ON public.gastos (categoria);
+CREATE INDEX IF NOT EXISTS idx_gastos_created_at ON public.gastos (created_at DESC);
+
+-- ──────────────── CERTIFICAÇÕES ────────────────
+CREATE TABLE IF NOT EXISTS public.certificacoes (
+  id          bigserial PRIMARY KEY,
+  nome        text        NOT NULL,
+  area        text        NOT NULL DEFAULT 'Outro',
+  prioridade  text        NOT NULL DEFAULT 'media'
+                          CHECK (prioridade IN ('alta','media','baixa')),
+  prazo       date,
+  status      text        NOT NULL DEFAULT 'planejada'
+                          CHECK (status IN ('planejada','em_andamento','concluida')),
+  notas       text,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_certs_status     ON public.certificacoes (status);
+CREATE INDEX IF NOT EXISTS idx_certs_created_at ON public.certificacoes (created_at DESC);
+
+-- ──────────────── LIVROS ────────────────
+CREATE TABLE IF NOT EXISTS public.livros (
+  id          bigserial PRIMARY KEY,
+  titulo      text        NOT NULL,
+  autor       text,
+  categoria   text        NOT NULL DEFAULT 'Outro',
+  status      text        NOT NULL DEFAULT 'quero_ler'
+                          CHECK (status IN ('quero_ler','lendo','lido')),
+  notas       text,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_livros_status     ON public.livros (status);
+CREATE INDEX IF NOT EXISTS idx_livros_created_at ON public.livros (created_at DESC);
+
+-- ════════════════════════════════════════════════════════════════
+-- RLS — habilita e restringe a usuários autenticados
+-- (single-user: qualquer sessão autenticada lê/escreve tudo)
+-- ════════════════════════════════════════════════════════════════
+ALTER TABLE public.metas         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.gastos        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.certificacoes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.livros        ENABLE ROW LEVEL SECURITY;
+
+-- Limpa policies antigas (caso já existam de tentativas anteriores)
+DROP POLICY IF EXISTS "allow all"       ON public.metas;
+DROP POLICY IF EXISTS "auth_all_metas"  ON public.metas;
+DROP POLICY IF EXISTS "allow all"       ON public.gastos;
+DROP POLICY IF EXISTS "auth_all_gastos" ON public.gastos;
+DROP POLICY IF EXISTS "allow all"       ON public.certificacoes;
+DROP POLICY IF EXISTS "auth_all_certs"  ON public.certificacoes;
+DROP POLICY IF EXISTS "allow all"       ON public.livros;
+DROP POLICY IF EXISTS "auth_all_livros" ON public.livros;
+
+-- Cria policies novas — só authenticated
+CREATE POLICY "auth_all_metas"  ON public.metas
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_gastos" ON public.gastos
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_certs"  ON public.certificacoes
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_livros" ON public.livros
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
