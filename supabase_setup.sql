@@ -63,6 +63,19 @@ CREATE TABLE IF NOT EXISTS public.livros (
 CREATE INDEX IF NOT EXISTS idx_livros_status     ON public.livros (status);
 CREATE INDEX IF NOT EXISTS idx_livros_created_at ON public.livros (created_at DESC);
 
+-- ──────────────── AULAS (Curso SQL) ────────────────
+-- Progresso e notas das aulas do SQL Impressionador.
+-- Catálogo (módulos + nomes das aulas) fica no JS — não armazenado.
+-- Cada linha = uma aula que teve status definido ou nota anexada.
+CREATE TABLE IF NOT EXISTS public.aulas (
+  id          bigserial PRIMARY KEY,
+  codigo      text        UNIQUE NOT NULL,        -- F0, F1, F2, ...
+  status      text        CHECK (status IN ('wip','done')),
+  notas       text,
+  updated_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_aulas_status ON public.aulas (status);
+
 -- ════════════════════════════════════════════════════════════════
 -- RLS — habilita e restringe a usuários autenticados
 -- (single-user: qualquer sessão autenticada lê/escreve tudo)
@@ -71,6 +84,7 @@ ALTER TABLE public.metas         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.gastos        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificacoes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.livros        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.aulas         ENABLE ROW LEVEL SECURITY;
 
 -- Limpa policies antigas (caso já existam de tentativas anteriores)
 DROP POLICY IF EXISTS "allow all"       ON public.metas;
@@ -81,6 +95,7 @@ DROP POLICY IF EXISTS "allow all"       ON public.certificacoes;
 DROP POLICY IF EXISTS "auth_all_certs"  ON public.certificacoes;
 DROP POLICY IF EXISTS "allow all"       ON public.livros;
 DROP POLICY IF EXISTS "auth_all_livros" ON public.livros;
+DROP POLICY IF EXISTS "auth_all_aulas"  ON public.aulas;
 
 -- Cria policies novas — só authenticated
 CREATE POLICY "auth_all_metas"  ON public.metas
@@ -93,4 +108,7 @@ CREATE POLICY "auth_all_certs"  ON public.certificacoes
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_livros" ON public.livros
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_aulas"  ON public.aulas
   FOR ALL TO authenticated USING (true) WITH CHECK (true);

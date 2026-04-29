@@ -244,6 +244,63 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
 .toast.show{opacity:1;transform:translateY(0);}
 .toast.err{border-color:var(--red-light);color:var(--red-light);}
 
+/* ── CURSO SQL ── */
+.curso-search{position:relative;margin-bottom:12px;}
+.curso-search input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--line);padding:11px 14px 11px 36px;color:var(--paper);font-family:var(--serif);font-size:14px;outline:none;transition:border-color .2s;border-radius:0;}
+.curso-search input:focus{border-color:var(--gold);}
+.curso-search input::placeholder{color:var(--muted);}
+.curso-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:var(--display);font-style:italic;color:var(--gold-dim);font-size:14px;pointer-events:none;}
+.curso-cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+.curso-cats::-webkit-scrollbar{display:none;}
+.cat-chip{flex-shrink:0;font-family:var(--mono);font-size:9.5px;padding:6px 12px;border:1px solid var(--line);background:transparent;color:var(--muted-2);cursor:pointer;letter-spacing:0.18em;text-transform:uppercase;white-space:nowrap;transition:all .15s;}
+.cat-chip:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.cat-chip.on{color:var(--ink);}
+.curso-mod-card{background:rgba(16,16,24,0.5);border:1px solid var(--line);padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;position:relative;transition:border-color .2s;}
+.curso-mod-card:hover{border-color:var(--line-2);}
+.curso-mod-card::before{content:'';position:absolute;top:0;left:0;width:1px;height:0;background:var(--gold);transition:height .3s;}
+.curso-mod-card:hover::before{height:100%;}
+.curso-mod-left{flex:1;min-width:0;}
+.curso-mod-num{font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.15em;margin-bottom:3px;}
+.curso-mod-title{font-family:var(--display);font-size:16px;font-weight:600;color:var(--paper);line-height:1.2;margin-bottom:6px;}
+.curso-mod-meta{display:flex;align-items:center;gap:8px;}
+.cat-dot{width:6px;height:6px;flex-shrink:0;}
+.curso-mod-sub{font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:0.05em;}
+.curso-mod-ring{flex-shrink:0;width:42px;height:42px;}
+.ring-bg-c{fill:none;stroke:rgba(201,168,76,0.15);stroke-width:2.5;}
+.ring-fg-c{fill:none;stroke-width:2.5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .4s;}
+.ring-text{font-family:var(--mono);font-size:9px;}
+.curso-back{background:transparent;border:1px solid var(--line);color:var(--muted-2);font-family:var(--mono);font-size:10px;letter-spacing:0.15em;padding:7px 14px;cursor:pointer;text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:6px;transition:all .2s;}
+.curso-back:hover{border-color:var(--gold);color:var(--gold);}
+.curso-mod-head{margin-bottom:14px;}
+.curso-mod-head h2{font-family:var(--display);font-size:22px;font-weight:600;color:var(--paper);line-height:1.2;margin-bottom:6px;}
+.curso-mod-head h2 em{font-style:italic;color:var(--gold);font-weight:400;}
+.curso-mod-cat-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;padding:3px 8px;text-transform:uppercase;}
+.curso-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap;}
+.curso-toolbar-info{font-family:var(--mono);font-size:9.5px;color:var(--gold-dim);letter-spacing:0.18em;text-transform:uppercase;}
+.curso-toggle{font-family:var(--mono);font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--muted-2);padding:6px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s;}
+.curso-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.curso-toggle .toggle-dot{width:6px;height:6px;background:var(--muted);transition:background .2s;}
+.curso-toggle.on .toggle-dot{background:var(--gold);}
+.curso-toggle.on{color:var(--gold);border-color:var(--gold);}
+.aula-card{background:rgba(16,16,24,0.4);border:1px solid var(--line);padding:11px 14px;margin-bottom:8px;}
+.aula-top{display:flex;align-items:center;gap:10px;}
+.aula-fcode{font-family:var(--mono);font-size:9.5px;color:var(--gold-dim);letter-spacing:0.1em;flex-shrink:0;min-width:38px;}
+.aula-name{flex:1;font-family:var(--serif);font-size:14px;line-height:1.3;color:var(--paper-dim);}
+.aula-name.done{color:var(--green-light);text-decoration:line-through;text-decoration-color:rgba(143,176,154,0.4);}
+.aula-name.wip{color:var(--gold);}
+.aula-note-btn{font-family:var(--display);font-style:italic;font-size:18px;padding:4px 8px;border:none;background:transparent;cursor:pointer;color:var(--muted);flex-shrink:0;line-height:1;transition:color .15s;}
+.aula-note-btn.has{color:var(--gold);}
+.aula-note-btn:hover{color:var(--gold);}
+.aula-status-row{display:flex;gap:6px;margin-top:10px;}
+.aula-status-row.hidden{display:none;}
+.s-btn{flex:1;padding:7px;font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted-2);transition:all .15s;}
+.s-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.s-btn.active.s-wip{background:rgba(184,138,46,0.1);border-color:var(--gold);color:var(--gold);}
+.s-btn.active.s-done{background:rgba(106,139,90,0.1);border-color:var(--green-light);color:var(--green-light);}
+.curso-empty{text-align:center;padding:40px 20px;color:var(--muted);font-family:var(--serif);}
+.note-meta{font-family:var(--mono);font-size:10px;color:var(--gold-dim);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;}
+.note-aula-name{font-family:var(--display);font-size:18px;font-weight:600;color:var(--paper);line-height:1.3;margin-bottom:14px;}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -384,6 +441,48 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     </div>
   </div>
 
+  <!-- CURSO SQL -->
+  <div id="page-curso" class="page">
+    <!-- estado: lista de módulos -->
+    <div id="curso-home">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Concluídas</div><div class="stat-value italic green" id="cs-done">0</div><div class="stat-sub" id="cs-done-sub">de 828 aulas</div></div>
+        <div class="stat-card"><div class="stat-label">Em andamento</div><div class="stat-value italic amber" id="cs-wip">0</div></div>
+        <div class="stat-card full"><div class="stat-label">Progresso geral</div><div class="stat-value italic" id="cs-pct">0%</div><div class="progress-bar" style="margin-top:10px"><div class="progress-fill" id="cs-bar" style="width:0%"></div></div></div>
+      </div>
+
+      <div class="curso-search">
+        <span class="curso-search-icon">⌕</span>
+        <input type="text" id="curso-srch" placeholder="Buscar módulo ou aula…" oninput="filterCurso()">
+      </div>
+
+      <div class="curso-cats" id="curso-cats"></div>
+
+      <div id="curso-mod-list"></div>
+    </div>
+
+    <!-- estado: detalhe do módulo -->
+    <div id="curso-detail" style="display:none">
+      <button class="curso-back" onclick="closeCursoMod()">← Módulos</button>
+      <div class="curso-mod-head">
+        <h2 id="cd-title">—</h2>
+        <span class="curso-mod-cat-badge" id="cd-cat-badge"></span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Feito</div><div class="stat-value italic gold" id="cd-pct">0%</div></div>
+        <div class="stat-card"><div class="stat-label">Concluídas</div><div class="stat-value italic green" id="cd-done">0</div></div>
+        <div class="stat-card"><div class="stat-label">Em andamento</div><div class="stat-value italic amber" id="cd-wip">0</div></div>
+      </div>
+      <div class="curso-toolbar">
+        <span class="curso-toolbar-info" id="cd-info">— aulas</span>
+        <button class="curso-toggle on" id="cd-toggle" onclick="toggleStatusVisibility()">
+          <span class="toggle-dot"></span><span id="cd-toggle-label">Status visível</span>
+        </button>
+      </div>
+      <div id="curso-aula-list"></div>
+    </div>
+  </div>
+
 </div><!-- /main -->
 
 <!-- FAB -->
@@ -423,6 +522,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     <button class="drawer-item" data-page="simulador" onclick="navigate('simulador')">
       <span class="drawer-num">V</span>
       <span class="drawer-text"><span class="drawer-label">Simulador</span><span class="drawer-sub">projeção 20 meses</span></span>
+    </button>
+    <button class="drawer-item" data-page="curso" onclick="navigate('curso')">
+      <span class="drawer-num">VI</span>
+      <span class="drawer-text"><span class="drawer-label">Curso SQL</span><span class="drawer-sub">SQL Impressionador · 828 aulas</span></span>
     </button>
   </nav>
 
@@ -501,6 +604,24 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     </div>
     <div class="form-field"><div class="form-label">Notas</div><textarea class="form-input" id="l-notas" rows="2" placeholder="Highlights, resenha..."></textarea></div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-livro')">Cancelar</button><button class="btn" onclick="saveLivro()">Salvar</button></div>
+  </div>
+</div>
+
+<!-- MODAL ANOTAÇÃO DE AULA -->
+<div class="modal-overlay" id="modal-aula-nota" onclick="if(event.target===this)closeModal('modal-aula-nota')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><em>Anotação</em> da aula</div>
+    <div class="note-meta" id="an-codigo">#F0</div>
+    <div class="note-aula-name" id="an-nome">—</div>
+    <div class="form-field">
+      <div class="form-label">Suas notas</div>
+      <textarea class="form-input" id="an-texto" rows="8" placeholder="O que aprendeu, dúvidas, snippets de SQL…" style="line-height:1.6;font-size:14px"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-aula-nota')">Cancelar</button>
+      <button class="btn" onclick="saveAulaNota()">Salvar</button>
+    </div>
   </div>
 </div>
 
@@ -589,7 +710,8 @@ const TOPBAR_CFG={
   metas:{title:'<em>Metas</em>',sub:'objetivos · trajetória',fab:true,modal:'modal-meta'},
   gastos:{title:'<em>Gastos</em>',sub:'controle financeiro',fab:true,modal:'modal-gasto'},
   estudos:{title:'<em>Estudos</em>',sub:'certificações · livros',fab:true},
-  simulador:{title:'<em>Simulador</em>',sub:'projeção · 20 meses',fab:false}
+  simulador:{title:'<em>Simulador</em>',sub:'projeção · 20 meses',fab:false},
+  curso:{title:'<em>Curso SQL</em>',sub:'SQL Impressionador',fab:false}
 };
 
 function navigate(page){
@@ -611,6 +733,7 @@ function navigate(page){
   if(page==='estudos')loadEstudos();
   if(page==='simulador'&&!simInit){initSim();simInit=true;}
   else if(page==='simulador')runSim();
+  if(page==='curso')loadCurso();
 }
 
 function fabAction(){
@@ -847,6 +970,305 @@ function runSim(){
   const lbs=Array.from({length:MESES_SIM},(_,i)=>'M'+(i+1));
   if(simChartInst){simChartInst.destroy();simChartInst=null;}
   simChartInst=new Chart(document.getElementById('sim-chart'),{type:'line',data:{labels:lbs,datasets:[{label:'Saldo',data:saldos,borderColor:'#c9a84c',backgroundColor:'rgba(201,168,76,0.06)',fill:true,tension:.3,pointRadius:0,pointHoverRadius:4,borderWidth:1.5},{label:'Zero',data:Array(MESES_SIM).fill(0),borderColor:'rgba(196,122,122,0.5)',borderWidth:1,borderDash:[3,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#101018',borderColor:'#c9a84c',borderWidth:1,titleFont:{family:'JetBrains Mono',size:10},bodyFont:{family:'JetBrains Mono',size:10}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k',color:'#8a6d2f',font:{family:'JetBrains Mono',size:9}},grid:{color:'rgba(201,168,76,0.06)'}},x:{ticks:{color:'#8a6d2f',font:{family:'JetBrains Mono',size:8},maxRotation:0,callback:(_,i)=>i%4===0||i===MESES_SIM-1?lbs[i]:''},grid:{display:false}}}}});
+}
+
+// ── CURSO SQL ──
+// Catálogo (módulos + aulas) — estático.
+const SQL_CATS=[
+  {k:'Boas-vindas',c:'#6b6455'},
+  {k:'SQL Server',c:'#2a4a8a'},
+  {k:'MySQL',c:'#8fb09a'},
+  {k:'PostgreSQL',c:'#6a9fcf'},
+  {k:'Oracle',c:'#c47a7a'},
+  {k:'Modelagem',c:'#b88a2e'},
+  {k:'Extras',c:'#8a8275'},
+];
+const SQL_M=[
+  {n:1,cat:'Boas-vindas',title:'Boas-Vindas — Instruções Obrigatórias',ls:[{f:'F0',name:'Seja bem-vindo, Impressionador'},{f:'F1',name:'Como assistir as aulas'},{f:'F2',name:'Como tirar dúvidas'},{f:'F3',name:'Como acessar a apostila'},{f:'F4',name:'Suporte Hashtag'}]},
+  {n:2,cat:'SQL Server',title:'Banco de Dados e SQL — Introdução',ls:[{f:'F5',name:'Apresentação'},{f:'F6',name:'O que vamos aprender'},{f:'F7',name:'O que é um dado e bancos de dados'},{f:'F8',name:'O que é o SQL'},{f:'F9',name:'SGBDs'},{f:'F10',name:'SQL vs MySQL, SQL Server, Oracle e PostgreSQL'},{f:'F11',name:'SQL, T-SQL, PL-SQL e PL-pgSQL'},{f:'F12',name:'Por que aprender SQL'},{f:'F13',name:'DBA, AD e DB'},{f:'F14',name:'Encerramento'}]},
+  {n:3,cat:'SQL Server',title:'Instalação SQL Server, SSMS e BD Contoso',ls:[{f:'F15',name:'Instalando SQL Server e SSMS'},{f:'F16',name:'Restaurando o BD Contoso'},{f:'F17',name:'O que esperar do BD Contoso'},{f:'F18',name:'Explorando o BD Contoso'},{f:'F19',name:'Observações sobre uso na empresa'}]},
+  {n:4,cat:'SQL Server',title:'Introdução ao SQL',ls:[{f:'F20',name:'Introdução ao módulo'},{f:'F21',name:'SELECT FROM'},{f:'F22',name:'Salvando a primeira consulta'},{f:'F23',name:'Indentação'},{f:'F24',name:'Comentários em SQL'},{f:'F25',name:'SELECT TOP e TOP PERCENT'},{f:'F26',name:'SELECT DISTINCT'},{f:'F27',name:'Renomeando colunas (aliasing)'},{f:'F28',name:'Resumo do módulo'},{f:'F29',name:'Explicação dos exercícios'},{f:'F30',name:'Exercício 1'},{f:'F31',name:'Exercício 2'},{f:'F32',name:'Exercício 3'},{f:'F33',name:'Exercício 4'},{f:'F34',name:'Exercício 5'}]},
+  {n:5,cat:'SQL Server',title:'Ordenando e Filtrando Dados',ls:[{f:'F35',name:'Introdução'},{f:'F36',name:'ORDER BY (Parte 1)'},{f:'F37',name:'ORDER BY (Parte 2)'},{f:'F38',name:'WHERE — números'},{f:'F39',name:'WHERE — texto'},{f:'F40',name:'WHERE — data'},{f:'F41',name:'Operadores Lógicos'},{f:'F42',name:'WHERE + AND'},{f:'F43',name:'WHERE + OR'},{f:'F44',name:'WHERE + NOT'},{f:'F45',name:'Fixação AND, OR e NOT'},{f:'F46',name:'Cuidados AND e OR'},{f:'F47',name:'WHERE + IN'},{f:'F48',name:'WHERE + LIKE'},{f:'F49',name:'WHERE + BETWEEN'},{f:'F50',name:'WHERE + IS NULL / IS NOT NULL'},{f:'F51',name:'Explicação dos exercícios'},{f:'F52',name:'Exercício 1'},{f:'F53',name:'Exercício 2'},{f:'F54',name:'Exercício 3'},{f:'F55',name:'Exercício 4'},{f:'F56',name:'Exercício 5'},{f:'F57',name:'Exercício 6'},{f:'F58',name:'Exercício 7'},{f:'F59',name:'Exercício 8'},{f:'F60',name:'Exercício 9'},{f:'F61',name:'Exercício 10'}]},
+  {n:6,cat:'SQL Server',title:'Funções de Agregação',ls:[{f:'F62',name:'Introdução'},{f:'F63',name:'SUM'},{f:'F64',name:'COUNT'},{f:'F65',name:'COUNT + DISTINCT'},{f:'F66',name:'MIN e MAX'},{f:'F67',name:'AVG'},{f:'F68',name:'Explicação dos exercícios'},{f:'F69',name:'Exercício 1'},{f:'F70',name:'Exercício 2'},{f:'F71',name:'Exercício 3'},{f:'F72',name:'Exercício 4'},{f:'F73',name:'Exercício 5'}]},
+  {n:7,cat:'SQL Server',title:'Agrupamentos — GROUP BY',ls:[{f:'F74',name:'Introdução'},{f:'F75',name:'GROUP BY (Parte 1)'},{f:'F76',name:'GROUP BY (Parte 2)'},{f:'F77',name:'GROUP BY + ORDER BY'},{f:'F78',name:'GROUP BY + WHERE'},{f:'F79',name:'GROUP BY + HAVING'},{f:'F80',name:'WHERE vs HAVING'},{f:'F81',name:'Explicação dos exercícios'},{f:'F82',name:'Exercício 1'},{f:'F83',name:'Exercício 2'},{f:'F84',name:'Exercício 3'},{f:'F85',name:'Exercício 4'},{f:'F86',name:'Exercício 5'},{f:'F87',name:'Exercício 6'},{f:'F88',name:'Exercício 7'},{f:'F89',name:'Exercício 8'},{f:'F90',name:'Exercício 9'},{f:'F91',name:'Exercício 10'}]},
+  {n:8,cat:'SQL Server',title:'JOINs no SQL',ls:[{f:'F92',name:'Introdução'},{f:'F93',name:'Por que precisamos do JOIN'},{f:'F94',name:'Por que não criar tabela única'},{f:'F95',name:'Chave Primária vs Estrangeira'},{f:'F96',name:'Tabela Fato vs Dimensão'},{f:'F97',name:'Tipos de Join'},{f:'F98',name:'LEFT JOIN'},{f:'F99',name:'RIGHT JOIN'},{f:'F100',name:'INNER JOIN'},{f:'F101',name:'FULL JOIN'},{f:'F102',name:'ANTI JOIN'},{f:'F103',name:'Exemplos práticos'},{f:'F104',name:'LEFT Table e RIGHT Table'},{f:'F105',name:'INNER JOIN ou LEFT JOIN'},{f:'F106',name:'CROSS JOIN'},{f:'F107',name:'Múltiplos Joins'},{f:'F108',name:'UNION e UNION ALL'},{f:'F109',name:'Explicação dos exercícios'},{f:'F110',name:'Exercício 1'},{f:'F111',name:'Exercício 2'},{f:'F112',name:'Exercício 3'},{f:'F113',name:'Exercício 4'},{f:'F114',name:'Exercício 5'},{f:'F115',name:'Exercício 6'},{f:'F116',name:'Exercício 7'},{f:'F117',name:'Exercício 8'},{f:'F118',name:'Exercício 9'},{f:'F119',name:'Exercício 10'}]},
+  {n:9,cat:'SQL Server',title:'GROUP BY + JOINs — Aplicações',ls:[{f:'F120',name:'GROUP BY + INNER JOIN'},{f:'F121',name:'Exercícios de Fixação'},{f:'F122',name:'Fixação 1'},{f:'F123',name:'Fixação 2'},{f:'F124',name:'Fixação 3'},{f:'F125',name:'Fixação 4'},{f:'F126',name:'Fixação 5'},{f:'F127',name:'Fixação 6'},{f:'F128',name:'Fixação 7'},{f:'F129',name:'Fixação 8'},{f:'F130',name:'Fixação 9'},{f:'F131',name:'Fixação 10'}]},
+  {n:10,cat:'SQL Server',title:'Variáveis',ls:[{f:'F132',name:'Introdução'},{f:'F133',name:'Tipos de Dados'},{f:'F134',name:'Operações Básicas'},{f:'F135',name:'SQL_VARIANT_PROPERTY'},{f:'F136',name:'CAST'},{f:'F137',name:'FORMAT'},{f:'F138',name:'ROUND, FLOOR e CEILING'},{f:'F139',name:'DECLARE e SET — uma variável'},{f:'F140',name:'DECLARE e SET — múltiplas'},{f:'F141',name:'Cuidado ao executar'},{f:'F142',name:'Variável em consulta (Parte 1)'},{f:'F143',name:'Variável em consulta (Parte 2)'},{f:'F144',name:'Resultado de SELECT em variável'},{f:'F145',name:'PRINT'},{f:'F146',name:'Registro de consulta em variável'},{f:'F147',name:'Acumulando valores'},{f:'F148',name:'Variáveis Globais'},{f:'F149',name:'Explicação dos exercícios'},{f:'F150',name:'Exercício 1'},{f:'F151',name:'Exercício 2'},{f:'F152',name:'Exercício 3'},{f:'F153',name:'Exercício 4'},{f:'F154',name:'Exercício 5'}]},
+  {n:11,cat:'SQL Server',title:'Manipulando Strings e Datas',ls:[{f:'F155',name:'Introdução'},{f:'F156',name:'LEN e DATALENGTH'},{f:'F157',name:'CONCAT'},{f:'F158',name:'LEFT e RIGHT'},{f:'F159',name:'REPLACE (Parte 1)'},{f:'F160',name:'REPLACE (Parte 2)'},{f:'F161',name:'TRANSLATE e STUFF'},{f:'F162',name:'UPPER e LOWER'},{f:'F163',name:'FORMAT'},{f:'F164',name:'CHARINDEX e SUBSTRING (1)'},{f:'F165',name:'CHARINDEX e SUBSTRING (2)'},{f:'F166',name:'CHARINDEX e SUBSTRING (3)'},{f:'F167',name:'TRIM, LTRIM e RTRIM'},{f:'F168',name:'DAY, MONTH, YEAR e DATEFROMPARTS'},{f:'F169',name:'GETDATE, SYSDATETIME, DATEPART'},{f:'F170',name:'DATEADD e DATEDIFF'},{f:'F171',name:'Explicação dos exercícios'},{f:'F172',name:'Exercício 1'},{f:'F173',name:'Exercício 2'},{f:'F174',name:'Exercício 3'},{f:'F175',name:'Exercício 4'},{f:'F176',name:'Exercício 5'},{f:'F177',name:'Exercício 6'}]},
+  {n:12,cat:'SQL Server',title:'Funções Condicionais',ls:[{f:'F178',name:'Introdução'},{f:'F179',name:'CASE WHEN ELSE — Explicação'},{f:'F180',name:'CASE WHEN ELSE — Exemplo'},{f:'F181',name:'CASE WHEN WHEN ELSE — Explicação'},{f:'F182',name:'CASE WHEN WHEN ELSE — Exemplo'},{f:'F183',name:'CASE com AND e OR'},{f:'F184',name:'CASE Aninhado'},{f:'F185',name:'CASE Aditivo'},{f:'F186',name:'IIF'},{f:'F187',name:'IIF Composto'},{f:'F188',name:'ISNULL'},{f:'F189',name:'Explicação dos exercícios'},{f:'F190',name:'Exercício 1'},{f:'F191',name:'Exercício 2'},{f:'F192',name:'Exercício 3'},{f:'F193',name:'Exercício 4'},{f:'F194',name:'Exercício 5'},{f:'F195',name:'Exercício 6'}]},
+  {n:13,cat:'SQL Server',title:'SQL Views',ls:[{f:'F196',name:'Introdução'},{f:'F197',name:'CREATE VIEW'},{f:'F198',name:'CREATE VIEW — only statement in the batch'},{f:'F199',name:'USE Database'},{f:'F200',name:'ALTER VIEW'},{f:'F201',name:'DROP VIEW'},{f:'F202',name:'Explicação dos exercícios'},{f:'F203',name:'Exercício 1'},{f:'F204',name:'Exercício 2'},{f:'F205',name:'Exercício 3'},{f:'F206',name:'Exercício 4'},{f:'F207',name:'Exercício 5'},{f:'F208',name:'Exercício 6'}]},
+  {n:14,cat:'SQL Server',title:'CRUD',ls:[{f:'F209',name:'Introdução'},{f:'F210',name:'CRUD em BDs'},{f:'F211',name:'CREATE e DROP DATABASE'},{f:'F212',name:'CRUD em Tabelas'},{f:'F213',name:'Cuidados ao criar tabela'},{f:'F214',name:'CREATE TABLE'},{f:'F215',name:'INSERT SELECT'},{f:'F216',name:'INSERT INTO'},{f:'F217',name:'Ordem correta do INSERT'},{f:'F218',name:'UPDATE'},{f:'F219',name:'DELETE'},{f:'F220',name:'DROP TABLE'},{f:'F221',name:'Código de exemplo'},{f:'F222',name:'ALTER TABLE'},{f:'F223',name:'Explicação dos exercícios'},{f:'F224',name:'Exercício 1'},{f:'F225',name:'Exercício 2'},{f:'F226',name:'Exercício 3'},{f:'F227',name:'Exercício 4'},{f:'F228',name:'Exercício 5'},{f:'F229',name:'Exercício 6'}]},
+  {n:15,cat:'SQL Server',title:'Subqueries e CTEs',ls:[{f:'F230',name:'Introdução'},{f:'F231',name:'O que é uma Subquery'},{f:'F232',name:'Subquery no WHERE — Ex 1'},{f:'F233',name:'Subquery no WHERE — Ex 2'},{f:'F234',name:'Subquery no WHERE — Ex 3'},{f:'F235',name:'ANY, SOME e ALL'},{f:'F236',name:'EXISTS (Parte 1)'},{f:'F237',name:'EXISTS (Parte 2)'},{f:'F238',name:'Subquery no SELECT'},{f:'F239',name:'Subquery no FROM'},{f:'F240',name:'Plano de Execução Estimado'},{f:'F241',name:'Subquery aninhada (1)'},{f:'F242',name:'Subquery aninhada (2)'},{f:'F243',name:'CTE — o que é'},{f:'F244',name:'Agregações com CTE'},{f:'F245',name:'Nomeando colunas de CTE'},{f:'F246',name:'Múltiplas CTEs'},{f:'F247',name:'Explicação dos exercícios'},{f:'F248',name:'Exercício 1'},{f:'F249',name:'Exercício 2'},{f:'F250',name:'Exercício 3'},{f:'F251',name:'Exercício 4'},{f:'F252',name:'Exercício 5'},{f:'F253',name:'Exercício 6'},{f:'F254',name:'Exercício 7'},{f:'F255',name:'Exercício 8'},{f:'F256',name:'Exercício 9'},{f:'F257',name:'Exercício 10'}]},
+  {n:16,cat:'SQL Server',title:'Loops — WHILE',ls:[{f:'F258',name:'Introdução'},{f:'F259',name:'WHILE — estrutura básica'},{f:'F260',name:'WHILE — loops infinitos'},{f:'F261',name:'BREAK'},{f:'F262',name:'CONTINUE'},{f:'F263',name:'Explicação dos exercícios'},{f:'F264',name:'Exercício 1'},{f:'F265',name:'Exercício 2'},{f:'F266',name:'Exercício 3'}]},
+  {n:17,cat:'SQL Server',title:'Window Functions',ls:[{f:'F267',name:'Introdução'},{f:'F268',name:'Tabela Lojas'},{f:'F269',name:'SUM, COUNT, AVG, MIN, MAX com OVER'},{f:'F270',name:'Percentual de participação (1)'},{f:'F271',name:'Percentual de participação (2)'},{f:'F272',name:'ROW_NUMBER, RANK, DENSE_RANK, NTILE'},{f:'F273',name:'Classificação + PARTITION BY'},{f:'F274',name:'RANK + GROUP BY'},{f:'F275',name:'Soma móvel e média móvel'},{f:'F276',name:'Cálculo de acumulado'},{f:'F277',name:'Mais sobre soma móvel'},{f:'F278',name:'LAG e LEAD'},{f:'F279',name:'Cálculo MoM (1)'},{f:'F280',name:'Cálculo MoM (2)'},{f:'F281',name:'FIRST_VALUE e LAST_VALUE'},{f:'F282',name:'Explicação dos exercícios'},{f:'F283',name:'Exercício 1'},{f:'F284',name:'Exercício 2'},{f:'F285',name:'Exercício 3'},{f:'F286',name:'Exercício 4'},{f:'F287',name:'Desafio 1'},{f:'F288',name:'Exercício 5'},{f:'F289',name:'Exercício 6'},{f:'F290',name:'Desafio 2'},{f:'F291',name:'Exercício 7'},{f:'F292',name:'Exercício 8'}]},
+  {n:18,cat:'SQL Server',title:'Exercícios Gerais',ls:[{f:'F293',name:'Exercícios — QR Code'}]},
+  {n:'19a',cat:'Extras',title:'List Comprehension (Python)',ls:[{f:'F294',name:'O que é List Comprehension'},{f:'F295',name:'Exemplo'},{f:'F296',name:'Exercícios 1'},{f:'F297',name:'List Comprehension com if'},{f:'F298',name:'Exercícios 2'},{f:'F299',name:'Tratando casos'},{f:'F300',name:'Exercícios 3'},{f:'F301',name:'Além de listas'}]},
+  {n:'19b',cat:'SQL Server',title:'Regex — Regular Expressions',ls:[{f:'F302',name:'Introdução'},{f:'F303',name:'COLLATE — Introdução'},{f:'F304',name:'Mais sobre COLLATE'},{f:'F305',name:'COLLATE — Exemplo'},{f:'F306',name:'LIKE — Case sensitive'},{f:'F307',name:'LIKE — primeiros caracteres'},{f:'F308',name:'LIKE — curingas'},{f:'F309',name:'LIKE — negação'},{f:'F310',name:'LIKE — caracteres especiais'},{f:'F311',name:'LIKE — filtros com números'}]},
+  {n:'20a',cat:'Extras',title:'Lambda Expressions (Python)',ls:[{f:'F312',name:'Functions em Iterables e map'},{f:'F313',name:'Function em iterable no sort'},{f:'F314',name:'Lambda Expressions'},{f:'F315',name:'Utilidade das Lambda'},{f:'F316',name:'Lambda — Construtor de Funções'}]},
+  {n:'20b',cat:'SQL Server',title:'Constraints',ls:[{f:'F317',name:'Introdução'},{f:'F318',name:'NOT NULL, UNIQUE, CHECK, DEFAULT, IDENTITY, PK, FK'},{f:'F319',name:'Sem Constraints'},{f:'F320',name:'Constraints — dCliente'},{f:'F321',name:'Constraints — dGerente'},{f:'F322',name:'Constraints — fContratos'},{f:'F323',name:'O que muda'},{f:'F324',name:'Violação (1)'},{f:'F325',name:'Violação (2)'},{f:'F326',name:'Violação (3)'},{f:'F327',name:'Gerenciando Constraints'},{f:'F328',name:'Explicação dos exercícios'},{f:'F329',name:'Exercício 1'},{f:'F330',name:'Exercício 2'}]},
+  {n:'21a',cat:'Extras',title:'NumPy — Python para Análise de Dados',ls:[{f:'F331',name:'Orientações iniciais'},{f:'F332',name:'Arrays NumPy vs Listas'},{f:'F333',name:'Array Explicado'},{f:'F334',name:'Funções Básicas de Array'},{f:'F335',name:'Exercícios Array'},{f:'F336',name:'Aleatórios e Estatística'},{f:'F337',name:'Where no NumPy'},{f:'F338',name:'Exercícios NumPy 1'}]},
+  {n:'21b',cat:'SQL Server',title:'Sequences',ls:[{f:'F339',name:'Introdução'},{f:'F340',name:'O que é uma Sequence'},{f:'F341',name:'Como criar'},{f:'F342',name:'Como utilizar'},{f:'F343',name:'Explicação dos exercícios'},{f:'F344',name:'Exercícios 1, 2 e 3'}]},
+  {n:22,cat:'SQL Server',title:'Transactions',ls:[{f:'F345',name:'Introdução'},{f:'F346',name:'O que é uma Transaction'},{f:'F347',name:'COMMIT e ROLLBACK'},{f:'F348',name:'Transações nomeadas'},{f:'F349',name:'COMMIT e ROLLBACK condicionais'},{f:'F350',name:'TRY e CATCH'},{f:'F351',name:'@@TRANCOUNT e Transações Aninhadas'},{f:'F352',name:'Explicação dos exercícios'},{f:'F353',name:'Exercícios 1 e 2'}]},
+  {n:23,cat:'SQL Server',title:'Functions',ls:[{f:'F354',name:'Introdução'},{f:'F355',name:'O que é uma Function'},{f:'F356',name:'Criar e utilizar'},{f:'F357',name:'Estrutura condicional'},{f:'F358',name:'Funções complexas (1)'},{f:'F359',name:'Funções complexas (2)'},{f:'F360',name:'Explicação dos exercícios'},{f:'F361',name:'Exercício 1'},{f:'F362',name:'Exercício 2'},{f:'F363',name:'Exercício 3'},{f:'F364',name:'Exercício 4'}]},
+  {n:24,cat:'SQL Server',title:'Stored Procedures',ls:[{f:'F365',name:'Introdução'},{f:'F366',name:'O que é uma Procedure'},{f:'F367',name:'Sem Parâmetros'},{f:'F368',name:'Com 1 Parâmetro'},{f:'F369',name:'Com múltiplos parâmetros'},{f:'F370',name:'Parâmetro Default'},{f:'F371',name:'Procedure complexa (Explicação)'},{f:'F372',name:'Procedure complexa (Solução)'},{f:'F373',name:'Excluindo uma Procedure'},{f:'F374',name:'Functions vs Procedures'},{f:'F375',name:'Explicação dos exercícios'},{f:'F376',name:'Exercício 1'},{f:'F377',name:'Exercício 2'},{f:'F378',name:'Exercício 3'},{f:'F379',name:'Exercícios 4, 5 e 6'}]},
+  {n:25,cat:'SQL Server',title:'Triggers DML',ls:[{f:'F380',name:'Introdução'},{f:'F381',name:'O que é uma Trigger DML'},{f:'F382',name:'Trigger AFTER'},{f:'F383',name:'Tabelas INSERTED e DELETED'},{f:'F384',name:'Identificando o Evento DML'},{f:'F385',name:'INSTEAD OF (1)'},{f:'F386',name:'INSTEAD OF (2)'},{f:'F387',name:'Habilitar, Desabilitar, Excluir'}]},
+  {n:26,cat:'SQL Server',title:'Triggers DDL',ls:[{f:'F388',name:'Introdução'},{f:'F389',name:'O que é uma Trigger DDL'},{f:'F390',name:'Criando'},{f:'F391',name:'Habilitar, Desabilitar, Excluir'}]},
+  {n:27,cat:'SQL Server',title:'Pivot Table',ls:[{f:'F392',name:'Introdução'},{f:'F393',name:'O que são Pivot Tables'},{f:'F394',name:'Criando uma Pivot Table'},{f:'F395',name:'Grupos de Linha'},{f:'F396',name:'Ordenando'},{f:'F397',name:'Mais linhas aos grupos'},{f:'F398',name:'Limitações'},{f:'F399',name:'Pivot dinâmica (1)'},{f:'F400',name:'Pivot dinâmica (2)'}]},
+  {n:28,cat:'SQL Server',title:'Projeto 1 — SQL Server + Excel',ls:[{f:'F401',name:'Apresentação'},{f:'F402',name:'BD AdventureWorks 2014'},{f:'F403',name:'KPIs'},{f:'F404',name:'Tabelas a analisar'},{f:'F405',name:'Colunas da view VENDAS_INTERNET'},{f:'F406',name:'Iniciando o código'},{f:'F407',name:'Finalizando com Joins'},{f:'F408',name:'Conexão SQL → Excel (View)'},{f:'F409',name:'Alterando SQL no Power Query'},{f:'F410',name:'Conexão SQL → Excel (Código)'},{f:'F411',name:'Atualizando visualização'},{f:'F412',name:'Power Query — tratamentos'},{f:'F413',name:'TD Vendas por Categoria'},{f:'F414',name:'TD Vendas por Mês'},{f:'F415',name:'TD Vendas por Gênero'},{f:'F416',name:'TD Receita e Custo por País'},{f:'F417',name:'Gráfico Vendas Categoria'},{f:'F418',name:'Gráfico Vendas Gênero'},{f:'F419',name:'Gráfico Vendas Mês'},{f:'F420',name:'Gráfico Receita País'},{f:'F421',name:'Finalizando o Relatório'},{f:'F422',name:'Atualizando no Excel'},{f:'F423',name:'Salvando e finalizando'}]},
+  {n:29,cat:'SQL Server',title:'Projeto 2 — SQL Server + Power BI',ls:[{f:'F424',name:'Apresentação'},{f:'F425',name:'KPIs'},{f:'F426',name:'Tabelas e Colunas'},{f:'F427',name:'View RESULTADOS_ADW'},{f:'F428',name:'Conexão SQL → Power BI'},{f:'F429',name:'Páginas do Relatório'},{f:'F430',name:'Aba Geral — Cartões'},{f:'F431',name:'Diferença na quantidade'},{f:'F432',name:'Receita e Lucro por Mês'},{f:'F433',name:'Lucro por País'},{f:'F434',name:'Vendas por Mês'},{f:'F435',name:'Margem de Lucro'},{f:'F436',name:'Filtro de Ano'},{f:'F437',name:'Aba Clientes — Cartões'},{f:'F438',name:'Total Vendido por País'},{f:'F439',name:'Clientes por País'},{f:'F440',name:'Clientes por Gênero'},{f:'F441',name:'Vendas por Categoria'},{f:'F442',name:'Navegação de Página'},{f:'F443',name:'Encerramento'}]},
+  {n:30,cat:'SQL Server',title:'Projeto 3 — SQL Server + Python',ls:[{f:'F444',name:'Case 1 (Escrita) — Explicação'},{f:'F445',name:'Case 1 — Preparando SQL Server'},{f:'F446',name:'Case 1 — Jupyter'},{f:'F447',name:'Case 1 — SQL no Jupyter'},{f:'F448',name:'Case 1 — Cadastro automático'},{f:'F449',name:'Case 2 (Leitura) — Explicação'},{f:'F450',name:'Case 2 — Conexão Python'},{f:'F451',name:'Case 2 — Leitura de tabela'},{f:'F452',name:'Case 2 — Group By e gráfico'}]},
+  {n:32,cat:'MySQL',title:'MySQL — Introdução',ls:[{f:'F453',name:'Apresentação'},{f:'F454',name:'Banco de Dados e SGBD'},{f:'F455',name:'SQL e Query'},{f:'F456',name:'DDL, DML, DCL e DQL'},{f:'F457',name:'Não confunda os SQLs'}]},
+  {n:33,cat:'MySQL',title:'MySQL — Instalação e Importação',ls:[{f:'F458',name:'Instalando o MySQL'},{f:'F459',name:'Tour pelo MySQL Workbench'},{f:'F460',name:'Importando banco de dados'},{f:'F461',name:'Banco padrão'}]},
+  {n:34,cat:'MySQL',title:'MySQL — Consultas Básicas',ls:[{f:'F462',name:'Comentários iniciais'},{f:'F463',name:'SELECT (1)'},{f:'F464',name:'Sem banco padrão'},{f:'F465',name:'Formas de executar'},{f:'F466',name:'Ponto e vírgula'},{f:'F467',name:'SELECT (2)'},{f:'F468',name:'AS'},{f:'F469',name:'LIMIT e OFFSET'},{f:'F470',name:'DISTINCT'},{f:'F471',name:'ORDER BY'}]},
+  {n:35,cat:'MySQL',title:'MySQL — Filtros',ls:[{f:'F472',name:'WHERE'},{f:'F473',name:'AND, OR e NOT'},{f:'F474',name:'IS NULL e IS NOT NULL'},{f:'F475',name:'NULL vs vazio'},{f:'F476',name:'LIKE'},{f:'F477',name:'IN / NOT IN'},{f:'F478',name:'BETWEEN'}]},
+  {n:36,cat:'MySQL',title:'MySQL — Agregação',ls:[{f:'F479',name:'Operações e arredondamento'},{f:'F480',name:'COUNT / COUNT DISTINCT'},{f:'F481',name:'SUM, AVG, MIN e MAX'}]},
+  {n:37,cat:'MySQL',title:'MySQL — GROUP BY',ls:[{f:'F482',name:'GROUP BY (1)'},{f:'F483',name:'GROUP BY (2)'},{f:'F484',name:'GROUP BY + WHERE'},{f:'F485',name:'GROUP BY + HAVING'}]},
+  {n:38,cat:'MySQL',title:'MySQL — Variáveis',ls:[{f:'F486',name:'Introdução'},{f:'F487',name:'User-Defined Variables'},{f:'F488',name:'CAST'}]},
+  {n:39,cat:'MySQL',title:'MySQL — Funções de Texto e Data',ls:[{f:'F489',name:'LENGTH'},{f:'F490',name:'CONCAT e CONCAT_WS (1)'},{f:'F491',name:'CONCAT e CONCAT_WS (2)'},{f:'F492',name:'LCASE e UCASE'},{f:'F493',name:'RIGHT e LEFT'},{f:'F494',name:'REPLACE'},{f:'F495',name:'INSTR e MID (1)'},{f:'F496',name:'INSTR e MID (2)'},{f:'F497',name:'DAY, YEAR e MONTH'},{f:'F498',name:'NOW, CURDATE e CURTIME'},{f:'F499',name:'DATE_DIFF, DATE_ADD e DATE_SUB'}]},
+  {n:40,cat:'MySQL',title:'MySQL — JOINs',ls:[{f:'F500',name:'Chave Primária e Estrangeira'},{f:'F501',name:'Tabela Fato e Dimensão'},{f:'F502',name:'JOIN — Contextualização'},{f:'F503',name:'INNER JOIN — Ex 1'},{f:'F504',name:'INNER JOIN — Ex 2'},{f:'F505',name:'Nome das tabelas'},{f:'F506',name:'Renomeando tabelas'},{f:'F507',name:'INNER JOIN + WHERE'},{f:'F508',name:'INNER JOIN + GROUP BY'}]},
+  {n:41,cat:'MySQL',title:'MySQL — Funções Condicionais',ls:[{f:'F509',name:'IF'},{f:'F510',name:'IFNULL, ISNULL e NULLIF'},{f:'F511',name:'CASE-THEN'},{f:'F512',name:'CASE + AND'},{f:'F513',name:'CASE + OR (IN)'}]},
+  {n:42,cat:'MySQL',title:'MySQL — Views',ls:[{f:'F514',name:'Introdução'},{f:'F515',name:'CREATE VIEW'},{f:'F516',name:'ALTER VIEW e DROP VIEW'},{f:'F517',name:'Exemplo 1 — WHERE'},{f:'F518',name:'Exemplo 2 — GROUP BY, WHERE, HAVING'},{f:'F519',name:'Exemplo 3 — INNER JOIN e GROUP BY'}]},
+  {n:43,cat:'MySQL',title:'MySQL — CRUD',ls:[{f:'F520',name:'O que é CRUD'},{f:'F521',name:'CREATE DATABASE'},{f:'F522',name:'CREATE TABLE'},{f:'F523',name:'Constraints'},{f:'F524',name:'Relacionamentos'},{f:'F525',name:'INSERT INTO'},{f:'F526',name:'UPDATE'},{f:'F527',name:'DELETE'},{f:'F528',name:'TRUNCATE vs DROP'}]},
+  {n:44,cat:'MySQL',title:'MySQL — Functions e Procedures',ls:[{f:'F529',name:'Functions — Introdução'},{f:'F530',name:'Functions — Ex 1'},{f:'F531',name:'Functions — Ex 2'},{f:'F532',name:'Functions — Ex 3'},{f:'F533',name:'ALTER FUNCTION'},{f:'F534',name:'DETERMINISTIC'},{f:'F535',name:'Stored Procedures'},{f:'F536',name:'Local Variables'},{f:'F537',name:'Stored Procedures — detalhes'},{f:'F538',name:'Alterando procedure'},{f:'F539',name:'Functions vs Procedures'}]},
+  {n:45,cat:'MySQL',title:'MySQL — Subqueries',ls:[{f:'F540',name:'Introdução'},{f:'F541',name:'Subquery escalar — Ex 1'},{f:'F542',name:'Subquery escalar — Ex 2'},{f:'F543',name:'Subquery escalar — Ex 3'},{f:'F544',name:'Subquery escalar — Desafio'},{f:'F545',name:'Subquery lista — Ex 1'},{f:'F546',name:'Subquery lista — Ex 2'},{f:'F547',name:'Subquery no SELECT'},{f:'F548',name:'Subquery no FROM'},{f:'F549',name:'EXISTS e NOT EXISTS'}]},
+  {n:47,cat:'PostgreSQL',title:'PostgreSQL — Instalação',ls:[{f:'F550',name:'Introdução'},{f:'F551',name:'Instalação'},{f:'F552',name:'Tabelas do BD Northwind'}]},
+  {n:48,cat:'PostgreSQL',title:'PostgreSQL — Queries Básicas',ls:[{f:'F553',name:'SELECT FROM'},{f:'F554',name:'Comentários'},{f:'F555',name:'SELECT AS'},{f:'F556',name:'SELECT LIMIT'},{f:'F557',name:'SELECT DISTINCT'}]},
+  {n:49,cat:'PostgreSQL',title:'PostgreSQL — Filtros',ls:[{f:'F558',name:'WHERE — textos'},{f:'F559',name:'WHERE — números e datas'},{f:'F560',name:'WHERE — AND e OR'},{f:'F561',name:'WHERE + LIKE'},{f:'F562',name:'WHERE + IN'},{f:'F563',name:'WHERE + BETWEEN'}]},
+  {n:50,cat:'PostgreSQL',title:'PostgreSQL — Agregação',ls:[{f:'F564',name:'COUNT'},{f:'F565',name:'SUM'},{f:'F566',name:'AVG, MIN e MAX'},{f:'F567',name:'GROUP BY'},{f:'F568',name:'GROUP BY + WHERE + HAVING'}]},
+  {n:51,cat:'PostgreSQL',title:'PostgreSQL — JOINs',ls:[{f:'F569',name:'Introdução'},{f:'F570',name:'LEFT vs INNER vs RIGHT vs FULL'},{f:'F571',name:'Exemplo 1'},{f:'F572',name:'Exemplo 2'},{f:'F573',name:'Exemplo 3'},{f:'F574',name:'JOIN + GROUP BY + ORDER BY'},{f:'F575',name:'JOIN + GROUP BY + WHERE + HAVING'}]},
+  {n:52,cat:'PostgreSQL',title:'PostgreSQL — Views',ls:[{f:'F576',name:'Create, Replace, Alter e Drop View'}]},
+  {n:53,cat:'PostgreSQL',title:'PostgreSQL — CRUD',ls:[{f:'F577',name:'Create e Drop Database'},{f:'F578',name:'Tipos de Dados e Create Table'},{f:'F579',name:'Constraints'},{f:'F580',name:'INSERT, UPDATE, DELETE, TRUNCATE, DROP'}]},
+  {n:54,cat:'PostgreSQL',title:'PostgreSQL — Funções de Número, Texto e Data',ls:[{f:'F581',name:'CEILING, FLOOR, ROUND, TRUNC'},{f:'F582',name:'UPPER, LOWER, LENGTH, REPLACE, SUBSTRING'},{f:'F583',name:'CURRENT_DATE, AGE, DATE_PART'}]},
+  {n:55,cat:'PostgreSQL',title:'PostgreSQL — Subqueries',ls:[{f:'F584',name:'O que é uma Subquery'},{f:'F585',name:'WHERE'},{f:'F586',name:'FROM'},{f:'F587',name:'SELECT'},{f:'F588',name:'Pedidos acima da média'}]},
+  {n:56,cat:'PostgreSQL',title:'PostgreSQL — Variáveis e Blocos Anônimos',ls:[{f:'F589',name:'Variáveis e Datatypes'},{f:'F590',name:'Blocos Anônimos — Exemplos'}]},
+  {n:57,cat:'PostgreSQL',title:'PostgreSQL — Functions',ls:[{f:'F591',name:'Criar uma Function'},{f:'F592',name:'Chamar e excluir'},{f:'F593',name:'Functions que retornam tabela'}]},
+  {n:58,cat:'PostgreSQL',title:'PostgreSQL — Transactions e Procedures',ls:[{f:'F594',name:'O que é uma Transação'},{f:'F595',name:'Criando e excluindo Procedures'},{f:'F596',name:'Procedure de transferência bancária'}]},
+  {n:60,cat:'Oracle',title:'Oracle — Introdução',ls:[{f:'F597',name:'O que veremos'},{f:'F598',name:'Conceitos de BDs relacionais'},{f:'F599',name:'SQL Oracle vs SQL ANSI'},{f:'F600',name:'Dicionário SQL'},{f:'F601',name:'Resumo'}]},
+  {n:61,cat:'Oracle',title:'Oracle — Instalação',ls:[{f:'F602',name:'Conta gratuita Oracle'},{f:'F603',name:'Oracle Database 21c XE'},{f:'F604',name:'Oracle SQL Developer'}]},
+  {n:62,cat:'Oracle',title:'Oracle — Administração de Usuários',ls:[{f:'F605',name:'O que veremos'},{f:'F606',name:'Contas e Privilégios'},{f:'F607',name:'Usuário sys (DBA)'},{f:'F608',name:'Usuário HR'},{f:'F609',name:'Tabelas do HR'}]},
+  {n:63,cat:'Oracle',title:'Oracle — Primeiros Passos no SQL Developer',ls:[{f:'F610',name:'O que veremos'},{f:'F611',name:'SQL e Grupos de Comando'},{f:'F612',name:'Documentação Oracle'},{f:'F613',name:'Schema HR'},{f:'F614',name:'Explorando tabelas'},{f:'F615',name:'Primeira consulta'},{f:'F616',name:'DESCRIBE / DESC'},{f:'F617',name:'SELECT *'},{f:'F618',name:'Formas de executar'},{f:'F619',name:'Comentários'},{f:'F620',name:'Alias'},{f:'F621',name:'Operador ||'},{f:'F622',name:'Problema do apóstrofo em string'},{f:'F623',name:'Cálculos e Tabela Dual'},{f:'F624',name:'DISTINCT'},{f:'F625',name:'Resumo'}]},
+  {n:64,cat:'Oracle',title:'Oracle — Ordenando e Filtrando',ls:[{f:'F626',name:'O que veremos'},{f:'F627',name:'ORDER BY — Sintaxe'},{f:'F628',name:'ORDER BY — Aplicação'},{f:'F629',name:'NULLS FIRST e NULLS LAST'},{f:'F630',name:'FETCH NEXT'},{f:'F631',name:'WHERE — Sintaxe'},{f:'F632',name:'Operadores básicos'},{f:'F633',name:'AND, OR e NOT'},{f:'F634',name:'LIKE e Wildcards'},{f:'F635',name:'BETWEEN'},{f:'F636',name:'IN e NOT IN'},{f:'F637',name:'IS NULL'},{f:'F638',name:'Regras de precedência'},{f:'F639',name:'Variáveis de substituição'},{f:'F640',name:'Resumo'}]},
+  {n:65,cat:'Oracle',title:'Oracle — Funções Single Row',ls:[{f:'F641',name:'O que veremos'},{f:'F642',name:'LOWER, UPPER, INITCAP'},{f:'F643',name:'CONCAT, SUBSTR, LENGTH, INSTR'},{f:'F644',name:'LPAD, RPAD, REPLACE'},{f:'F645',name:'ROUND, TRUNC, MOD'},{f:'F646',name:'MONTHS_BETWEEN, ADD_MONTHS, EXTRACT'}]},
+  {n:66,cat:'Oracle',title:'Oracle — Funções de Conversão e NULL',ls:[{f:'F647',name:'O que veremos'},{f:'F648',name:'TO_CHAR, TO_NUMBER, TO_DATE'},{f:'F649',name:'NVL, NVL2, COALESCE, NULLIF'},{f:'F650',name:'Resumo'}]},
+  {n:67,cat:'Oracle',title:'Oracle — Agregação e Agrupamentos',ls:[{f:'F651',name:'O que veremos'},{f:'F652',name:'COUNT, COUNT(*), COUNT DISTINCT'},{f:'F653',name:'SUM, AVG, MIN e MAX'},{f:'F654',name:'Valores nulos'},{f:'F655',name:'GROUP BY — Estrutura'},{f:'F656',name:'GROUP BY — Aplicações'},{f:'F657',name:'Funções aninhadas'},{f:'F658',name:'GROUP BY + WHERE'},{f:'F659',name:'GROUP BY + HAVING'},{f:'F660',name:'Resumo'}]},
+  {n:68,cat:'Oracle',title:'Oracle — JOINs e SET',ls:[{f:'F661',name:'O que veremos'},{f:'F662',name:'Joins e Operadores SET'},{f:'F663',name:'INNER JOIN (1)'},{f:'F664',name:'INNER JOIN (2)'},{f:'F665',name:'INNER JOIN múltiplas tabelas'},{f:'F666',name:'SELF JOIN'},{f:'F667',name:'LEFT, RIGHT, FULL JOIN'},{f:'F668',name:'CROSS JOIN'},{f:'F669',name:'UNION, UNION ALL, INTERSECT, MINUS'},{f:'F670',name:'Resumo'}]},
+  {n:69,cat:'Oracle',title:'Oracle — CRUD',ls:[{f:'F671',name:'O que veremos'},{f:'F672',name:'CRUD, DDL, DML, TCL, DCL'},{f:'F673',name:'Novo usuário'},{f:'F674',name:'CREATE e INSERT INTO'},{f:'F675',name:'UPDATE e DELETE'},{f:'F676',name:'TRUNCATE e DROP'},{f:'F677',name:'COMMENT'},{f:'F678',name:'COMMIT, ROLLBACK, SAVEPOINT'},{f:'F679',name:'ALTER TABLE'},{f:'F680',name:'Resumo'}]},
+  {n:70,cat:'Oracle',title:'Oracle — Constraints, Sequences e Índices',ls:[{f:'F681',name:'O que veremos'},{f:'F682',name:'NOT NULL, UNIQUE, CHECK, PK, FK'},{f:'F683',name:'Constraints — CLIENTES'},{f:'F684',name:'Constraints — PRODUTOS'},{f:'F685',name:'Constraints — VENDAS'},{f:'F686',name:'O que muda'},{f:'F687',name:'Inserindo dados'},{f:'F688',name:'Violação — NOT NULL e CHECK'},{f:'F689',name:'Violação — UNIQUE'},{f:'F690',name:'Violação — PK e FK'},{f:'F691',name:'Gerenciando'},{f:'F692',name:'Deletando com constraints'},{f:'F693',name:'Sequences — criar, alterar, excluir'},{f:'F694',name:'Sequences na prática'},{f:'F695',name:'Cuidados com sequences'},{f:'F696',name:'Índices'},{f:'F697',name:'Resumo'}]},
+  {n:71,cat:'Oracle',title:'Oracle — Views',ls:[{f:'F698',name:'O que veremos'},{f:'F699',name:'O que é uma View'},{f:'F700',name:'CREATE, REPLACE e DROP VIEW'},{f:'F701',name:'Resumo'}]},
+  {n:72,cat:'Oracle',title:'Oracle — Subqueries',ls:[{f:'F702',name:'O que veremos'},{f:'F703',name:'O que é'},{f:'F704',name:'WHERE — single row'},{f:'F705',name:'WHERE — IN'},{f:'F706',name:'WHERE — ANY e ALL'},{f:'F707',name:'WHERE — múltiplas linhas'},{f:'F708',name:'EXISTS e NOT EXISTS (1)'},{f:'F709',name:'EXISTS e NOT EXISTS (2)'},{f:'F710',name:'EXISTS e NOT EXISTS — Ex 2'},{f:'F711',name:'Subconsulta correlacionada 1'},{f:'F712',name:'Subconsulta correlacionada 2'},{f:'F713',name:'SELECT'},{f:'F714',name:'FROM'},{f:'F715',name:'Resumo'}]},
+  {n:73,cat:'Oracle',title:'Oracle — Blocos Anônimos',ls:[{f:'F716',name:'O que veremos'},{f:'F717',name:'O que é'},{f:'F718',name:'Exemplo 1'},{f:'F719',name:'Exemplo 2'},{f:'F720',name:'Comentários'},{f:'F721',name:'Exemplo 3'},{f:'F722',name:'Funções em blocos'},{f:'F723',name:'Blocos aninhados'},{f:'F724',name:'Resumo'}]},
+  {n:74,cat:'Oracle',title:'Oracle — Estruturas de Controle',ls:[{f:'F725',name:'O que veremos'},{f:'F726',name:'IF — Ex 1'},{f:'F727',name:'IF — Ex 2'},{f:'F728',name:'CASE'},{f:'F729',name:'Loop Básico'},{f:'F730',name:'FOR LOOP'},{f:'F731',name:'WHILE LOOP'}]},
+  {n:75,cat:'Oracle',title:'Oracle — Functions',ls:[{f:'F732',name:'O que veremos'},{f:'F733',name:'CREATE FUNCTION — Ex 1'},{f:'F734',name:'CREATE FUNCTION — Ex 2'},{f:'F735',name:'Resumo'}]},
+  {n:76,cat:'Oracle',title:'Oracle — Procedures',ls:[{f:'F736',name:'O que veremos'},{f:'F737',name:'Introdução'},{f:'F738',name:'Sem parâmetros'},{f:'F739',name:'Com parâmetros'},{f:'F740',name:'Com estrutura de controle'},{f:'F741',name:'DROP PROCEDURE'},{f:'F742',name:'Functions vs Procedures'},{f:'F743',name:'Resumo'}]},
+  {n:77,cat:'Oracle',title:'Oracle — Triggers',ls:[{f:'F744',name:'O que veremos'},{f:'F745',name:'O que é'},{f:'F746',name:'BEFORE INSERT (1)'},{f:'F747',name:'BEFORE INSERT (2)'},{f:'F748',name:'BEFORE INSERT, UPDATE, DELETE'},{f:'F749',name:'Habilitar, Desabilitar, Excluir'},{f:'F750',name:'Resumo'}]},
+  {n:78,cat:'Oracle',title:'Oracle — Tratamento de Erros',ls:[{f:'F751',name:'O que veremos'},{f:'F752',name:'Exceções do Sistema 1'},{f:'F753',name:'Exceções do Sistema 2'},{f:'F754',name:'RAISE_APPLICATION_ERROR'},{f:'F755',name:'Exceções do Usuário'},{f:'F756',name:'WHEN OTHERS'},{f:'F757',name:'SQLCODE e SQLERRM'},{f:'F758',name:'Resumo'}]},
+  {n:79,cat:'Oracle',title:'Oracle — Cursores',ls:[{f:'F759',name:'O que veremos'},{f:'F760',name:'O que é'},{f:'F761',name:'Cursor — LOOP e WHILE'},{f:'F762',name:'Cursor — FOR LOOP'},{f:'F763',name:'Cursor com Parâmetros'},{f:'F764',name:'Resumo'}]},
+  {n:80,cat:'Oracle',title:'Oracle — Segurança',ls:[{f:'F765',name:'O que veremos'},{f:'F766',name:'GRANT e REVOKE'},{f:'F767',name:'Users — Criar, Alterar, Excluir'},{f:'F768',name:'Concedendo privilégios'},{f:'F769',name:'Resumo'}]},
+  {n:82,cat:'Extras',title:'Intensivão de SQL',ls:[{f:'F770',name:'Aula 1'},{f:'F771',name:'Aula 2 (parte 1)'},{f:'F772',name:'Aula 2 (parte 2)'},{f:'F773',name:'Aula 3'},{f:'F774',name:'Aula 4'}]},
+  {n:83,cat:'Modelagem',title:'Modelagem — Introdução',ls:[{f:'F775',name:'Apresentação'},{f:'F776',name:'Introdução à Modelagem'},{f:'F777',name:'Conceitos de BDs'},{f:'F778',name:'Modelos de Dados (1)'},{f:'F779',name:'Modelos de Dados (2)'},{f:'F780',name:'Etapas da Modelagem'},{f:'F781',name:'Resumo'}]},
+  {n:84,cat:'Modelagem',title:'Modelagem — Modelo Conceitual',ls:[{f:'F782',name:'Entidades, Atributos e Relacionamentos'},{f:'F783',name:'Entidade x Tabela x Relação'},{f:'F784',name:'Cardinalidades'},{f:'F785',name:'Tipos de Cardinalidade'},{f:'F786',name:'Cardinalidade 1:1'},{f:'F787',name:'Cardinalidade 1:N e N:N'},{f:'F788',name:'Engenharia da Informação'},{f:'F789',name:'Resumo'}]},
+  {n:85,cat:'Modelagem',title:'Modelagem — Modelo Lógico',ls:[{f:'F790',name:'O Modelo Lógico'},{f:'F791',name:'Chaves Primárias, Estrangeiras, Candidatas'},{f:'F792',name:'Restrições — Introdução'},{f:'F793',name:'Tipos de Restrições'},{f:'F794',name:'Cardinalidade 1:1 no Lógico'},{f:'F795',name:'Cardinalidade 1:N'},{f:'F796',name:'Cardinalidade N:N'},{f:'F797',name:'Entidade Associativa e Ternário'},{f:'F798',name:'Dicionário de Dados'},{f:'F799',name:'Resumo'}]},
+  {n:86,cat:'Modelagem',title:'Modelagem — Normalização',ls:[{f:'F800',name:'Anomalias em BDs'},{f:'F801',name:'5 Conceitos'},{f:'F802',name:'O que é Normalização'},{f:'F803',name:'1ª Forma Normal (1FN)'},{f:'F804',name:'2ª Forma Normal (2FN)'},{f:'F805',name:'3ª Forma Normal (3FN)'},{f:'F806',name:'Resumo'}]},
+  {n:87,cat:'Modelagem',title:'Modelagem — Modelo Físico',ls:[{f:'F807',name:'O Modelo Físico, SQL e SGBD'}]},
+  {n:88,cat:'Modelagem',title:'Modelagem — Projeto Completo',ls:[{f:'F808',name:'Apresentação e Regras'},{f:'F809',name:'Entidades, Atributos, Relacionamentos'},{f:'F810',name:'Diagrama Entidade Relacionamento'},{f:'F811',name:'Cardinalidades do DER'},{f:'F812',name:'Eliminando N:N — Modelo Lógico'},{f:'F813',name:'Normalização'},{f:'F814',name:'Dicionário de Dados'},{f:'F815',name:'Modelo Físico'},{f:'F816',name:'SQL Server — Criação'},{f:'F817',name:'SQL Server — Testes'},{f:'F818',name:'MySQL — Criação'},{f:'F819',name:'MySQL — Testes'},{f:'F820',name:'PostgreSQL — Criação'},{f:'F821',name:'PostgreSQL — Testes'},{f:'F822',name:'Oracle — Criação'},{f:'F823',name:'Oracle — Testes'},{f:'F824',name:'Encerramento'}]},
+  {n:90,cat:'Extras',title:'Aulas de Extensão',ls:[{f:'F825',name:'SQL para Análise — Aula 1'},{f:'F826',name:'SQL para Análise — Aula 2'},{f:'F827',name:'MongoDB — NoSQL'}]},
+];
+const SQL_TOTAL=SQL_M.reduce((s,m)=>s+m.ls.length,0);
+
+// Estado
+let aulasMap={};               // { F0: {status, notas}, ... }
+let cursoCat='all',cursoSearch='',cursoMod=null,cursoStatusVisible=true,curEditAula=null;
+
+async function loadCurso(){
+  const{data}=await sb.from('aulas').select('codigo,status,notas');
+  aulasMap={};(data||[]).forEach(r=>{aulasMap[r.codigo]={status:r.status,notas:r.notas};});
+  document.getElementById('curso-home').style.display='block';
+  document.getElementById('curso-detail').style.display='none';
+  cursoMod=null;
+  if(!document.getElementById('curso-cats').children.length)buildCursoCats();
+  renderCursoStats();
+  renderCursoMods();
+}
+
+function buildCursoCats(){
+  const el=document.getElementById('curso-cats');
+  el.innerHTML='';
+  const all=document.createElement('button');
+  all.className='cat-chip on';all.textContent='Todas';
+  all.style.background='var(--gold)';all.style.borderColor='var(--gold)';
+  all.onclick=()=>setCursoCat('all',all);
+  el.appendChild(all);
+  SQL_CATS.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='cat-chip';b.textContent=c.k;
+    b.onclick=()=>setCursoCat(c.k,b);
+    el.appendChild(b);
+  });
+}
+function setCursoCat(f,btn){
+  cursoCat=f;
+  document.querySelectorAll('#curso-cats .cat-chip').forEach(b=>{b.classList.remove('on');b.style.background='';b.style.borderColor='';b.style.color='';});
+  btn.classList.add('on');
+  if(f==='all'){btn.style.background='var(--gold)';btn.style.borderColor='var(--gold)';btn.style.color='var(--ink)';}
+  else{const c=SQL_CATS.find(x=>x.k===f);if(c){btn.style.background=c.c;btn.style.borderColor=c.c;btn.style.color='#fff';}}
+  renderCursoMods();
+}
+function filterCurso(){cursoSearch=document.getElementById('curso-srch').value.toLowerCase();renderCursoMods();}
+
+function aulaStatus(f){return aulasMap[f]?.status||'';}
+function aulaTemNota(f){return !!(aulasMap[f]?.notas&&aulasMap[f].notas.trim());}
+
+function renderCursoStats(){
+  const all=Object.values(aulasMap);
+  const done=all.filter(x=>x.status==='done').length;
+  const wip=all.filter(x=>x.status==='wip').length;
+  const pct=Math.round(done/SQL_TOTAL*100);
+  document.getElementById('cs-done').textContent=done;
+  document.getElementById('cs-done-sub').textContent=`de ${SQL_TOTAL} aulas`;
+  document.getElementById('cs-wip').textContent=wip;
+  document.getElementById('cs-pct').textContent=pct+'%';
+  document.getElementById('cs-bar').style.width=pct+'%';
+}
+
+function renderCursoMods(){
+  const q=cursoSearch;
+  const list=SQL_M.filter(m=>{
+    const catOk=cursoCat==='all'||m.cat===cursoCat;
+    const txtOk=!q||m.title.toLowerCase().includes(q)||m.ls.some(l=>l.name.toLowerCase().includes(q));
+    return catOk&&txtOk;
+  });
+  const el=document.getElementById('curso-mod-list');
+  if(list.length===0){el.innerHTML='<div class="curso-empty">Nenhum módulo encontrado.</div>';return;}
+  el.innerHTML=list.map((m,i)=>{
+    const idx=SQL_M.indexOf(m);
+    const done=m.ls.filter(l=>aulaStatus(l.f)==='done').length;
+    const pct=Math.round(done/m.ls.length*100);
+    const cat=SQL_CATS.find(c=>c.k===m.cat)||{c:'#8a8275'};
+    const r=16,circ=Math.round(2*Math.PI*r*100)/100,dash=Math.round(circ*pct/100*100)/100;
+    return `<div class="curso-mod-card" onclick="openCursoMod(${idx})">
+      <div class="curso-mod-left">
+        <div class="curso-mod-num">#${m.n}</div>
+        <div class="curso-mod-title">${m.title}</div>
+        <div class="curso-mod-meta">
+          <span class="cat-dot" style="background:${cat.c}"></span>
+          <span class="curso-mod-sub">${m.cat} · ${done}/${m.ls.length} aulas</span>
+        </div>
+      </div>
+      <svg class="curso-mod-ring" viewBox="0 0 40 40">
+        <circle class="ring-bg-c" cx="20" cy="20" r="${r}"/>
+        <circle class="ring-fg-c" cx="20" cy="20" r="${r}" stroke="${cat.c}"
+          stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="0"/>
+        <text class="ring-text" x="20" y="23" text-anchor="middle" fill="${pct>0?cat.c:'#6b6455'}">${pct}%</text>
+      </svg>
+    </div>`;
+  }).join('');
+}
+
+function openCursoMod(idx){
+  cursoMod=SQL_M[idx];
+  const m=cursoMod;
+  const cat=SQL_CATS.find(c=>c.k===m.cat)||{c:'#8a8275'};
+  document.getElementById('cd-title').innerHTML=`<em>#${m.n}</em> ${m.title}`;
+  const badge=document.getElementById('cd-cat-badge');
+  badge.textContent=m.cat;
+  badge.style.background=cat.c+'22';
+  badge.style.color=cat.c;
+  badge.style.border=`1px solid ${cat.c}`;
+  document.getElementById('curso-home').style.display='none';
+  document.getElementById('curso-detail').style.display='block';
+  document.getElementById('main-scroll').scrollTo(0,0);
+  renderCursoModStats();
+  renderCursoLessons();
+}
+function closeCursoMod(){
+  cursoMod=null;
+  document.getElementById('curso-home').style.display='block';
+  document.getElementById('curso-detail').style.display='none';
+  document.getElementById('main-scroll').scrollTo(0,0);
+  renderCursoStats();
+  renderCursoMods();
+}
+
+function renderCursoModStats(){
+  const m=cursoMod;
+  const done=m.ls.filter(l=>aulaStatus(l.f)==='done').length;
+  const wip=m.ls.filter(l=>aulaStatus(l.f)==='wip').length;
+  const pct=Math.round(done/m.ls.length*100);
+  document.getElementById('cd-pct').textContent=pct+'%';
+  document.getElementById('cd-done').textContent=done;
+  document.getElementById('cd-wip').textContent=wip;
+  document.getElementById('cd-info').textContent=`${m.ls.length} aulas`;
+}
+
+function renderCursoLessons(){
+  const el=document.getElementById('curso-aula-list');
+  el.innerHTML=cursoMod.ls.map(l=>{
+    const s=aulaStatus(l.f);
+    const hasN=aulaTemNota(l.f);
+    const safeName=l.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    return `<div class="aula-card">
+      <div class="aula-top">
+        <span class="aula-fcode">#${l.f}</span>
+        <span class="aula-name ${s}">${l.name}</span>
+        <button class="aula-note-btn${hasN?' has':''}" onclick="openAulaNota('${l.f}','${safeName}')" title="Anotação">𝓝</button>
+      </div>
+      <div class="aula-status-row${cursoStatusVisible?'':' hidden'}">
+        <button class="s-btn s-wip${s==='wip'?' active':''}" onclick="setAulaStatus('${l.f}','wip')">⟳ Em andamento</button>
+        <button class="s-btn s-done${s==='done'?' active':''}" onclick="setAulaStatus('${l.f}','done')">✓ Concluída</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function setAulaStatus(codigo,target){
+  const cur=aulaStatus(codigo);
+  const next=cur===target?null:target;
+  // optimistic local update
+  if(!aulasMap[codigo])aulasMap[codigo]={};
+  aulasMap[codigo].status=next;
+  renderCursoLessons();
+  renderCursoModStats();
+  // persist
+  const existing=aulasMap[codigo].notas;
+  if(next===null&&!existing){
+    await sb.from('aulas').delete().eq('codigo',codigo);
+    delete aulasMap[codigo];
+  } else {
+    await sb.from('aulas').upsert({codigo,status:next,notas:existing??null,updated_at:new Date().toISOString()},{onConflict:'codigo'});
+  }
+}
+
+function toggleStatusVisibility(){
+  cursoStatusVisible=!cursoStatusVisible;
+  const btn=document.getElementById('cd-toggle');
+  btn.classList.toggle('on',cursoStatusVisible);
+  document.getElementById('cd-toggle-label').textContent=cursoStatusVisible?'Status visível':'Status oculto';
+  document.querySelectorAll('.aula-status-row').forEach(r=>r.classList.toggle('hidden',!cursoStatusVisible));
+}
+
+function openAulaNota(codigo,nome){
+  curEditAula={codigo,nome};
+  document.getElementById('an-codigo').textContent='#'+codigo;
+  document.getElementById('an-nome').textContent=nome;
+  document.getElementById('an-texto').value=aulasMap[codigo]?.notas||'';
+  openModal('modal-aula-nota');
+}
+async function saveAulaNota(){
+  const txt=document.getElementById('an-texto').value;
+  const codigo=curEditAula.codigo;
+  const valor=txt.trim()||null;
+  if(!aulasMap[codigo])aulasMap[codigo]={};
+  aulasMap[codigo].notas=valor;
+  const status=aulasMap[codigo].status??null;
+  if(!valor&&!status){
+    await sb.from('aulas').delete().eq('codigo',codigo);
+    delete aulasMap[codigo];
+  } else {
+    const{error}=await sb.from('aulas').upsert({codigo,status,notas:valor,updated_at:new Date().toISOString()},{onConflict:'codigo'});
+    if(error){toast(error.message,false);return;}
+  }
+  toast('Nota salva');closeModal('modal-aula-nota');
+  if(cursoMod)renderCursoLessons();
 }
 
 // ── INIT ──
