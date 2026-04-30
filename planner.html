@@ -600,6 +600,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     <div class="form-field"><div class="form-label">Título</div><input class="form-input" id="l-titulo" placeholder="Título do livro"></div>
     <div class="form-field"><div class="form-label">Autor</div><input class="form-input" id="l-autor" placeholder="Nome do autor"></div>
     <div class="form-row">
+      <div class="form-field"><div class="form-label">Número de capítulos</div><input class="form-input" id="l-capitulos" type="number" min="0" placeholder="ex: 12"></div>
+      <div class="form-field"><div class="form-label">Número de páginas</div><input class="form-input" id="l-paginas" type="number" min="0" placeholder="ex: 320"></div>
+    </div>
+    <div class="form-row">
       <div class="form-field"><div class="form-label">Categoria</div><select class="form-input" id="l-cat"><option>Inteligência Artificial</option><option>Aprendizado de Máquina</option><option>Engenharia de Dados</option><option>Vendas</option><option>Negócios</option><option>Finanças</option><option>Imigração</option><option>Inglês</option><option>Outro</option></select></div>
       <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="l-status"><option value="quero_ler">Quero ler</option><option value="lendo">Lendo</option><option value="lido">Lido</option></select></div>
     </div>
@@ -952,12 +956,22 @@ async function loadLivros(){
   el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div style="flex:1;padding-right:8px"><div class="item-name">${x.titulo}</div>${x.autor?`<div class="item-desc" style="margin-top:0">${x.autor}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="deleteLivro(${x.id})">×</button></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag tag-blue">${x.categoria}</span></div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
 }
 async function saveLivro(){
-  const obj={titulo:document.getElementById('l-titulo').value,autor:document.getElementById('l-autor').value,categoria:document.getElementById('l-cat').value,status:document.getElementById('l-status').value,notas:document.getElementById('l-notas').value};
+  const capitulosRaw=(document.getElementById('l-capitulos').value||'').trim();
+  const paginasRaw=(document.getElementById('l-paginas').value||'').trim();
+  const obj={
+    titulo:document.getElementById('l-titulo').value,
+    autor:document.getElementById('l-autor').value,
+    categoria:document.getElementById('l-cat').value,
+    status:document.getElementById('l-status').value,
+    capitulos:capitulosRaw?Number(capitulosRaw):null,
+    paginas:paginasRaw?Number(paginasRaw):null,
+    notas:document.getElementById('l-notas').value
+  };
   if(!obj.titulo)return toast('Título obrigatório',false);
   const{error}=await sb.from('livros').insert(obj);
   if(error)return toast(error.message,false);
   toast('Salvo');closeModal('modal-livro');
-  document.getElementById('l-titulo').value='';document.getElementById('l-autor').value='';document.getElementById('l-notas').value='';
+  document.getElementById('l-titulo').value='';document.getElementById('l-autor').value='';document.getElementById('l-capitulos').value='';document.getElementById('l-paginas').value='';document.getElementById('l-notas').value='';
   loadLivros();
 }
 async function deleteLivro(id){
