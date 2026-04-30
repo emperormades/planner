@@ -532,7 +532,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
   <div class="drawer-foot">
     <div>
       <div class="drawer-user-label">Sessão</div>
-      <div class="drawer-user" id="drawer-email">—</div>
+      <div class="drawer-user" id="drawer-email">Mades & Isabelly</div>
     </div>
     <button class="drawer-logout" onclick="signOut()">↪ Sair</button>
   </div>
@@ -690,7 +690,7 @@ function showApp(){
   document.getElementById('auth-pass').value='';
   setAuthError('');
   sb.auth.getUser().then(({data})=>{
-    document.getElementById('drawer-email').textContent=data.user?.email||'—';
+    document.getElementById('drawer-email').textContent='Mades & Isabelly';
   });
   navigate('dashboard');
 }
