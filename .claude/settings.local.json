@@ -14,7 +14,17 @@
       "Bash(curl -s \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/.well-known/oauth-protected-resource\")",
       "Bash(curl -s -X POST \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/register\" -H \"Content-Type: application/json\" -d '{\"redirect_uris\":[\"https://claude.ai/api/oauth/callback\"]}')",
       "Bash(curl *)",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "Bash(awk 'NR<638 && /\\\\bsb\\\\b/' C:/Users/mades/Documents/planner/planner.html)",
+      "Bash(rm -rf dist)",
+      "Bash(npm run *)",
+      "Bash(npx vite *)",
+      "Bash(cp .env.example .env.local)",
+      "Bash(cp .env.tmp .env)",
+      "Bash(grep -oE \".{40}sb\\\\.auth\\\\..{40}\" C:/Users/mades/Documents/planner/dist/planner.html)",
+      "Bash(awk -v offset=48820 'BEGIN{RS=\"\"; ORS=\"\"} {print substr\\($0, offset, 200\\)}' C:/Users/mades/Documents/planner/dist/planner.html)",
+      "Bash(awk -v offset=51000 'BEGIN{RS=\"\"; ORS=\"\"} {print substr\\($0, offset, 200\\)}' C:/Users/mades/Documents/planner/dist/planner.html)",
+      "Bash(rm -f C:/Users/mades/Documents/planner/.env.tmp C:/Users/mades/Documents/planner/.env.local)"
     ]
   }
 }

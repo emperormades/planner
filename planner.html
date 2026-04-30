@@ -625,6 +625,18 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-confirm" onclick="if(event.target===this)closeModal('modal-confirm')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><em>Confirmar</em> exclusão</div>
+    <div id="confirm-msg" style="font-family:var(--serif);font-size:15px;color:var(--paper-dim);line-height:1.6;margin-bottom:22px">Tem certeza?</div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm')">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-ok">Excluir</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -754,6 +766,13 @@ function loadEstudos(){loadCerts();loadLivros();}
 function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 
+let _confirmCb=null;
+function confirmAction(msg,cb){
+  document.getElementById('confirm-msg').textContent=msg;
+  _confirmCb=cb;
+  openModal('modal-confirm');
+}
+
 function toast(msg,ok=true){
   const t=document.getElementById('toast');
   t.textContent=msg;
@@ -854,9 +873,10 @@ async function saveMeta(){
   loadMetas();
 }
 async function deleteMeta(id){
-  if(!confirm('Remover esta meta?'))return;
-  await sb.from('metas').delete().eq('id',id);
-  toast('Removida');loadMetas();
+  confirmAction('Tem certeza que deseja excluir esta meta? Esta ação não pode ser desfeita.',async()=>{
+    await sb.from('metas').delete().eq('id',id);
+    toast('Removida');loadMetas();
+  });
 }
 
 // ── GASTOS ──
@@ -887,7 +907,12 @@ async function saveGasto(){
   document.getElementById('g-desc').value='';document.getElementById('g-valor').value='';
   loadGastos();
 }
-async function deleteGasto(id){await sb.from('gastos').delete().eq('id',id);toast('Removido');loadGastos();}
+async function deleteGasto(id){
+  confirmAction('Tem certeza que deseja excluir este gasto? Esta ação não pode ser desfeita.',async()=>{
+    await sb.from('gastos').delete().eq('id',id);
+    toast('Removido');loadGastos();
+  });
+}
 
 // ── CERTS ──
 async function loadCerts(){
@@ -908,7 +933,12 @@ async function saveCert(){
   document.getElementById('c-nome').value='';document.getElementById('c-notas').value='';
   loadCerts();
 }
-async function deleteCert(id){await sb.from('certificacoes').delete().eq('id',id);toast('Removida');loadCerts();}
+async function deleteCert(id){
+  confirmAction('Tem certeza que deseja excluir esta certificação? Esta ação não pode ser desfeita.',async()=>{
+    await sb.from('certificacoes').delete().eq('id',id);
+    toast('Removida');loadCerts();
+  });
+}
 
 // ── LIVROS ──
 async function loadLivros(){
@@ -928,7 +958,12 @@ async function saveLivro(){
   document.getElementById('l-titulo').value='';document.getElementById('l-autor').value='';document.getElementById('l-notas').value='';
   loadLivros();
 }
-async function deleteLivro(id){await sb.from('livros').delete().eq('id',id);toast('Removido');loadLivros();}
+async function deleteLivro(id){
+  confirmAction('Tem certeza que deseja excluir este livro? Esta ação não pode ser desfeita.',async()=>{
+    await sb.from('livros').delete().eq('id',id);
+    toast('Removido');loadLivros();
+  });
+}
 
 // ── SIMULADOR ──
 const MESES_SIM=20,CUSTO_IWU=19802,MENS_IWU=Math.round(CUSTO_IWU/MESES_SIM),CPT_H_MES=20*4.33;
@@ -1277,6 +1312,7 @@ document.getElementById('g-mes').value=now.getMonth()+1;
 document.getElementById('auth-pass').addEventListener('keydown',e=>{if(e.key==='Enter')submitAuth();});
 document.getElementById('auth-email').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('auth-pass').focus();});
 document.getElementById('m-status').addEventListener('change',e=>{if(e.target.value==='concluida')document.getElementById('m-prog').value=100;});
+document.getElementById('confirm-ok').addEventListener('click',()=>{const cb=_confirmCb;_confirmCb=null;closeModal('modal-confirm');if(cb)cb();});
 </script>
 </body>
 </html>
