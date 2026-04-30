@@ -43,9 +43,11 @@ CREATE TABLE IF NOT EXISTS public.certificacoes (
   prazo       date,
   status      text        NOT NULL DEFAULT 'planejada'
                           CHECK (status IN ('planejada','em_andamento','concluida')),
+  modulos     int         CHECK (modulos >= 0),
   notas       text,
   created_at  timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.certificacoes ADD COLUMN IF NOT EXISTS modulos int CHECK (modulos >= 0);
 CREATE INDEX IF NOT EXISTS idx_certs_status     ON public.certificacoes (status);
 CREATE INDEX IF NOT EXISTS idx_certs_created_at ON public.certificacoes (created_at DESC);
 

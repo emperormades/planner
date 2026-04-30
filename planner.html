@@ -587,6 +587,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="form-field"><div class="form-label">Prazo</div><input class="form-input" type="date" id="c-prazo"></div>
       <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="c-status"><option value="planejada">Planejada</option><option value="em_andamento">Em andamento</option><option value="concluida">Concluída</option></select></div>
     </div>
+    <div class="form-field"><div class="form-label">Módulos</div><input class="form-input" type="number" id="c-modulos" min="0" placeholder="ex: 12"></div>
     <div class="form-field"><div class="form-label">Notas</div><textarea class="form-input" id="c-notas" rows="2" placeholder="Material, links..."></textarea></div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-cert')">Cancelar</button><button class="btn" onclick="saveCert()">Salvar</button></div>
   </div>
@@ -922,15 +923,16 @@ async function loadCerts(){
   const sc={planejada:'tag-gray',em_andamento:'tag-amber',concluida:'tag-green'};
   const sl={planejada:'Planejada',em_andamento:'Em andamento',concluida:'Concluída'};
   const pc={alta:'tag-red',media:'tag-amber',baixa:'tag-gray'};
-  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div class="item-name" style="flex:1;padding-right:8px">${x.nome}</div><button class="btn btn-sm btn-danger" onclick="deleteCert(${x.id})">×</button></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag ${pc[x.prioridade]||'tag-gray'}">${x.prioridade||''}</span><span class="tag tag-blue">${x.area}</span>${x.prazo?`<span class="item-meta">${new Date(x.prazo+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
+  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div class="item-name" style="flex:1;padding-right:8px">${x.nome}</div><button class="btn btn-sm btn-danger" onclick="deleteCert(${x.id})">×</button></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag ${pc[x.prioridade]||'tag-gray'}">${x.prioridade||''}</span><span class="tag tag-blue">${x.area}</span>${x.modulos!=null?`<span class="tag tag-gray">${x.modulos} módulos</span>`:''}${x.prazo?`<span class="item-meta">${new Date(x.prazo+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
 }
 async function saveCert(){
-  const obj={nome:document.getElementById('c-nome').value,area:document.getElementById('c-area').value,prioridade:document.getElementById('c-prio').value,prazo:document.getElementById('c-prazo').value||null,status:document.getElementById('c-status').value,notas:document.getElementById('c-notas').value};
+  const modulosRaw=(document.getElementById('c-modulos').value||'').trim();
+  const obj={nome:document.getElementById('c-nome').value,area:document.getElementById('c-area').value,prioridade:document.getElementById('c-prio').value,prazo:document.getElementById('c-prazo').value||null,status:document.getElementById('c-status').value,modulos:modulosRaw?Number(modulosRaw):null,notas:document.getElementById('c-notas').value};
   if(!obj.nome)return toast('Nome obrigatório',false);
   const{error}=await sb.from('certificacoes').insert(obj);
   if(error)return toast(error.message,false);
   toast('Salva');closeModal('modal-cert');
-  document.getElementById('c-nome').value='';document.getElementById('c-notas').value='';
+  document.getElementById('c-nome').value='';document.getElementById('c-modulos').value='';document.getElementById('c-notas').value='';
   loadCerts();
 }
 async function deleteCert(id){
