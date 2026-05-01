@@ -61,11 +61,13 @@ CREATE TABLE IF NOT EXISTS public.livros (
                           CHECK (status IN ('quero_ler','lendo','lido')),
   capitulos   int         CHECK (capitulos >= 0),
   paginas     int         CHECK (paginas >= 0),
+  pagina_atual int        CHECK (pagina_atual >= 0),
   notas       text,
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 ALTER TABLE public.livros ADD COLUMN IF NOT EXISTS capitulos int CHECK (capitulos >= 0);
 ALTER TABLE public.livros ADD COLUMN IF NOT EXISTS paginas int CHECK (paginas >= 0);
+ALTER TABLE public.livros ADD COLUMN IF NOT EXISTS pagina_atual int CHECK (pagina_atual >= 0);
 CREATE INDEX IF NOT EXISTS idx_livros_status     ON public.livros (status);
 CREATE INDEX IF NOT EXISTS idx_livros_created_at ON public.livros (created_at DESC);
 

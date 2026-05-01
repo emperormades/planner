@@ -610,6 +610,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="form-field"><div class="form-label">Número de capítulos</div><input class="form-input" id="l-capitulos" type="number" min="0" placeholder="ex: 12"></div>
       <div class="form-field"><div class="form-label">Número de páginas</div><input class="form-input" id="l-paginas" type="number" min="0" placeholder="ex: 320"></div>
     </div>
+    <div class="form-field"><div class="form-label">Página atual</div><input class="form-input" id="l-pagina-atual" type="number" min="0" placeholder="ex: 85"></div>
     <div class="form-row">
       <div class="form-field"><div class="form-label">Categoria</div><select class="form-input" id="l-cat"><option>Inteligência Artificial</option><option>Aprendizado de Máquina</option><option>Engenharia de Dados</option><option>Vendas</option><option>Negócios</option><option>Finanças</option><option>Imigração</option><option>Inglês</option><option>Outro</option></select></div>
       <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="l-status"><option value="quero_ler">Quero ler</option><option value="lendo">Lendo</option><option value="lido">Lido</option></select></div>
@@ -1043,7 +1044,12 @@ async function loadLivros(){
   if(!data?.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">▭</div>Nenhum livro<br><br><button class="btn" onclick="newLivro()">+ Adicionar</button></div>';return;}
   const sc={quero_ler:'tag-gray',lendo:'tag-amber',lido:'tag-green'};
   const sl={quero_ler:'Quero ler',lendo:'Lendo',lido:'Lido'};
-  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div style="flex:1;padding-right:8px"><div class="item-name">${x.titulo}</div>${x.autor?`<div class="item-desc" style="margin-top:0">${x.autor}</div>`:''}</div><div style="white-space:nowrap"><button class="btn btn-sm" onclick="editLivro(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteLivro(${x.id})">×</button></div></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag tag-blue">${x.categoria}</span></div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
+  el.innerHTML=data.map(x=>{
+    const paginasTotal=Math.max(0,Number(x.paginas)||0);
+    const paginaAtual=Math.max(0,Number(x.pagina_atual)||0);
+    const pctLido=paginasTotal>0?Math.min(100,Math.round((paginaAtual/paginasTotal)*100)):null;
+    return `<div class="item-card"><div class="item-header"><div style="flex:1;padding-right:8px"><div class="item-name">${x.titulo}</div>${x.autor?`<div class="item-desc" style="margin-top:0">${x.autor}</div>`:''}</div><div style="white-space:nowrap"><button class="btn btn-sm" onclick="editLivro(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteLivro(${x.id})">×</button></div></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag tag-blue">${x.categoria}</span>${paginasTotal>0?`<span class="tag tag-gray">p. ${Math.min(paginaAtual,paginasTotal)}/${paginasTotal}</span>`:''}${pctLido!=null?`<span class="tag tag-green">${pctLido}% lido</span>`:''}</div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`;
+  }).join('');
 }
 function resetLivroForm(){
   editingLivroId=null;
@@ -1051,6 +1057,7 @@ function resetLivroForm(){
   document.getElementById('l-autor').value='';
   document.getElementById('l-capitulos').value='';
   document.getElementById('l-paginas').value='';
+  document.getElementById('l-pagina-atual').value='';
   document.getElementById('l-cat').selectedIndex=0;
   document.getElementById('l-status').value='quero_ler';
   document.getElementById('l-notas').value='';
@@ -1069,6 +1076,7 @@ async function editLivro(id){
   document.getElementById('l-autor').value=data.autor||'';
   document.getElementById('l-capitulos').value=data.capitulos??'';
   document.getElementById('l-paginas').value=data.paginas??'';
+  document.getElementById('l-pagina-atual').value=data.pagina_atual??'';
   document.getElementById('l-cat').value=data.categoria||document.getElementById('l-cat').options[0].value;
   document.getElementById('l-status').value=data.status||'quero_ler';
   document.getElementById('l-notas').value=data.notas||'';
@@ -1079,6 +1087,7 @@ async function editLivro(id){
 async function saveLivro(){
   const capitulosRaw=(document.getElementById('l-capitulos').value||'').trim();
   const paginasRaw=(document.getElementById('l-paginas').value||'').trim();
+  const paginaAtualRaw=(document.getElementById('l-pagina-atual').value||'').trim();
   const obj={
     titulo:document.getElementById('l-titulo').value,
     autor:document.getElementById('l-autor').value,
@@ -1086,6 +1095,7 @@ async function saveLivro(){
     status:document.getElementById('l-status').value,
     capitulos:capitulosRaw?Number(capitulosRaw):null,
     paginas:paginasRaw?Number(paginasRaw):null,
+    pagina_atual:paginaAtualRaw?Number(paginaAtualRaw):null,
     notas:document.getElementById('l-notas').value
   };
   if(!obj.titulo)return toast('Título obrigatório',false);
