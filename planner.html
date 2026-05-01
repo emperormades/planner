@@ -60,7 +60,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .auth-error{font-family:var(--mono);font-size:11px;color:var(--red-light);min-height:16px;letter-spacing:0.05em;margin-top:4px;}
 
 /* ── TOP BAR ── */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(10,10,15,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:calc(var(--safe-t) + 12px) 18px 12px;display:flex;align-items:center;justify-content:space-between;min-height:calc(var(--safe-t) + 56px);}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,10,15,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:calc(var(--safe-t) + 12px) 18px 12px;display:flex;align-items:center;justify-content:space-between;min-height:calc(var(--safe-t) + 56px);cursor:pointer;}
 .topbar-id{display:flex;flex-direction:column;gap:1px;}
 .topbar-brand{font-family:var(--display);font-size:14px;font-weight:600;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;line-height:1;}
 .topbar-title{font-family:var(--display);font-size:18px;font-weight:600;color:var(--paper);line-height:1.1;margin-top:2px;}
@@ -110,6 +110,12 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   .drawer-close{display:none;}
   .hamburger{display:none !important;}
   .app{padding-left:var(--drawer-w);}
+}
+
+@media (max-width:420px){
+  /* Em telas pequenas, esconde a coluna de categoria em Gastos */
+  #page-gastos .data-table th:nth-child(2),
+  #page-gastos .data-table td:nth-child(2){display:none;}
 }
 
 /* ── STATS ── */
@@ -335,8 +341,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
 <div class="app" id="app" style="display:none">
 
 <!-- TOP BAR -->
-<header class="topbar">
-  <button class="icon-btn hamburger" onclick="openDrawer()" aria-label="Menu" style="margin-right:12px">≡</button>
+<header class="topbar" onclick="reloadCurrentPage()">
+  <button class="icon-btn hamburger" onclick="event.stopPropagation();openDrawer()" aria-label="Menu" style="margin-right:12px">≡</button>
   <div class="topbar-id">
     <div class="topbar-title" id="topbar-title">Início</div>
     <div class="topbar-sub" id="topbar-sub">visão geral</div>
