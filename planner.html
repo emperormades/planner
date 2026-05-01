@@ -584,7 +584,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
 <div class="modal-overlay" id="modal-cert" onclick="if(event.target===this)closeModal('modal-cert')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title"><em>Certificação</em></div>
+    <div class="modal-title" id="modal-cert-title"><em>Certificação</em></div>
     <div class="form-field"><div class="form-label">Nome</div><input class="form-input" id="c-nome" placeholder="ex: Azure AI Engineer"></div>
     <div class="form-row">
       <div class="form-field"><div class="form-label">Área</div><select class="form-input" id="c-area"><option>AZ-900 Azure Fundamentals</option><option>DP-900 Data Fundamentals</option><option>AB-900 Copilot and Agent Administration Fundamentals</option><option>AI-900 AI Fundamentals</option><option>AI-901 AI Fundamentals</option><option>AI-102 AI Engineer Associate</option><option>AI-103 AI Engineer Associate</option><option>AB-730 AI Business Professional</option><option>AB-731 AI Transformation Leader</option><option>PL-300 Power BI Data Analyst Associate</option><option>DP-600 Fabric Analytics Engineer</option><option>DP-700 Fabric Data Engineer</option><option>DP-750 Azure Databricks Data Engineer Associate</option><option>DP-800 SQL AI Developer Associate</option><option>AI-300 Machine Learning Operations (MLOps) Engineer Associate</option><option>AB-100 Agentic AI Business Solutions Architect</option><option>AZ 204 Azure Develper Associate</option><option>AZ-400 DevOps Engineer Expert</option><option>AZ-104 Azure Administrator</option><option>AZ-305 Azure Solutions Architect Expert</option></select></div>
@@ -596,7 +596,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     </div>
     <div class="form-field"><div class="form-label">Módulos</div><input class="form-input" type="number" id="c-modulos" min="0" placeholder="ex: 12"></div>
     <div class="form-field"><div class="form-label">Notas</div><textarea class="form-input" id="c-notas" rows="2" placeholder="Material, links..."></textarea></div>
-    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-cert')">Cancelar</button><button class="btn" onclick="saveCert()">Salvar</button></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-cert')">Cancelar</button><button class="btn" id="c-submit" onclick="saveCert()">Salvar</button></div>
   </div>
 </div>
 
@@ -727,7 +727,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null;
+let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null;
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -773,7 +773,7 @@ function reloadCurrentPage(){
 function fabAction(){
   if(curPage==='metas')newMeta();
   else if(curPage==='gastos')newGasto();
-  else if(curPage==='estudos')openModal(estudosTab==='certs'?'modal-cert':'modal-livro');
+  else if(curPage==='estudos')estudosTab==='certs'?newCert():openModal('modal-livro');
 }
 
 function switchEstudos(tab){
@@ -978,20 +978,55 @@ async function deleteGasto(id){
 async function loadCerts(){
   const{data}=await sb.from('certificacoes').select('*').order('created_at',{ascending:false});
   const el=document.getElementById('certs-list');
-  if(!data?.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✦</div>Nenhuma certificação<br><br><button class="btn" onclick="openModal(\'modal-cert\')">+ Adicionar</button></div>';return;}
+  if(!data?.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✦</div>Nenhuma certificação<br><br><button class="btn" onclick="newCert()">+ Adicionar</button></div>';return;}
   const sc={planejada:'tag-gray',em_andamento:'tag-amber',concluida:'tag-green'};
   const sl={planejada:'Planejada',em_andamento:'Em andamento',concluida:'Concluída'};
   const pc={alta:'tag-red',media:'tag-amber',baixa:'tag-gray'};
-  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div class="item-name" style="flex:1;padding-right:8px">${x.nome}</div><button class="btn btn-sm btn-danger" onclick="deleteCert(${x.id})">×</button></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag ${pc[x.prioridade]||'tag-gray'}">${x.prioridade||''}</span><span class="tag tag-blue">${x.area}</span>${x.modulos!=null?`<span class="tag tag-gray">${x.modulos} módulos</span>`:''}${x.prazo?`<span class="item-meta">${new Date(x.prazo+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
+  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div class="item-name" style="flex:1;padding-right:8px">${x.nome}</div><div style="white-space:nowrap"><button class="btn btn-sm" onclick="editCert(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteCert(${x.id})">×</button></div></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag ${pc[x.prioridade]||'tag-gray'}">${x.prioridade||''}</span><span class="tag tag-blue">${x.area}</span>${x.modulos!=null?`<span class="tag tag-gray">${x.modulos} módulos</span>`:''}${x.prazo?`<span class="item-meta">${new Date(x.prazo+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
+}
+function resetCertForm(){
+  editingCertId=null;
+  document.getElementById('c-nome').value='';
+  document.getElementById('c-area').selectedIndex=0;
+  document.getElementById('c-prio').value='media';
+  document.getElementById('c-prazo').value='';
+  document.getElementById('c-status').value='planejada';
+  document.getElementById('c-modulos').value='';
+  document.getElementById('c-notas').value='';
+  document.getElementById('modal-cert-title').innerHTML='<em>Certificação</em>';
+  document.getElementById('c-submit').textContent='Salvar';
+}
+function newCert(){
+  resetCertForm();
+  openModal('modal-cert');
+}
+async function editCert(id){
+  const{data,error}=await sb.from('certificacoes').select('*').eq('id',id).single();
+  if(error||!data)return toast('Não foi possível carregar a certificação',false);
+  editingCertId=id;
+  document.getElementById('c-nome').value=data.nome||'';
+  document.getElementById('c-area').value=data.area||document.getElementById('c-area').options[0].value;
+  document.getElementById('c-prio').value=data.prioridade||'media';
+  document.getElementById('c-prazo').value=data.prazo||'';
+  document.getElementById('c-status').value=data.status||'planejada';
+  document.getElementById('c-modulos').value=data.modulos??'';
+  document.getElementById('c-notas').value=data.notas||'';
+  document.getElementById('modal-cert-title').innerHTML='Editar <em>Certificação</em>';
+  document.getElementById('c-submit').textContent='Atualizar';
+  openModal('modal-cert');
 }
 async function saveCert(){
   const modulosRaw=(document.getElementById('c-modulos').value||'').trim();
   const obj={nome:document.getElementById('c-nome').value,area:document.getElementById('c-area').value,prioridade:document.getElementById('c-prio').value,prazo:document.getElementById('c-prazo').value||null,status:document.getElementById('c-status').value,modulos:modulosRaw?Number(modulosRaw):null,notas:document.getElementById('c-notas').value};
   if(!obj.nome)return toast('Nome obrigatório',false);
-  const{error}=await sb.from('certificacoes').insert(obj);
+  const isEdit=editingCertId!=null;
+  const{error}=isEdit
+    ?await sb.from('certificacoes').update(obj).eq('id',editingCertId)
+    :await sb.from('certificacoes').insert(obj);
   if(error)return toast(error.message,false);
-  toast('Salva');closeModal('modal-cert');
-  document.getElementById('c-nome').value='';document.getElementById('c-modulos').value='';document.getElementById('c-notas').value='';
+  toast(isEdit?'Certificação atualizada':'Certificação salva');
+  closeModal('modal-cert');
+  resetCertForm();
   loadCerts();
 }
 async function deleteCert(id){
