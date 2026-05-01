@@ -560,7 +560,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
 <div class="modal-overlay" id="modal-gasto" onclick="if(event.target===this)closeModal('modal-gasto')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">Lançar <em>Gasto</em></div>
+    <div class="modal-title" id="modal-gasto-title">Lançar <em>Gasto</em></div>
     <div class="form-field"><div class="form-label">Descrição</div><input class="form-input" id="g-desc" placeholder="ex: Aluguel setembro"></div>
     <div class="form-row">
       <div class="form-field"><div class="form-label">Valor ($)</div><input class="form-input" type="number" id="g-valor" placeholder="0.00" step="0.01" inputmode="decimal"></div>
@@ -570,7 +570,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="form-field"><div class="form-label">Mês</div><select class="form-input" id="g-mes"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select></div>
       <div class="form-field"><div class="form-label">Ano</div><input class="form-input" type="number" id="g-ano" value="2026" min="2026" max="2030" inputmode="numeric"></div>
     </div>
-    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-gasto')">Cancelar</button><button class="btn" onclick="saveGasto()">Salvar</button></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-gasto')">Cancelar</button><button class="btn" id="g-submit" onclick="saveGasto()">Salvar</button></div>
   </div>
 </div>
 
@@ -720,7 +720,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false;
+let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null;
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -765,7 +765,7 @@ function reloadCurrentPage(){
 
 function fabAction(){
   if(curPage==='metas')newMeta();
-  else if(curPage==='gastos')openModal('modal-gasto');
+  else if(curPage==='gastos')newGasto();
   else if(curPage==='estudos')openModal(estudosTab==='certs'?'modal-cert':'modal-livro');
 }
 
@@ -911,15 +911,47 @@ async function loadGastos(){
   const meses=[...new Set((allQ.data||[]).map(x=>x.ano+'-'+String(x.mes).padStart(2,'0')))].sort().reverse();
   const sel=document.getElementById('filtro-mes');const cur=sel.value;
   sel.innerHTML='<option value="">Todos</option>'+meses.map(m=>{const[a,mm]=m.split('-');return`<option value="${m}" ${m===cur?'selected':''}>${MN[+mm]}/${a}</option>`;}).join('');
-  document.getElementById('gastos-list').innerHTML=gD.length===0?'<tr><td colspan="4" class="empty-state">Nenhum gasto</td></tr>':gD.map(x=>`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td><td><button class="btn btn-sm btn-danger" onclick="deleteGasto(${x.id})">×</button></td></tr>`).join('');
+  document.getElementById('gastos-list').innerHTML=gD.length===0?'<tr><td colspan="4" class="empty-state">Nenhum gasto</td></tr>':gD.map(x=>`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td><td style="white-space:nowrap"><button class="btn btn-sm" onclick="editGasto(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteGasto(${x.id})">×</button></td></tr>`).join('');
+}
+function resetGastoForm(){
+  editingGastoId=null;
+  document.getElementById('g-desc').value='';
+  document.getElementById('g-valor').value='';
+  document.getElementById('g-cat').selectedIndex=0;
+  const now=new Date();
+  document.getElementById('g-mes').value=now.getMonth()+1;
+  document.getElementById('g-ano').value=now.getFullYear();
+  document.getElementById('modal-gasto-title').innerHTML='Lançar <em>Gasto</em>';
+  document.getElementById('g-submit').textContent='Salvar';
+}
+function newGasto(){
+  resetGastoForm();
+  openModal('modal-gasto');
+}
+async function editGasto(id){
+  const{data,error}=await sb.from('gastos').select('*').eq('id',id).single();
+  if(error||!data)return toast('Não foi possível carregar o gasto',false);
+  editingGastoId=id;
+  document.getElementById('g-desc').value=data.descricao||'';
+  document.getElementById('g-valor').value=data.valor??'';
+  document.getElementById('g-cat').value=data.categoria||'Outro';
+  document.getElementById('g-mes').value=data.mes;
+  document.getElementById('g-ano').value=data.ano;
+  document.getElementById('modal-gasto-title').innerHTML='Editar <em>Gasto</em>';
+  document.getElementById('g-submit').textContent='Atualizar';
+  openModal('modal-gasto');
 }
 async function saveGasto(){
   const obj={descricao:document.getElementById('g-desc').value,valor:+document.getElementById('g-valor').value,categoria:document.getElementById('g-cat').value,mes:+document.getElementById('g-mes').value,ano:+document.getElementById('g-ano').value};
   if(!obj.descricao||!obj.valor)return toast('Preencha descrição e valor',false);
-  const{error}=await sb.from('gastos').insert(obj);
+  const isEdit=editingGastoId!=null;
+  const{error}=isEdit
+    ?await sb.from('gastos').update(obj).eq('id',editingGastoId)
+    :await sb.from('gastos').insert(obj);
   if(error)return toast(error.message,false);
-  toast('Gasto lançado');closeModal('modal-gasto');
-  document.getElementById('g-desc').value='';document.getElementById('g-valor').value='';
+  toast(isEdit?'Gasto atualizado':'Gasto lançado');
+  closeModal('modal-gasto');
+  resetGastoForm();
   loadGastos();
 }
 async function deleteGasto(id){
