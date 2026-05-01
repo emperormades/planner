@@ -393,6 +393,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     <div class="block">
       <div class="block-title">Lançamentos
         <select class="form-input" style="width:auto;padding:6px 28px 6px 10px;font-size:11px;font-family:var(--mono)" id="filtro-mes" onchange="loadGastos()"><option value="">Todos os meses</option></select>
+        <select class="form-input" style="width:auto;padding:6px 28px 6px 10px;font-size:11px;font-family:var(--mono)" id="filtro-cat" onchange="loadGastos()"><option value="">Todas categorias</option></select>
       </div>
       <table class="data-table">
         <thead><tr><th>Descrição</th><th>Cat.</th><th class="text-right">Valor</th><th></th></tr></thead>
@@ -903,8 +904,10 @@ async function deleteMeta(id){
 // ── GASTOS ──
 async function loadGastos(){
   const filtro=document.getElementById('filtro-mes').value;
+  const filtroCat=document.getElementById('filtro-cat').value;
   let q=sb.from('gastos').select('*').order('ano',{ascending:false}).order('mes',{ascending:false}).order('created_at',{ascending:false});
   if(filtro){const[a,mm]=filtro.split('-');q=q.eq('ano',a).eq('mes',mm);}
+  if(filtroCat)q=q.eq('categoria',filtroCat);
   const{data}=await q;const gD=data||[];
   const tot=gD.reduce((a,b)=>a+(+b.valor),0);
   const catMap={};gD.forEach(x=>{catMap[x.categoria]=(catMap[x.categoria]||0)+(+x.valor);});
@@ -913,10 +916,14 @@ async function loadGastos(){
   document.getElementById('g-count').textContent=gD.length;
   document.getElementById('g-top-cat').textContent=top?top[0]:'—';
   document.getElementById('g-avg').textContent=gD.length?fmtUSD(tot/gD.length):'$0';
-  const allQ=await sb.from('gastos').select('mes,ano');
-  const meses=[...new Set((allQ.data||[]).map(x=>x.ano+'-'+String(x.mes).padStart(2,'0')))].sort().reverse();
+  const allQ=await sb.from('gastos').select('mes,ano,categoria');
+  const allData=allQ.data||[];
+  const meses=[...new Set(allData.map(x=>x.ano+'-'+String(x.mes).padStart(2,'0')))].sort().reverse();
   const sel=document.getElementById('filtro-mes');const cur=sel.value;
   sel.innerHTML='<option value="">Todos</option>'+meses.map(m=>{const[a,mm]=m.split('-');return`<option value="${m}" ${m===cur?'selected':''}>${MN[+mm]}/${a}</option>`;}).join('');
+  const categorias=[...new Set(allData.map(x=>x.categoria).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  const selCat=document.getElementById('filtro-cat');const curCat=selCat.value;
+  selCat.innerHTML='<option value="">Todas categorias</option>'+categorias.map(c=>`<option value="${c}" ${c===curCat?'selected':''}>${c}</option>`).join('');
   document.getElementById('gastos-list').innerHTML=gD.length===0?'<tr><td colspan="4" class="empty-state">Nenhum gasto</td></tr>':gD.map(x=>`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td><td style="white-space:nowrap"><button class="btn btn-sm" onclick="editGasto(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteGasto(${x.id})">×</button></td></tr>`).join('');
 }
 function resetGastoForm(){
