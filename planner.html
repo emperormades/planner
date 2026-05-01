@@ -603,7 +603,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
 <div class="modal-overlay" id="modal-livro" onclick="if(event.target===this)closeModal('modal-livro')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title"><em>Livro</em></div>
+    <div class="modal-title" id="modal-livro-title"><em>Livro</em></div>
     <div class="form-field"><div class="form-label">Título</div><input class="form-input" id="l-titulo" placeholder="Título do livro"></div>
     <div class="form-field"><div class="form-label">Autor</div><input class="form-input" id="l-autor" placeholder="Nome do autor"></div>
     <div class="form-row">
@@ -615,7 +615,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="l-status"><option value="quero_ler">Quero ler</option><option value="lendo">Lendo</option><option value="lido">Lido</option></select></div>
     </div>
     <div class="form-field"><div class="form-label">Notas</div><textarea class="form-input" id="l-notas" rows="2" placeholder="Highlights, resenha..."></textarea></div>
-    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-livro')">Cancelar</button><button class="btn" onclick="saveLivro()">Salvar</button></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-livro')">Cancelar</button><button class="btn" id="l-submit" onclick="saveLivro()">Salvar</button></div>
   </div>
 </div>
 
@@ -727,7 +727,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null;
+let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null,editingLivroId=null;
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -773,7 +773,7 @@ function reloadCurrentPage(){
 function fabAction(){
   if(curPage==='metas')newMeta();
   else if(curPage==='gastos')newGasto();
-  else if(curPage==='estudos')estudosTab==='certs'?newCert():openModal('modal-livro');
+  else if(curPage==='estudos')estudosTab==='certs'?newCert():newLivro();
 }
 
 function switchEstudos(tab){
@@ -1040,10 +1040,41 @@ async function deleteCert(id){
 async function loadLivros(){
   const{data}=await sb.from('livros').select('*').order('created_at',{ascending:false});
   const el=document.getElementById('livros-list');
-  if(!data?.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">▭</div>Nenhum livro<br><br><button class="btn" onclick="openModal(\'modal-livro\')">+ Adicionar</button></div>';return;}
+  if(!data?.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">▭</div>Nenhum livro<br><br><button class="btn" onclick="newLivro()">+ Adicionar</button></div>';return;}
   const sc={quero_ler:'tag-gray',lendo:'tag-amber',lido:'tag-green'};
   const sl={quero_ler:'Quero ler',lendo:'Lendo',lido:'Lido'};
-  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div style="flex:1;padding-right:8px"><div class="item-name">${x.titulo}</div>${x.autor?`<div class="item-desc" style="margin-top:0">${x.autor}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="deleteLivro(${x.id})">×</button></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag tag-blue">${x.categoria}</span></div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
+  el.innerHTML=data.map(x=>`<div class="item-card"><div class="item-header"><div style="flex:1;padding-right:8px"><div class="item-name">${x.titulo}</div>${x.autor?`<div class="item-desc" style="margin-top:0">${x.autor}</div>`:''}</div><div style="white-space:nowrap"><button class="btn btn-sm" onclick="editLivro(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteLivro(${x.id})">×</button></div></div><div class="item-tags"><span class="tag ${sc[x.status]||'tag-gray'}">${sl[x.status]||x.status}</span><span class="tag tag-blue">${x.categoria}</span></div>${x.notas?`<div class="item-desc" style="margin-top:8px">${x.notas}</div>`:''}</div>`).join('');
+}
+function resetLivroForm(){
+  editingLivroId=null;
+  document.getElementById('l-titulo').value='';
+  document.getElementById('l-autor').value='';
+  document.getElementById('l-capitulos').value='';
+  document.getElementById('l-paginas').value='';
+  document.getElementById('l-cat').selectedIndex=0;
+  document.getElementById('l-status').value='quero_ler';
+  document.getElementById('l-notas').value='';
+  document.getElementById('modal-livro-title').innerHTML='<em>Livro</em>';
+  document.getElementById('l-submit').textContent='Salvar';
+}
+function newLivro(){
+  resetLivroForm();
+  openModal('modal-livro');
+}
+async function editLivro(id){
+  const{data,error}=await sb.from('livros').select('*').eq('id',id).single();
+  if(error||!data)return toast('Não foi possível carregar o livro',false);
+  editingLivroId=id;
+  document.getElementById('l-titulo').value=data.titulo||'';
+  document.getElementById('l-autor').value=data.autor||'';
+  document.getElementById('l-capitulos').value=data.capitulos??'';
+  document.getElementById('l-paginas').value=data.paginas??'';
+  document.getElementById('l-cat').value=data.categoria||document.getElementById('l-cat').options[0].value;
+  document.getElementById('l-status').value=data.status||'quero_ler';
+  document.getElementById('l-notas').value=data.notas||'';
+  document.getElementById('modal-livro-title').innerHTML='Editar <em>Livro</em>';
+  document.getElementById('l-submit').textContent='Atualizar';
+  openModal('modal-livro');
 }
 async function saveLivro(){
   const capitulosRaw=(document.getElementById('l-capitulos').value||'').trim();
@@ -1058,10 +1089,14 @@ async function saveLivro(){
     notas:document.getElementById('l-notas').value
   };
   if(!obj.titulo)return toast('Título obrigatório',false);
-  const{error}=await sb.from('livros').insert(obj);
+  const isEdit=editingLivroId!=null;
+  const{error}=isEdit
+    ?await sb.from('livros').update(obj).eq('id',editingLivroId)
+    :await sb.from('livros').insert(obj);
   if(error)return toast(error.message,false);
-  toast('Salvo');closeModal('modal-livro');
-  document.getElementById('l-titulo').value='';document.getElementById('l-autor').value='';document.getElementById('l-capitulos').value='';document.getElementById('l-paginas').value='';document.getElementById('l-notas').value='';
+  toast(isEdit?'Livro atualizado':'Livro salvo');
+  closeModal('modal-livro');
+  resetLivroForm();
   loadLivros();
 }
 async function deleteLivro(id){
