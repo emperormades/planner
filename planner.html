@@ -365,6 +365,13 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div id="dash-metas-list"><div class="empty-state"><div class="empty-icon">◯</div>Sem metas ativas</div></div>
     </div>
     <div class="block">
+      <div class="block-title">Kaizen <span class="block-sub">ontem e hoje</span></div>
+      <div style="font-size:11px;color:var(--muted-2);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em">Ontem</div>
+      <div id="dash-kaizen-ontem"></div>
+      <div style="font-size:11px;color:var(--muted-2);margin-top:14px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em">Hoje</div>
+      <div id="dash-kaizen-hoje"></div>
+    </div>
+    <div class="block">
       <div class="block-title">Gastos por <em>categoria</em> <span class="block-sub">este mês</span></div>
       <div class="chart-wrap" style="height:200px"><canvas id="chart-gastos" role="img" aria-label="Gastos por categoria"></canvas></div>
     </div>
@@ -906,11 +913,41 @@ if(window.Chart){
   Chart.defaults.borderColor='rgba(201,168,76,0.15)';
 }
 
+const KZ_CAT_LABEL={saude:'Saúde',profissional:'Profissional',financeira:'Financeira',pessoal:'Pessoal',familiar:'Familiar'};
+const KZ_CAT_TAG={saude:'tag-green',profissional:'tag-blue',financeira:'tag-gold',pessoal:'tag-gray',familiar:'tag-amber'};
+function escHtml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function fmtKzDataHora(iso){
+  if(!iso)return'—';
+  const d=new Date(iso);
+  if(isNaN(d.getTime()))return'—';
+  return d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+}
+function renderDashKaizenPreview(rows){
+  if(!rows.length)return'<div class="empty-state" style="padding:12px 8px"><div class="empty-icon" style="font-size:18px">◇</div>Nenhuma melhoria</div>';
+  return rows.map(x=>{
+    const cat=(x.categoria&&KZ_CAT_LABEL[x.categoria])?x.categoria:'pessoal';
+    const lbl=KZ_CAT_LABEL[cat]||'Pessoal';
+    const tg=KZ_CAT_TAG[cat]||'tag-gray';
+    const mh=x.momento||x.created_at;
+    return `<div class="item-card" style="margin-bottom:8px;padding:10px 12px"><div class="item-tags" style="margin-bottom:6px;flex-wrap:wrap;gap:6px"><span class="tag ${tg}">${lbl}</span><span class="item-meta">${fmtKzDataHora(mh)}</span></div><div class="item-desc" style="margin:0;line-height:1.5;font-size:13.5px">${escHtml(x.texto)}</div></div>`;
+  }).join('');
+}
+
 // ── DASHBOARD ──
 async function loadDashboard(){
   const now=new Date();
-  const[g,m,c,l]=await Promise.all([sb.from('gastos').select('*').order('created_at',{ascending:false}),sb.from('metas').select('*'),sb.from('certificacoes').select('*'),sb.from('livros').select('*')]);
+  const[g,m,c,l,kz]=await Promise.all([sb.from('gastos').select('*').order('created_at',{ascending:false}),sb.from('metas').select('*'),sb.from('certificacoes').select('*'),sb.from('livros').select('*'),sb.from('kaizen').select('*').order('momento',{ascending:false}).order('created_at',{ascending:false}).limit(400)]);
   const gD=g.data||[],mD=m.data||[],cD=c.data||[],lD=l.data||[];
+  const sameLocalDay=(a,b)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
+  const whenOf=x=>{const iso=x.momento||x.created_at;if(!iso)return null;const d=new Date(iso);return isNaN(d.getTime())?null:d;};
+  const today0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const yest0=new Date(today0);yest0.setDate(yest0.getDate()-1);
+  const kzAll=kz.data||[];
+  const sortKz=(a,b)=>new Date(b.momento||b.created_at)-new Date(a.momento||a.created_at);
+  const kzOntem=kzAll.filter(x=>{const w=whenOf(x);return w&&sameLocalDay(w,yest0);}).sort(sortKz);
+  const kzHoje=kzAll.filter(x=>{const w=whenOf(x);return w&&sameLocalDay(w,today0);}).sort(sortKz);
+  document.getElementById('dash-kaizen-ontem').innerHTML=renderDashKaizenPreview(kzOntem);
+  document.getElementById('dash-kaizen-hoje').innerHTML=renderDashKaizenPreview(kzHoje);
   const mes=gD.filter(x=>x.mes==now.getMonth()+1&&x.ano==now.getFullYear());
   const tot=mes.reduce((a,b)=>a+(+b.valor),0);
   document.getElementById('ds-gastos').textContent=fmtUSD(tot);
@@ -954,20 +991,11 @@ function kzIsoToLocalInput(iso){
   d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
   return d.toISOString().slice(0,16);
 }
-function fmtKzDataHora(iso){
-  if(!iso)return'—';
-  const d=new Date(iso);
-  if(isNaN(d.getTime()))return'—';
-  return d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
-}
 async function loadKaizen(){
   const{data}=await sb.from('kaizen').select('*').order('momento',{ascending:false}).order('created_at',{ascending:false});
   renderKaizenList(data||[]);
   setDefaultKzMomento();
 }
-const KZ_CAT_LABEL={saude:'Saúde',profissional:'Profissional',financeira:'Financeira',pessoal:'Pessoal',familiar:'Familiar'};
-const KZ_CAT_TAG={saude:'tag-green',profissional:'tag-blue',financeira:'tag-gold',pessoal:'tag-gray',familiar:'tag-amber'};
-function escHtml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
 function renderKaizenList(rows){
   const el=document.getElementById('kaizen-list');
   if(!rows.length){el.innerHTML='<div class="empty-state" style="padding:18px 12px"><div class="empty-icon">◇</div>Nenhuma melhoria registrada ainda</div>';return;}
