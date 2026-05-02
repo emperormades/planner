@@ -71,6 +71,16 @@ ALTER TABLE public.livros ADD COLUMN IF NOT EXISTS pagina_atual int CHECK (pagin
 CREATE INDEX IF NOT EXISTS idx_livros_status     ON public.livros (status);
 CREATE INDEX IF NOT EXISTS idx_livros_created_at ON public.livros (created_at DESC);
 
+-- ──────────────── KAIZEN (melhoria contínua — dashboard) ────────────────
+CREATE TABLE IF NOT EXISTS public.kaizen (
+  id          bigserial PRIMARY KEY,
+  texto       text        NOT NULL,
+  categoria   text        NOT NULL DEFAULT 'pessoal',
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.kaizen ADD COLUMN IF NOT EXISTS categoria text NOT NULL DEFAULT 'pessoal';
+CREATE INDEX IF NOT EXISTS idx_kaizen_created_at ON public.kaizen (created_at DESC);
+
 -- ──────────────── AULAS (Curso SQL) ────────────────
 -- Progresso e notas das aulas do SQL Impressionador.
 -- Catálogo (módulos + nomes das aulas) fica no JS — não armazenado.
@@ -93,6 +103,7 @@ ALTER TABLE public.gastos        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificacoes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.livros        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.aulas         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.kaizen        ENABLE ROW LEVEL SECURITY;
 
 -- Limpa policies antigas (caso já existam de tentativas anteriores)
 DROP POLICY IF EXISTS "allow all"       ON public.metas;
@@ -104,6 +115,7 @@ DROP POLICY IF EXISTS "auth_all_certs"  ON public.certificacoes;
 DROP POLICY IF EXISTS "allow all"       ON public.livros;
 DROP POLICY IF EXISTS "auth_all_livros" ON public.livros;
 DROP POLICY IF EXISTS "auth_all_aulas"  ON public.aulas;
+DROP POLICY IF EXISTS "auth_all_kaizen" ON public.kaizen;
 
 -- Cria policies novas — só authenticated
 CREATE POLICY "auth_all_metas"  ON public.metas
@@ -119,4 +131,7 @@ CREATE POLICY "auth_all_livros" ON public.livros
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_aulas"  ON public.aulas
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_kaizen" ON public.kaizen
   FOR ALL TO authenticated USING (true) WITH CHECK (true);

@@ -377,6 +377,32 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     </div>
   </div>
 
+  <!-- KAIZEN -->
+  <div id="page-kaizen" class="page">
+    <div class="block">
+      <div class="block-title"><em>Kaizen</em> <span class="block-sub">melhoria contínua</span></div>
+      <p style="font-size:13.5px;color:var(--muted-2);line-height:1.55;margin-bottom:14px">Pequenas melhorias consistentes, um hábito de cada vez.</p>
+      <div class="form-field" style="margin-bottom:12px">
+        <div class="form-label">Em que área você melhorou?</div>
+        <select class="form-input" id="kz-cat">
+          <option value="saude">Saúde</option>
+          <option value="profissional">Profissional</option>
+          <option value="financeira">Financeira</option>
+          <option value="pessoal" selected>Pessoal</option>
+          <option value="familiar">Familiar</option>
+        </select>
+      </div>
+      <div class="form-row" style="align-items:flex-end">
+        <div class="form-field" style="margin-bottom:0;flex:1;min-width:0">
+          <div class="form-label">Nova melhoria</div>
+          <input class="form-input" id="kz-input" placeholder="Ex.: revisar 15 min de SQL antes do café…" onkeydown="if(event.key==='Enter')addKaizen()">
+        </div>
+        <button class="btn" type="button" onclick="addKaizen()" style="flex-shrink:0">Adicionar</button>
+      </div>
+      <div id="kaizen-list" style="margin-top:14px"></div>
+    </div>
+  </div>
+
   <!-- METAS -->
   <div id="page-metas" class="page">
     <div id="metas-list"><div class="empty-state"><div class="empty-icon">◯</div>Nenhuma meta ainda</div></div>
@@ -548,24 +574,28 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <span class="drawer-num">I</span>
       <span class="drawer-text"><span class="drawer-label">Início</span><span class="drawer-sub">visão geral</span></span>
     </button>
-    <button class="drawer-item" data-page="metas" onclick="navigate('metas')">
+    <button class="drawer-item" data-page="kaizen" onclick="navigate('kaizen')">
       <span class="drawer-num">II</span>
+      <span class="drawer-text"><span class="drawer-label">Kaizen</span><span class="drawer-sub">melhoria contínua</span></span>
+    </button>
+    <button class="drawer-item" data-page="metas" onclick="navigate('metas')">
+      <span class="drawer-num">III</span>
       <span class="drawer-text"><span class="drawer-label">Metas</span><span class="drawer-sub">objetivos · trajetória</span></span>
     </button>
     <button class="drawer-item" data-page="gastos" onclick="navigate('gastos')">
-      <span class="drawer-num">III</span>
+      <span class="drawer-num">IV</span>
       <span class="drawer-text"><span class="drawer-label">Gastos</span><span class="drawer-sub">controle financeiro</span></span>
     </button>
     <button class="drawer-item" data-page="estudos" onclick="navigate('estudos')">
-      <span class="drawer-num">IV</span>
+      <span class="drawer-num">V</span>
       <span class="drawer-text"><span class="drawer-label">Estudos</span><span class="drawer-sub">certs · livros</span></span>
     </button>
     <button class="drawer-item" data-page="simulador" onclick="navigate('simulador')">
-      <span class="drawer-num">V</span>
+      <span class="drawer-num">VI</span>
       <span class="drawer-text"><span class="drawer-label">Simulador</span><span class="drawer-sub">projeção 20 meses</span></span>
     </button>
     <button class="drawer-item" data-page="curso" onclick="navigate('curso')">
-      <span class="drawer-num">VI</span>
+      <span class="drawer-num">VII</span>
       <span class="drawer-text"><span class="drawer-label">Curso SQL</span><span class="drawer-sub">SQL Impressionador · 828 aulas</span></span>
     </button>
   </nav>
@@ -573,7 +603,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
   <div class="drawer-foot">
     <div>
       <div class="drawer-user-label">Sessão</div>
-      <div class="drawer-user" id="drawer-email">Mades & Isabelly</div>
+      <div class="drawer-user" id="drawer-email">Mades</div>
     </div>
     <button class="drawer-logout" onclick="signOut()">↪ Sair</button>
   </div>
@@ -737,7 +767,7 @@ function showApp(){
   document.getElementById('auth-pass').value='';
   setAuthError('');
   sb.auth.getUser().then(({data})=>{
-    document.getElementById('drawer-email').textContent='Mades & Isabelly';
+    document.getElementById('drawer-email').textContent='Mades';
   });
   navigate('dashboard');
 }
@@ -766,6 +796,7 @@ let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,s
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
+  kaizen:{title:'<em>Kaizen</em>',sub:'melhoria contínua',fab:false},
   metas:{title:'<em>Metas</em>',sub:'objetivos · trajetória',fab:true,modal:'modal-meta'},
   gastos:{title:'<em>Gastos</em>',sub:'controle financeiro',fab:true,modal:'modal-gasto'},
   estudos:{title:'<em>Estudos</em>',sub:'certificações · livros',fab:true},
@@ -787,6 +818,7 @@ function navigate(page){
   document.getElementById('main-scroll').scrollTo(0,0);
   closeDrawer();
   if(page==='dashboard')loadDashboard();
+  if(page==='kaizen')loadKaizen();
   if(page==='metas')loadMetas();
   if(page==='gastos')loadGastos();
   if(page==='estudos')loadEstudos();
@@ -797,6 +829,7 @@ function navigate(page){
 
 function reloadCurrentPage(){
   if(curPage==='dashboard')loadDashboard();
+  if(curPage==='kaizen')loadKaizen();
   if(curPage==='metas')loadMetas();
   if(curPage==='gastos')loadGastos();
   if(curPage==='estudos')loadEstudos();
@@ -877,6 +910,42 @@ async function loadDashboard(){
     canvas.parentElement.innerHTML='<div class="empty-state" style="height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column"><div class="empty-icon">◇</div>Sem gastos este mês</div>';
   }
   document.getElementById('dash-gastos-list').innerHTML=gD.length===0?'<tr><td colspan="3" class="empty-state">Nenhum gasto</td></tr>':gD.slice(0,5).map(x=>`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td></tr>`).join('');
+}
+async function loadKaizen(){
+  const{data}=await sb.from('kaizen').select('*').order('created_at',{ascending:false});
+  renderKaizenList(data||[]);
+}
+const KZ_CAT_LABEL={saude:'Saúde',profissional:'Profissional',financeira:'Financeira',pessoal:'Pessoal',familiar:'Familiar'};
+const KZ_CAT_TAG={saude:'tag-green',profissional:'tag-blue',financeira:'tag-gold',pessoal:'tag-gray',familiar:'tag-amber'};
+function escHtml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function renderKaizenList(rows){
+  const el=document.getElementById('kaizen-list');
+  if(!rows.length){el.innerHTML='<div class="empty-state" style="padding:18px 12px"><div class="empty-icon">◇</div>Nenhuma melhoria registrada ainda</div>';return;}
+  el.innerHTML=rows.map(x=>{
+    const cat=(x.categoria&&KZ_CAT_LABEL[x.categoria])?x.categoria:'pessoal';
+    const lbl=KZ_CAT_LABEL[cat]||'Pessoal';
+    const tg=KZ_CAT_TAG[cat]||'tag-gray';
+    return `<div class="item-card" style="margin-bottom:8px;padding:12px 14px"><div class="item-header" style="align-items:flex-start"><div style="flex:1;min-width:0;padding-right:10px"><div class="item-tags" style="margin-bottom:8px"><span class="tag ${tg}">${lbl}</span></div><div class="item-desc" style="margin:0;line-height:1.5">${escHtml(x.texto)}</div></div><button class="btn btn-sm btn-danger" onclick="deleteKaizen(${x.id})" style="flex-shrink:0">×</button></div></div>`;
+  }).join('');
+}
+async function addKaizen(){
+  const v=document.getElementById('kz-input').value.trim();
+  if(!v)return toast('Escreva uma melhoria',false);
+  const cat=document.getElementById('kz-cat').value;
+  const{error}=await sb.from('kaizen').insert({texto:v,categoria:cat});
+  if(error)return toast(error.message,false);
+  document.getElementById('kz-input').value='';
+  toast('Melhoria adicionada');
+  const{data}=await sb.from('kaizen').select('*').order('created_at',{ascending:false});
+  renderKaizenList(data||[]);
+}
+async function deleteKaizen(id){
+  confirmAction('Remover esta melhoria da lista?',async()=>{
+    await sb.from('kaizen').delete().eq('id',id);
+    toast('Removido');
+    const{data}=await sb.from('kaizen').select('*').order('created_at',{ascending:false});
+    renderKaizenList(data||[]);
+  });
 }
 
 // ── METAS ──
