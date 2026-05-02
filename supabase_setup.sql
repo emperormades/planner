@@ -76,10 +76,16 @@ CREATE TABLE IF NOT EXISTS public.kaizen (
   id          bigserial PRIMARY KEY,
   texto       text        NOT NULL,
   categoria   text        NOT NULL DEFAULT 'pessoal',
+  momento     timestamptz NOT NULL DEFAULT now(),
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 ALTER TABLE public.kaizen ADD COLUMN IF NOT EXISTS categoria text NOT NULL DEFAULT 'pessoal';
+ALTER TABLE public.kaizen ADD COLUMN IF NOT EXISTS momento timestamptz;
+UPDATE public.kaizen SET momento = created_at WHERE momento IS NULL;
+ALTER TABLE public.kaizen ALTER COLUMN momento SET DEFAULT now();
+ALTER TABLE public.kaizen ALTER COLUMN momento SET NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_kaizen_created_at ON public.kaizen (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_kaizen_momento ON public.kaizen (momento DESC);
 
 -- ──────────────── AULAS (Curso SQL) ────────────────
 -- Progresso e notas das aulas do SQL Impressionador.

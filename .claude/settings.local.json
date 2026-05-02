@@ -24,7 +24,12 @@
       "Bash(grep -oE \".{40}sb\\\\.auth\\\\..{40}\" C:/Users/mades/Documents/planner/dist/planner.html)",
       "Bash(awk -v offset=48820 'BEGIN{RS=\"\"; ORS=\"\"} {print substr\\($0, offset, 200\\)}' C:/Users/mades/Documents/planner/dist/planner.html)",
       "Bash(awk -v offset=51000 'BEGIN{RS=\"\"; ORS=\"\"} {print substr\\($0, offset, 200\\)}' C:/Users/mades/Documents/planner/dist/planner.html)",
-      "Bash(rm -f C:/Users/mades/Documents/planner/.env.tmp C:/Users/mades/Documents/planner/.env.local)"
+      "Bash(rm -f C:/Users/mades/Documents/planner/.env.tmp C:/Users/mades/Documents/planner/.env.local)",
+      "Bash(supabase *)",
+      "PowerShell(supabase *)",
+      "PowerShell(npx --yes supabase --version)",
+      "PowerShell(npx supabase projects list 2>&1 | Select-Object -First 30)",
+      "PowerShell(npx supabase functions deploy mcp)"
     ]
   }
 }

@@ -392,6 +392,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
           <option value="familiar">Familiar</option>
         </select>
       </div>
+      <div class="form-field" style="margin-bottom:12px">
+        <div class="form-label">Data e hora da melhoria</div>
+        <input class="form-input" type="datetime-local" id="kz-momento">
+      </div>
       <div class="form-row" style="align-items:flex-end">
         <div class="form-field" style="margin-bottom:0;flex:1;min-width:0">
           <div class="form-label">Nova melhoria</div>
@@ -400,6 +404,26 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
         <button class="btn" type="button" onclick="addKaizen()" style="flex-shrink:0">Adicionar</button>
       </div>
       <div id="kaizen-list" style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-kaizen" onclick="if(event.target===this)closeModal('modal-kaizen')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Editar <em>Kaizen</em></div>
+      <div class="form-field"><div class="form-label">Em que área você melhorou?</div>
+        <select class="form-input" id="kz-edit-cat">
+          <option value="saude">Saúde</option>
+          <option value="profissional">Profissional</option>
+          <option value="financeira">Financeira</option>
+          <option value="pessoal">Pessoal</option>
+          <option value="familiar">Familiar</option>
+        </select>
+      </div>
+      <div class="form-field"><div class="form-label">Data e hora</div><input class="form-input" type="datetime-local" id="kz-edit-momento"></div>
+      <div class="form-field"><div class="form-label">Melhoria</div><textarea class="form-input" id="kz-edit-texto" rows="3" placeholder="Descreva a melhoria…"></textarea></div>
+      <div class="form-field"><div class="form-label" style="color:var(--muted)">Registrado no app</div><div class="item-meta" id="kz-edit-criado" style="font-size:10px">—</div></div>
+      <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-kaizen')">Cancelar</button><button class="btn" onclick="saveKaizen()">Atualizar</button></div>
     </div>
   </div>
 
@@ -792,7 +816,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null,editingLivroId=null;
+let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null;
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -911,9 +935,35 @@ async function loadDashboard(){
   }
   document.getElementById('dash-gastos-list').innerHTML=gD.length===0?'<tr><td colspan="3" class="empty-state">Nenhum gasto</td></tr>':gD.slice(0,5).map(x=>`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td></tr>`).join('');
 }
+function setDefaultKzMomento(){
+  const el=document.getElementById('kz-momento');
+  if(!el)return;
+  const d=new Date();
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  el.value=d.toISOString().slice(0,16);
+}
+function kzLocalToIso(val){
+  if(!val)return new Date().toISOString();
+  const d=new Date(val);
+  return isNaN(d.getTime())?new Date().toISOString():d.toISOString();
+}
+function kzIsoToLocalInput(iso){
+  if(!iso)return'';
+  const d=new Date(iso);
+  if(isNaN(d.getTime()))return'';
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  return d.toISOString().slice(0,16);
+}
+function fmtKzDataHora(iso){
+  if(!iso)return'—';
+  const d=new Date(iso);
+  if(isNaN(d.getTime()))return'—';
+  return d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+}
 async function loadKaizen(){
-  const{data}=await sb.from('kaizen').select('*').order('created_at',{ascending:false});
+  const{data}=await sb.from('kaizen').select('*').order('momento',{ascending:false}).order('created_at',{ascending:false});
   renderKaizenList(data||[]);
+  setDefaultKzMomento();
 }
 const KZ_CAT_LABEL={saude:'Saúde',profissional:'Profissional',financeira:'Financeira',pessoal:'Pessoal',familiar:'Familiar'};
 const KZ_CAT_TAG={saude:'tag-green',profissional:'tag-blue',financeira:'tag-gold',pessoal:'tag-gray',familiar:'tag-amber'};
@@ -925,25 +975,54 @@ function renderKaizenList(rows){
     const cat=(x.categoria&&KZ_CAT_LABEL[x.categoria])?x.categoria:'pessoal';
     const lbl=KZ_CAT_LABEL[cat]||'Pessoal';
     const tg=KZ_CAT_TAG[cat]||'tag-gray';
-    return `<div class="item-card" style="margin-bottom:8px;padding:12px 14px"><div class="item-header" style="align-items:flex-start"><div style="flex:1;min-width:0;padding-right:10px"><div class="item-tags" style="margin-bottom:8px"><span class="tag ${tg}">${lbl}</span></div><div class="item-desc" style="margin:0;line-height:1.5">${escHtml(x.texto)}</div></div><button class="btn btn-sm btn-danger" onclick="deleteKaizen(${x.id})" style="flex-shrink:0">×</button></div></div>`;
+    const mh=x.momento||x.created_at;
+    const tm=x.momento?new Date(x.momento).getTime():0,tc=x.created_at?new Date(x.created_at).getTime():0;
+    const subCriado=x.created_at&&tm&&tc&&Math.abs(tm-tc)>60000?`<div class="item-meta" style="margin-top:4px">Registrado no app: ${fmtKzDataHora(x.created_at)}</div>`:'';
+    return `<div class="item-card" style="margin-bottom:8px;padding:12px 14px"><div class="item-header" style="align-items:flex-start"><div style="flex:1;min-width:0;padding-right:10px"><div class="item-tags" style="margin-bottom:6px;flex-wrap:wrap;align-items:center;gap:6px"><span class="tag ${tg}">${lbl}</span><span class="item-meta" style="letter-spacing:0.06em">${fmtKzDataHora(mh)}</span></div><div class="item-desc" style="margin:0;line-height:1.5">${escHtml(x.texto)}</div>${subCriado}</div><div style="white-space:nowrap;display:flex;gap:4px;flex-shrink:0"><button class="btn btn-sm" onclick="openEditKaizen(${x.id})">✎</button><button class="btn btn-sm btn-danger" onclick="deleteKaizen(${x.id})">×</button></div></div></div>`;
   }).join('');
 }
 async function addKaizen(){
   const v=document.getElementById('kz-input').value.trim();
   if(!v)return toast('Escreva uma melhoria',false);
   const cat=document.getElementById('kz-cat').value;
-  const{error}=await sb.from('kaizen').insert({texto:v,categoria:cat});
+  const momento=kzLocalToIso(document.getElementById('kz-momento').value);
+  const{error}=await sb.from('kaizen').insert({texto:v,categoria:cat,momento});
   if(error)return toast(error.message,false);
   document.getElementById('kz-input').value='';
+  setDefaultKzMomento();
   toast('Melhoria adicionada');
-  const{data}=await sb.from('kaizen').select('*').order('created_at',{ascending:false});
+  const{data}=await sb.from('kaizen').select('*').order('momento',{ascending:false}).order('created_at',{ascending:false});
+  renderKaizenList(data||[]);
+}
+async function openEditKaizen(id){
+  const{data,error}=await sb.from('kaizen').select('*').eq('id',id).single();
+  if(error||!data)return toast('Não foi possível carregar',false);
+  editingKaizenId=id;
+  document.getElementById('kz-edit-cat').value=data.categoria||'pessoal';
+  document.getElementById('kz-edit-momento').value=kzIsoToLocalInput(data.momento||data.created_at);
+  document.getElementById('kz-edit-texto').value=data.texto||'';
+  document.getElementById('kz-edit-criado').textContent=data.created_at?fmtKzDataHora(data.created_at)+' (fixo)':'—';
+  openModal('modal-kaizen');
+}
+async function saveKaizen(){
+  if(editingKaizenId==null)return;
+  const texto=document.getElementById('kz-edit-texto').value.trim();
+  if(!texto)return toast('Texto obrigatório',false);
+  const cat=document.getElementById('kz-edit-cat').value;
+  const momento=kzLocalToIso(document.getElementById('kz-edit-momento').value);
+  const{error}=await sb.from('kaizen').update({texto,categoria:cat,momento}).eq('id',editingKaizenId);
+  if(error)return toast(error.message,false);
+  editingKaizenId=null;
+  toast('Kaizen atualizado');
+  closeModal('modal-kaizen');
+  const{data}=await sb.from('kaizen').select('*').order('momento',{ascending:false}).order('created_at',{ascending:false});
   renderKaizenList(data||[]);
 }
 async function deleteKaizen(id){
   confirmAction('Remover esta melhoria da lista?',async()=>{
     await sb.from('kaizen').delete().eq('id',id);
     toast('Removido');
-    const{data}=await sb.from('kaizen').select('*').order('created_at',{ascending:false});
+    const{data}=await sb.from('kaizen').select('*').order('momento',{ascending:false}).order('created_at',{ascending:false});
     renderKaizenList(data||[]);
   });
 }
