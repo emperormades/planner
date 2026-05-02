@@ -414,16 +414,50 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
 
   <!-- SIMULADOR -->
   <div id="page-simulador" class="page">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Gasto · inicial</div><div class="stat-value italic red" id="s-inicial">--</div></div>
-      <div class="stat-card"><div class="stat-label">Gasto · mês</div><div class="stat-value italic amber" id="s-mensal">--</div></div>
-      <div class="stat-card full"><div class="stat-label">Saldo · ao formar</div><div class="stat-value italic" id="s-final">--</div><div class="stat-sub" id="s-det">--</div></div>
-      <div class="stat-card"><div class="stat-label">Total · CPT</div><div class="stat-value italic green" id="s-cpt">--</div></div>
-      <div class="stat-card"><div class="stat-label">Parcela · empr.</div><div class="stat-value italic red" id="s-parcela" style="font-size:22px">N/A</div></div>
+    <div class="block" style="margin-bottom:14px;padding-top:14px">
+      <div class="block-title" style="margin-bottom:10px">Resumo</div>
+      <div class="stats-grid" style="margin-bottom:8px">
+        <div class="stat-card"><div class="stat-label">Reserva atual</div><div class="stat-value italic gold" id="s-sum-reserva">--</div></div>
+        <div class="stat-card"><div class="stat-label">Crédito estudantil</div><div class="stat-value italic" id="s-sum-credito">--</div><div class="stat-sub" id="s-sum-credito-sub">valor do empréstimo</div></div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:8px">
+        <div class="stat-card"><div class="stat-label">Carro usado</div><div class="stat-value italic red" id="s-sum-carro">--</div></div>
+        <div class="stat-card"><div class="stat-label">Depósito + setup casa</div><div class="stat-value italic amber" id="s-sum-setup">--</div></div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:8px">
+        <div class="stat-card"><div class="stat-label">Aluguel</div><div class="stat-value italic" id="s-sum-aluguel">--</div></div>
+        <div class="stat-card"><div class="stat-label">Outros gastos mensais</div><div class="stat-value italic" id="s-sum-outros">--</div></div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:8px">
+        <div class="stat-card"><div class="stat-label">Salário CPT</div><div class="stat-value italic green" id="s-sum-hcpt">--</div></div>
+        <div class="stat-card"><div class="stat-label">Meses p/ conseguir CPT</div><div class="stat-value italic" id="s-sum-meses-cpt">--</div></div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:8px">
+        <div class="stat-card"><div class="stat-label">Gasto mensal</div><div class="stat-value italic amber" id="s-sum-gasto-mes">--</div><div class="stat-sub" id="s-sum-gasto-mes-sub">aluguel + outros + faculdade</div></div>
+        <div class="stat-card"><div class="stat-label">Renda CPT · 20h/sem</div><div class="stat-value italic green" id="s-sum-renda-20h">--</div><div class="stat-sub">após obter CPT</div></div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:8px">
+        <div class="stat-card"><div class="stat-label">Total CPT · 20 meses</div><div class="stat-value italic green" id="s-cpt">--</div></div>
+        <div class="stat-card"><div class="stat-label">Parcela do empréstimo</div><div class="stat-value italic red" id="s-parcela" style="font-size:22px">N/A</div><div class="stat-sub" id="s-parcela-sub">120 meses · 10% aa</div></div>
+      </div>
+      <div class="stat-card full" style="margin-top:4px"><div class="stat-label">Saldo · ao formar</div><div class="stat-value italic" id="s-final">--</div><div class="stat-sub" id="s-det">--</div></div>
     </div>
     <div class="block">
       <div class="block-title">Parâmetros</div>
       <div class="sim-section">I · Recursos</div>
+      <div class="form-field" style="margin-bottom:10px">
+        <div class="form-label">Universidade / programa</div>
+        <select class="form-input" id="s-uni-preset" style="width:100%;padding:8px 10px;font-size:12px;font-family:var(--mono)">
+          <option value="iwu">Indiana Wesleyan (IWU) · $19.802 · 20 meses</option>
+          <option value="ex24">Outro exemplo · $24.000 · 24 meses</option>
+          <option value="ex30">Outro exemplo · $30.000 · 30 meses</option>
+          <option value="custom">Personalizado (ajuste custo e meses abaixo)</option>
+        </select>
+      </div>
+      <div class="sim-row"><div class="sim-lbl"><span class="sim-name">Custo total do programa</span><span class="sim-val" id="sv-custo-uni">$19.802</span></div><input type="range" id="s-custo-uni" min="5000" max="120000" value="19802" step="100"></div>
+      <div class="sim-row"><div class="sim-lbl"><span class="sim-name">Duração do programa (meses)</span><span class="sim-val" id="sv-meses-uni">20 meses</span></div><input type="range" id="s-meses-uni" min="6" max="48" value="20" step="1"></div>
+      <div class="sim-row" style="margin-bottom:12px"><div class="sim-lbl"><span class="sim-name">Mensalidade estimada (custo ÷ meses)</span><span class="sim-val" id="sv-mens-uni">$991/mês</span></div></div>
+      <div class="sim-section" style="margin-top:4px">Reserva e crédito</div>
       <div class="sim-row"><div class="sim-lbl"><span class="sim-name">Reserva inicial</span><span class="sim-val" id="sv-reserva">$50.000</span></div><input type="range" id="s-reserva" min="0" max="80000" value="50000" step="1000"></div>
       <div class="sim-row"><div class="sim-lbl"><span class="sim-name">Crédito estudantil (até $100k)</span><span class="sim-val" id="sv-credito">$0</span></div><input type="range" id="s-credito" min="0" max="100000" value="0" step="1000"></div>
       <div class="sim-section">II · Gastos iniciais</div>
@@ -443,7 +477,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div style="display:flex;gap:14px;margin-top:12px;font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.1em;text-transform:uppercase;flex-wrap:wrap">
         <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:1px;background:var(--gold);display:inline-block"></span>saldo</span>
         <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:1px;background:var(--red-light);opacity:.6;display:inline-block"></span>zero</span>
-        <span>IWU $19.802 · MPOWER 10% aa · 120 meses</span>
+        <span id="sim-uni-legend">Universidade · MPOWER 10% aa · 120 meses</span>
       </div>
     </div>
   </div>
@@ -1117,11 +1151,24 @@ async function deleteLivro(id){
 }
 
 // ── SIMULADOR ──
-const MESES_SIM=20,CUSTO_IWU=19802,MENS_IWU=Math.round(CUSTO_IWU/MESES_SIM),CPT_H_MES=20*4.33;
+const MESES_SIM=20,CPT_H_MES=20*4.33;
+const UNI_PRESETS={iwu:{custo:19802,meses:20},ex24:{custo:24000,meses:24},ex30:{custo:30000,meses:30}};
 function calcParcela(p,r,n){if(p<=0)return 0;const rm=r/12;return Math.round(p*rm*Math.pow(1+rm,n)/(Math.pow(1+rm,n)-1));}
+function markUniCustom(){document.getElementById('s-uni-preset').value='custom';}
+function applyUniPreset(){
+  const v=document.getElementById('s-uni-preset').value,p=UNI_PRESETS[v];
+  if(p){
+    document.getElementById('s-custo-uni').value=p.custo;
+    document.getElementById('s-meses-uni').value=p.meses;
+  }
+  runSim();
+}
 
 function initSim(){
-  ['s-reserva','s-credito','s-carro','s-setup','s-aluguel','s-outros','s-hcpt','s-inicio'].forEach(id=>{document.getElementById(id).addEventListener('input',runSim);});
+  ['s-reserva','s-credito','s-carro','s-setup','s-aluguel','s-outros','s-hcpt','s-inicio','s-custo-uni','s-meses-uni'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',()=>{if(id==='s-custo-uni'||id==='s-meses-uni')markUniCustom();runSim();});
+  });
+  document.getElementById('s-uni-preset').addEventListener('change',applyUniPreset);
   runSim();
 }
 
@@ -1130,6 +1177,11 @@ function runSim(){
   const ca=+document.getElementById('s-carro').value,se=+document.getElementById('s-setup').value;
   const al=+document.getElementById('s-aluguel').value,ou=+document.getElementById('s-outros').value;
   const ch=+document.getElementById('s-hcpt').value,in_=+document.getElementById('s-inicio').value;
+  const custoUni=+document.getElementById('s-custo-uni').value,mesesUni=+document.getElementById('s-meses-uni').value;
+  const mensUni=mesesUni>0?Math.round(custoUni/mesesUni):0;
+  document.getElementById('sv-custo-uni').textContent='$'+custoUni.toLocaleString('pt-BR');
+  document.getElementById('sv-meses-uni').textContent=mesesUni+(mesesUni===1?' mês':' meses');
+  document.getElementById('sv-mens-uni').textContent='$'+mensUni.toLocaleString('pt-BR')+'/mês';
   document.getElementById('sv-reserva').textContent='$'+r.toLocaleString('pt-BR');
   document.getElementById('sv-credito').textContent='$'+cr.toLocaleString('pt-BR');
   document.getElementById('sv-carro').textContent='$'+ca.toLocaleString('pt-BR');
@@ -1138,17 +1190,32 @@ function runSim(){
   document.getElementById('sv-outros').textContent='$'+ou.toLocaleString('pt-BR');
   document.getElementById('sv-hcpt').textContent='$'+ch+'/h';
   document.getElementById('sv-inicio').textContent=in_+(in_===1?' mês':' meses');
-  const gm=al+ou+MENS_IWU,gi=ca+se;
+  const gm=al+ou+mensUni,gi=ca+se;
   let s=r+cr-gi;const rc=Math.round(ch*CPT_H_MES),saldos=[];
   let tot=0,mn=s;
   for(let m=1;m<=MESES_SIM;m++){const c=m>in_?rc:0;s+=c-gm;tot+=c;saldos.push(Math.round(s));if(s<mn)mn=s;}
   const fs=saldos[MESES_SIM-1],parc=calcParcela(cr,0.10,120);
-  document.getElementById('s-inicial').textContent=fmtK(gi);
-  document.getElementById('s-mensal').textContent=fmtK(gm);
-  document.getElementById('s-det').textContent='aluguel + outros + IWU $'+MENS_IWU;
+  document.getElementById('s-sum-reserva').textContent=fmtK(r);
+  document.getElementById('s-sum-credito').textContent=fmtK(cr);
+  document.getElementById('s-sum-credito-sub').textContent=cr>0?'valor no slider (simulado)':'sem empréstimo';
+  document.getElementById('s-sum-carro').textContent=fmtK(ca);
+  document.getElementById('s-sum-setup').textContent=fmtK(se);
+  document.getElementById('s-sum-aluguel').textContent=fmtK(al);
+  document.getElementById('s-sum-outros').textContent=fmtK(ou);
+  document.getElementById('s-sum-hcpt').textContent='$'+ch+'/h';
+  document.getElementById('s-sum-meses-cpt').textContent=in_+(in_===1?' mês':' meses');
+  document.getElementById('s-sum-gasto-mes').textContent=fmtK(gm);
+  document.getElementById('s-sum-gasto-mes-sub').textContent='aluguel + outros + faculdade $'+mensUni.toLocaleString('pt-BR')+'/mês';
+  const uniSel=document.getElementById('s-uni-preset');
+  const uniNome=(uniSel.options[uniSel.selectedIndex].text.split('·')[0]||'Programa').trim();
+  document.getElementById('sim-uni-legend').textContent=uniNome+' · $'+custoUni.toLocaleString('pt-BR')+' ÷ '+mesesUni+' meses ≈ $'+mensUni.toLocaleString('pt-BR')+'/mês · MPOWER 10% aa · 120 meses';
+  document.getElementById('s-sum-renda-20h').textContent=fmtK(rc);
+  document.getElementById('s-det').textContent='gasto inicial (carro+setup) '+fmtK(gi)+' · saldo mínimo simulação '+fmtK(mn);
   const sf=document.getElementById('s-final');sf.textContent=fmtK(fs);sf.className='stat-value italic '+(fs>=0?'green':'red');
   document.getElementById('s-cpt').textContent=fmtK(tot);
-  document.getElementById('s-parcela').textContent=cr>0?'$'+parc+'/mês':'N/A';
+  const parcEl=document.getElementById('s-parcela'),parcSub=document.getElementById('s-parcela-sub');
+  if(cr>0){parcEl.textContent='$'+parc.toLocaleString('pt-BR')+'/mês';parcSub.textContent='MPOWER · 120 meses · 10% aa';}
+  else{parcEl.textContent='N/A';parcSub.textContent='sem empréstimo';}
   const al2=document.getElementById('sim-alert');
   if(mn<0){al2.className='sim-alert sim-bad';al2.innerHTML='Saldo fica <em>negativo</em>. Aumente a reserva ou o salário CPT.';}
   else if(fs<5000){al2.className='sim-alert sim-warn';al2.innerHTML='Saldo <em>baixo</em> ao se formar.'+(cr>0?' Parcela $'+parc+'/mês após formatura.':'');}
