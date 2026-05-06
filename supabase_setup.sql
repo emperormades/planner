@@ -27,10 +27,13 @@ CREATE TABLE IF NOT EXISTS public.gastos (
   categoria   text         NOT NULL DEFAULT 'Outro',
   mes         int          NOT NULL CHECK (mes BETWEEN 1 AND 12),
   ano         int          NOT NULL CHECK (ano BETWEEN 2024 AND 2040),
+  fixo        boolean      NOT NULL DEFAULT false,
   created_at  timestamptz  NOT NULL DEFAULT now()
 );
+ALTER TABLE public.gastos ADD COLUMN IF NOT EXISTS fixo boolean NOT NULL DEFAULT false;
 CREATE INDEX IF NOT EXISTS idx_gastos_periodo    ON public.gastos (ano DESC, mes DESC);
 CREATE INDEX IF NOT EXISTS idx_gastos_categoria  ON public.gastos (categoria);
+CREATE INDEX IF NOT EXISTS idx_gastos_fixo       ON public.gastos (fixo);
 CREATE INDEX IF NOT EXISTS idx_gastos_created_at ON public.gastos (created_at DESC);
 
 -- ──────────────── CERTIFICAÇÕES ────────────────
