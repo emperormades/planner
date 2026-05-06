@@ -28,12 +28,24 @@ CREATE TABLE IF NOT EXISTS public.gastos (
   mes         int          NOT NULL CHECK (mes BETWEEN 1 AND 12),
   ano         int          NOT NULL CHECK (ano BETWEEN 2024 AND 2040),
   fixo        boolean      NOT NULL DEFAULT false,
+  pagamento   text         NOT NULL DEFAULT 'pago'
+                            CHECK (pagamento IN ('pago','nao_pago','parcial')),
+  valor_pago  numeric(12,2) CHECK (valor_pago >= 0),
   created_at  timestamptz  NOT NULL DEFAULT now()
 );
 ALTER TABLE public.gastos ADD COLUMN IF NOT EXISTS fixo boolean NOT NULL DEFAULT false;
+ALTER TABLE public.gastos ADD COLUMN IF NOT EXISTS pagamento text NOT NULL DEFAULT 'pago';
+ALTER TABLE public.gastos ADD COLUMN IF NOT EXISTS valor_pago numeric(12,2) CHECK (valor_pago >= 0);
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname='gastos_pagamento_check') THEN
+    ALTER TABLE public.gastos ADD CONSTRAINT gastos_pagamento_check
+      CHECK (pagamento IN ('pago','nao_pago','parcial'));
+  END IF;
+END $$;
 CREATE INDEX IF NOT EXISTS idx_gastos_periodo    ON public.gastos (ano DESC, mes DESC);
 CREATE INDEX IF NOT EXISTS idx_gastos_categoria  ON public.gastos (categoria);
 CREATE INDEX IF NOT EXISTS idx_gastos_fixo       ON public.gastos (fixo);
+CREATE INDEX IF NOT EXISTS idx_gastos_pagamento  ON public.gastos (pagamento);
 CREATE INDEX IF NOT EXISTS idx_gastos_created_at ON public.gastos (created_at DESC);
 
 -- ──────────────── CERTIFICAÇÕES ────────────────

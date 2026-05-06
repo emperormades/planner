@@ -672,7 +672,11 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="form-field"><div class="form-label">Mês</div><select class="form-input" id="g-mes"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select></div>
       <div class="form-field"><div class="form-label">Ano</div><input class="form-input" type="number" id="g-ano" value="2026" min="2026" max="2030" inputmode="numeric"></div>
     </div>
-    <div class="form-field"><div class="form-label">Tipo</div><select class="form-input" id="g-fixo"><option value="false">Variável</option><option value="true">Fixo</option></select></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Tipo</div><select class="form-input" id="g-fixo"><option value="false">Variável</option><option value="true">Fixo</option></select></div>
+      <div class="form-field"><div class="form-label">Pagamento</div><select class="form-input" id="g-pagamento" onchange="toggleValorPago()"><option value="pago">Pago</option><option value="nao_pago">Não pago</option><option value="parcial">Parcial</option></select></div>
+    </div>
+    <div class="form-field" id="g-valor-pago-field" style="display:none"><div class="form-label">Valor pago ($)</div><input class="form-input" type="number" id="g-valor-pago" placeholder="0.00" step="0.01" inputmode="decimal"></div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-gasto')">Cancelar</button><button class="btn" id="g-submit" onclick="saveGasto()">Salvar</button></div>
   </div>
 </div>
@@ -1136,7 +1140,12 @@ async function loadGastos(){
   const categorias=[...new Set(allData.map(x=>x.categoria).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
   const selCat=document.getElementById('filtro-cat');const curCat=selCat.value;
   selCat.innerHTML='<option value="">Todas categorias</option>'+categorias.map(c=>`<option value="${c}" ${c===curCat?'selected':''}>${c}</option>`).join('');
-  document.getElementById('gastos-list').innerHTML=gD.length===0?'<tr><td colspan="4" class="empty-state">Nenhum gasto</td></tr>':gD.map(x=>`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}${x.fixo?' · fixo':''}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td><td style="white-space:nowrap"><button class="btn btn-sm" onclick="editGasto(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteGasto(${x.id})">×</button></td></tr>`).join('');
+  document.getElementById('gastos-list').innerHTML=gD.length===0?'<tr><td colspan="4" class="empty-state">Nenhum gasto</td></tr>':gD.map(x=>{const payTag=x.pagamento==='nao_pago'?'<span style="color:var(--red-light)"> · não pago</span>':x.pagamento==='parcial'?`<span style="color:var(--amber)"> · pago ${fmtUSD(x.valor_pago||0)}</span>`:'';return`<tr><td><div class="trunc serif" style="font-size:14px">${x.descricao}</div><div class="item-meta">${MN[x.mes]}/${x.ano}${x.fixo?' · fixo':''}${payTag}</div></td><td><span class="tag" style="border-color:${COLORS[x.categoria]||'#c9a84c'};color:${COLORS[x.categoria]||'#c9a84c'}">${x.categoria.substring(0,6)}</span></td><td class="text-right text-red mono">${fmtUSD(x.valor)}</td><td style="white-space:nowrap"><button class="btn btn-sm" onclick="editGasto(${x.id})">✎</button> <button class="btn btn-sm btn-danger" onclick="deleteGasto(${x.id})">×</button></td></tr>`}).join('');
+}
+function toggleValorPago(){
+  const isParcial=document.getElementById('g-pagamento').value==='parcial';
+  document.getElementById('g-valor-pago-field').style.display=isParcial?'flex':'none';
+  if(!isParcial)document.getElementById('g-valor-pago').value='';
 }
 function resetGastoForm(){
   editingGastoId=null;
@@ -1147,6 +1156,9 @@ function resetGastoForm(){
   document.getElementById('g-mes').value=now.getMonth()+1;
   document.getElementById('g-ano').value=now.getFullYear();
   document.getElementById('g-fixo').value='false';
+  document.getElementById('g-pagamento').value='pago';
+  document.getElementById('g-valor-pago').value='';
+  toggleValorPago();
   document.getElementById('modal-gasto-title').innerHTML='Lançar <em>Gasto</em>';
   document.getElementById('g-submit').textContent='Salvar';
 }
@@ -1164,13 +1176,20 @@ async function editGasto(id){
   document.getElementById('g-mes').value=data.mes;
   document.getElementById('g-ano').value=data.ano;
   document.getElementById('g-fixo').value=data.fixo?'true':'false';
+  document.getElementById('g-pagamento').value=data.pagamento||'pago';
+  document.getElementById('g-valor-pago').value=data.valor_pago??'';
+  toggleValorPago();
   document.getElementById('modal-gasto-title').innerHTML='Editar <em>Gasto</em>';
   document.getElementById('g-submit').textContent='Atualizar';
   openModal('modal-gasto');
 }
 async function saveGasto(){
-  const obj={descricao:document.getElementById('g-desc').value,valor:+document.getElementById('g-valor').value,categoria:document.getElementById('g-cat').value,mes:+document.getElementById('g-mes').value,ano:+document.getElementById('g-ano').value,fixo:document.getElementById('g-fixo').value==='true'};
+  const pagamento=document.getElementById('g-pagamento').value;
+  const valorPagoRaw=+document.getElementById('g-valor-pago').value;
+  const obj={descricao:document.getElementById('g-desc').value,valor:+document.getElementById('g-valor').value,categoria:document.getElementById('g-cat').value,mes:+document.getElementById('g-mes').value,ano:+document.getElementById('g-ano').value,fixo:document.getElementById('g-fixo').value==='true',pagamento,valor_pago:pagamento==='parcial'?valorPagoRaw:null};
   if(!obj.descricao||!obj.valor)return toast('Preencha descrição e valor',false);
+  if(pagamento==='parcial'&&(!valorPagoRaw||valorPagoRaw<=0))return toast('Informe o valor pago',false);
+  if(pagamento==='parcial'&&valorPagoRaw>obj.valor)return toast('Valor pago não pode ser maior que o total',false);
   const isEdit=editingGastoId!=null;
   const{error}=isEdit
     ?await sb.from('gastos').update(obj).eq('id',editingGastoId)
