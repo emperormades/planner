@@ -445,7 +445,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="stat-card"><div class="stat-label">Total · mês</div><div class="stat-value italic red" id="g-total">$0</div></div>
       <div class="stat-card"><div class="stat-label">Lançamentos</div><div class="stat-value italic gold" id="g-count">0</div></div>
       <div class="stat-card"><div class="stat-label">Top categoria</div><div class="stat-value italic" id="g-top-cat" style="font-size:18px;color:var(--blue-soft)">—</div></div>
-      <div class="stat-card"><div class="stat-label">Média · gasto</div><div class="stat-value italic" id="g-avg">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Lançamentos · fixos</div><div class="stat-value italic" id="g-fixos">0</div></div>
     </div>
     <div class="block">
       <div class="block-title">Lançamentos
@@ -1127,7 +1127,7 @@ async function loadGastos(){
   document.getElementById('g-total').textContent=fmtUSD(tot);
   document.getElementById('g-count').textContent=gD.length;
   document.getElementById('g-top-cat').textContent=top?top[0]:'—';
-  document.getElementById('g-avg').textContent=gD.length?fmtUSD(tot/gD.length):'$0';
+  document.getElementById('g-fixos').textContent=gD.filter(x=>x.fixo).length;
   const allQ=await sb.from('gastos').select('mes,ano,categoria');
   const allData=allQ.data||[];
   const meses=[...new Set(allData.map(x=>x.ano+'-'+String(x.mes).padStart(2,'0')))].sort().reverse();
