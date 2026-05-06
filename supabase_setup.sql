@@ -48,6 +48,23 @@ CREATE INDEX IF NOT EXISTS idx_gastos_fixo       ON public.gastos (fixo);
 CREATE INDEX IF NOT EXISTS idx_gastos_pagamento  ON public.gastos (pagamento);
 CREATE INDEX IF NOT EXISTS idx_gastos_created_at ON public.gastos (created_at DESC);
 
+-- ──────────────── GANHOS (renda por mês) ────────────────
+CREATE TABLE IF NOT EXISTS public.ganhos (
+  ano        int           NOT NULL CHECK (ano BETWEEN 2024 AND 2040),
+  mes        int           NOT NULL CHECK (mes BETWEEN 1 AND 12),
+  valor      numeric(12,2) NOT NULL DEFAULT 0 CHECK (valor >= 0),
+  updated_at timestamptz   NOT NULL DEFAULT now(),
+  PRIMARY KEY (ano, mes)
+);
+CREATE INDEX IF NOT EXISTS idx_ganhos_periodo ON public.ganhos (ano DESC, mes DESC);
+
+-- ──────────────── APP CONFIG (chave/valor único — saldo etc) ────────────────
+CREATE TABLE IF NOT EXISTS public.app_config (
+  chave      text          PRIMARY KEY,
+  valor      numeric(12,2),
+  updated_at timestamptz   NOT NULL DEFAULT now()
+);
+
 -- ──────────────── CERTIFICAÇÕES ────────────────
 CREATE TABLE IF NOT EXISTS public.certificacoes (
   id          bigserial PRIMARY KEY,
@@ -121,6 +138,8 @@ CREATE INDEX IF NOT EXISTS idx_aulas_status ON public.aulas (status);
 -- ════════════════════════════════════════════════════════════════
 ALTER TABLE public.metas         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.gastos        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ganhos        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.app_config    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificacoes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.livros        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.aulas         ENABLE ROW LEVEL SECURITY;
@@ -131,6 +150,8 @@ DROP POLICY IF EXISTS "allow all"       ON public.metas;
 DROP POLICY IF EXISTS "auth_all_metas"  ON public.metas;
 DROP POLICY IF EXISTS "allow all"       ON public.gastos;
 DROP POLICY IF EXISTS "auth_all_gastos" ON public.gastos;
+DROP POLICY IF EXISTS "auth_all_ganhos" ON public.ganhos;
+DROP POLICY IF EXISTS "auth_all_app_config" ON public.app_config;
 DROP POLICY IF EXISTS "allow all"       ON public.certificacoes;
 DROP POLICY IF EXISTS "auth_all_certs"  ON public.certificacoes;
 DROP POLICY IF EXISTS "allow all"       ON public.livros;
@@ -143,6 +164,12 @@ CREATE POLICY "auth_all_metas"  ON public.metas
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_gastos" ON public.gastos
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_ganhos" ON public.ganhos
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_app_config" ON public.app_config
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_certs"  ON public.certificacoes

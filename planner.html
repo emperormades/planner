@@ -123,6 +123,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .stat-card{background:rgba(16,16,24,0.6);border:1px solid var(--line);padding:14px 14px 13px;position:relative;overflow:hidden;}
 .stat-card.full{grid-column:1/-1;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--gold-dim);opacity:.5;}
+.stat-card.stat-clickable{cursor:pointer;transition:border-color .2s;}
+.stat-card.stat-clickable::after{content:'✎';position:absolute;top:8px;right:10px;color:var(--gold-dim);font-size:11px;opacity:.6;}
+.stat-card.stat-clickable:hover,.stat-card.stat-clickable:active{border-color:var(--gold);}
+.stat-card.stat-clickable:hover::after{opacity:1;color:var(--gold);}
 .stat-label{font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;}
 .stat-value{font-family:var(--display);font-size:30px;font-weight:600;line-height:1;color:var(--paper);font-feature-settings:"lnum";}
 .stat-value.italic{font-style:italic;font-weight:400;}
@@ -442,10 +446,12 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
   <!-- GASTOS -->
   <div id="page-gastos" class="page">
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Total · mês</div><div class="stat-value italic red" id="g-total">$0</div></div>
-      <div class="stat-card"><div class="stat-label">Lançamentos</div><div class="stat-value italic gold" id="g-count">0</div></div>
+      <div class="stat-card stat-clickable" onclick="openEditGanho()"><div class="stat-label">Ganho · mês</div><div class="stat-value italic green" id="g-ganho">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Despesas · mês</div><div class="stat-value italic red" id="g-total">$0</div></div>
+      <div class="stat-card stat-clickable" onclick="openEditSaldo()"><div class="stat-label">Saldo · conta</div><div class="stat-value italic" id="g-saldo" style="color:var(--blue-soft)">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Diferença · mês</div><div class="stat-value italic" id="g-diff">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Falta pagar</div><div class="stat-value italic amber" id="g-falta">$0</div></div>
       <div class="stat-card"><div class="stat-label">Top categoria</div><div class="stat-value italic" id="g-top-cat" style="font-size:18px;color:var(--blue-soft)">—</div></div>
-      <div class="stat-card"><div class="stat-label">Lançamentos · fixos</div><div class="stat-value italic" id="g-fixos">0</div></div>
     </div>
     <div class="block">
       <div class="block-title">Lançamentos
@@ -678,6 +684,28 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
     </div>
     <div class="form-field" id="g-valor-pago-field" style="display:none"><div class="form-label">Valor pago ($)</div><input class="form-input" type="number" id="g-valor-pago" placeholder="0.00" step="0.01" inputmode="decimal"></div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-gasto')">Cancelar</button><button class="btn" id="g-submit" onclick="saveGasto()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-ganho" onclick="if(event.target===this)closeModal('modal-ganho')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Editar <em>Ganho do mês</em></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Mês</div><select class="form-input" id="gn-mes"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select></div>
+      <div class="form-field"><div class="form-label">Ano</div><input class="form-input" type="number" id="gn-ano" min="2024" max="2040" inputmode="numeric"></div>
+    </div>
+    <div class="form-field"><div class="form-label">Valor ($)</div><input class="form-input" type="number" id="gn-valor" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-ganho')">Cancelar</button><button class="btn" onclick="saveGanho()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-saldo" onclick="if(event.target===this)closeModal('modal-saldo')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Editar <em>Saldo em conta</em></div>
+    <div class="form-field"><div class="form-label">Valor ($)</div><input class="form-input" type="number" id="sd-valor" placeholder="0.00" step="0.01" inputmode="decimal"></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-saldo')">Cancelar</button><button class="btn" onclick="saveSaldo()">Salvar</button></div>
   </div>
 </div>
 
@@ -1124,14 +1152,25 @@ async function loadGastos(){
   let q=sb.from('gastos').select('*').order('ano',{ascending:false}).order('mes',{ascending:false}).order('created_at',{ascending:false});
   if(filtro){const[a,mm]=filtro.split('-');q=q.eq('ano',a).eq('mes',mm);}
   if(filtroCat)q=q.eq('categoria',filtroCat);
-  const{data}=await q;const gD=data||[];
+  let ganhoQ=sb.from('ganhos').select('valor,ano,mes');
+  if(filtro){const[a,mm]=filtro.split('-');ganhoQ=ganhoQ.eq('ano',a).eq('mes',mm);}
+  const[gRes,gnRes,sdRes]=await Promise.all([q,ganhoQ,sb.from('app_config').select('valor').eq('chave','saldo').maybeSingle()]);
+  const gD=gRes.data||[];
+  const ganhoTot=(gnRes.data||[]).reduce((a,b)=>a+(+b.valor),0);
+  const saldoVal=+(sdRes.data?.valor||0);
   const tot=gD.reduce((a,b)=>a+(+b.valor),0);
+  const falta=gD.reduce((a,b)=>{if(b.pagamento==='nao_pago')return a+(+b.valor);if(b.pagamento==='parcial')return a+Math.max(0,(+b.valor)-(+b.valor_pago||0));return a;},0);
+  const diff=ganhoTot-tot;
   const catMap={};gD.forEach(x=>{catMap[x.categoria]=(catMap[x.categoria]||0)+(+x.valor);});
   const top=Object.entries(catMap).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('g-ganho').textContent=fmtUSD(ganhoTot);
   document.getElementById('g-total').textContent=fmtUSD(tot);
-  document.getElementById('g-count').textContent=gD.length;
+  document.getElementById('g-saldo').textContent=fmtUSD(saldoVal);
+  const diffEl=document.getElementById('g-diff');
+  diffEl.textContent=(diff<0?'-':'')+fmtUSD(Math.abs(diff));
+  diffEl.style.color=diff<0?'var(--red-light)':diff>0?'var(--green-light)':'var(--paper)';
+  document.getElementById('g-falta').textContent=fmtUSD(falta);
   document.getElementById('g-top-cat').textContent=top?top[0]:'—';
-  document.getElementById('g-fixos').textContent=gD.filter(x=>x.fixo).length;
   const allQ=await sb.from('gastos').select('mes,ano,categoria');
   const allData=allQ.data||[];
   const meses=[...new Set(allData.map(x=>x.ano+'-'+String(x.mes).padStart(2,'0')))].sort().reverse();
@@ -1205,6 +1244,42 @@ async function deleteGasto(id){
     await sb.from('gastos').delete().eq('id',id);
     toast('Removido');loadGastos();
   });
+}
+async function openEditGanho(){
+  const filtro=document.getElementById('filtro-mes').value;
+  let ano,mes;
+  if(filtro){const[a,mm]=filtro.split('-');ano=+a;mes=+mm;}
+  else{const now=new Date();ano=now.getFullYear();mes=now.getMonth()+1;}
+  document.getElementById('gn-ano').value=ano;
+  document.getElementById('gn-mes').value=mes;
+  const{data}=await sb.from('ganhos').select('valor').eq('ano',ano).eq('mes',mes).maybeSingle();
+  document.getElementById('gn-valor').value=data?.valor??'';
+  openModal('modal-ganho');
+}
+async function saveGanho(){
+  const ano=+document.getElementById('gn-ano').value;
+  const mes=+document.getElementById('gn-mes').value;
+  const valor=+document.getElementById('gn-valor').value;
+  if(!ano||!mes||isNaN(valor)||valor<0)return toast('Preencha mês, ano e valor',false);
+  const{error}=await sb.from('ganhos').upsert({ano,mes,valor,updated_at:new Date().toISOString()},{onConflict:'ano,mes'});
+  if(error)return toast(error.message,false);
+  toast('Ganho atualizado');
+  closeModal('modal-ganho');
+  loadGastos();
+}
+async function openEditSaldo(){
+  const{data}=await sb.from('app_config').select('valor').eq('chave','saldo').maybeSingle();
+  document.getElementById('sd-valor').value=data?.valor??'';
+  openModal('modal-saldo');
+}
+async function saveSaldo(){
+  const valor=+document.getElementById('sd-valor').value;
+  if(isNaN(valor))return toast('Valor inválido',false);
+  const{error}=await sb.from('app_config').upsert({chave:'saldo',valor,updated_at:new Date().toISOString()},{onConflict:'chave'});
+  if(error)return toast(error.message,false);
+  toast('Saldo atualizado');
+  closeModal('modal-saldo');
+  loadGastos();
 }
 
 // ── CERTS ──
