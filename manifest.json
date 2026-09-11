@@ -1,7 +1,7 @@
 {
-  "name": "Planner EUA 2026",
+  "name": "Planner",
   "short_name": "Planner",
-  "description": "Planejador financeiro pessoal para o mestrado nos EUA",
+  "description": "Planejador pessoal",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
