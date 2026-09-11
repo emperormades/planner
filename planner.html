@@ -446,6 +446,9 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
     </div>
   </div>
 
+<!-- FAB -->
+<button class="fab" id="fab" onclick="fabAction()">+</button>
+
 </div><!-- /app -->
 
 <!-- DRAWER -->
@@ -734,8 +737,8 @@ function navigate(page){
   document.getElementById('topbar-title').innerHTML=cfg.title||page;
   document.getElementById('topbar-sub').textContent=cfg.sub||'';
   const fab=document.getElementById('fab');
-  cfg.fab?fab.classList.add('show'):fab.classList.remove('show');
-  document.getElementById('main-scroll').scrollTo(0,0);
+  if(fab)cfg.fab?fab.classList.add('show'):fab.classList.remove('show');
+  document.getElementById('main-scroll')?.scrollTo(0,0);
   closeDrawer();
   if(page==='dashboard')loadDashboard();
   if(page==='kaizen')loadKaizen();
