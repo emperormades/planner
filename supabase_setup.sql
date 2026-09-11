@@ -135,6 +135,48 @@ CREATE TABLE IF NOT EXISTS public.rotina (
 CREATE INDEX IF NOT EXISTS idx_rotina_hora ON public.rotina (hora_inicio);
 CREATE INDEX IF NOT EXISTS idx_rotina_tipo ON public.rotina (tipo);
 
+-- ──────────────── ACADEMICO (formações e trilhas longas) ────────────────
+CREATE TABLE IF NOT EXISTS public.academico (
+  id bigserial PRIMARY KEY,
+  nome text NOT NULL,
+  instituicao text,
+  tipo text NOT NULL DEFAULT 'curso',
+  total_aulas int CHECK (total_aulas >= 0),
+  aulas_feitas int NOT NULL DEFAULT 0 CHECK (aulas_feitas >= 0),
+  status text NOT NULL DEFAULT 'em_andamento',
+  prazo date,
+  detalhe text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_academico_status ON public.academico (status);
+
+-- ──────────────── EMPRESAS (empresas e contratos) ────────────────
+-- valor_mensal negativo = saída (folha). Positivo = receita recorrente.
+CREATE TABLE IF NOT EXISTS public.empresas (
+  id bigserial PRIMARY KEY,
+  nome text NOT NULL,
+  papel text NOT NULL DEFAULT 'contratante',
+  cliente_final text,
+  valor_mensal numeric(12,2) NOT NULL DEFAULT 0,
+  dia_pagamento text,
+  status text NOT NULL DEFAULT 'ativo',
+  detalhe text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_empresas_status ON public.empresas (status);
+
+-- ──────────────── RIEMANN (backlog da hipótese) ────────────────
+CREATE TABLE IF NOT EXISTS public.riemann (
+  id bigserial PRIMARY KEY,
+  item text NOT NULL,
+  categoria text NOT NULL DEFAULT 'aberto',
+  status text NOT NULL DEFAULT 'aberto',
+  detalhe text,
+  ordem int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_riemann_ordem ON public.riemann (ordem);
+
 -- ──────────────── AULAS (Curso SQL) ────────────────
 -- Progresso e notas das aulas do SQL Impressionador.
 -- Catálogo (módulos + nomes das aulas) fica no JS — não armazenado.
@@ -161,6 +203,9 @@ ALTER TABLE public.livros        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.aulas         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.kaizen        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rotina        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.academico     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.empresas      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.riemann       ENABLE ROW LEVEL SECURITY;
 
 -- Limpa policies antigas (caso já existam de tentativas anteriores)
 DROP POLICY IF EXISTS "allow all"       ON public.metas;
@@ -176,6 +221,9 @@ DROP POLICY IF EXISTS "auth_all_livros" ON public.livros;
 DROP POLICY IF EXISTS "auth_all_aulas"  ON public.aulas;
 DROP POLICY IF EXISTS "auth_all_kaizen" ON public.kaizen;
 DROP POLICY IF EXISTS "auth_all_rotina" ON public.rotina;
+DROP POLICY IF EXISTS "auth_all_academico" ON public.academico;
+DROP POLICY IF EXISTS "auth_all_empresas" ON public.empresas;
+DROP POLICY IF EXISTS "auth_all_riemann" ON public.riemann;
 
 -- Cria policies novas — só authenticated
 CREATE POLICY "auth_all_metas"  ON public.metas
@@ -203,4 +251,13 @@ CREATE POLICY "auth_all_kaizen" ON public.kaizen
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_rotina" ON public.rotina
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_academico" ON public.academico
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_empresas" ON public.empresas
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_riemann" ON public.riemann
   FOR ALL TO authenticated USING (true) WITH CHECK (true);

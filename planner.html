@@ -420,6 +420,52 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
     <div id="panel-livros" style="display:none"><div id="livros-list"><div class="empty-state"><div class="empty-icon">▭</div>Nenhum livro</div></div></div>
   </div>
 
+  <!-- ACADEMICO -->
+  <div id="page-academico" class="page">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Frentes</div><div class="stat-value italic" id="ac-frentes">0</div></div>
+      <div class="stat-card"><div class="stat-label">Aulas pendentes</div><div class="stat-value italic amber" id="ac-pend">0</div></div>
+      <div class="stat-card"><div class="stat-label">Em andamento</div><div class="stat-value italic green" id="ac-and">0</div></div>
+      <div class="stat-card"><div class="stat-label">Pausadas</div><div class="stat-value italic" id="ac-pausadas" style="color:var(--muted-2)">0</div></div>
+    </div>
+    <div id="academico-list"><div class="empty-state"><div class="empty-icon">✎</div>Nenhuma formação</div></div>
+  </div>
+
+  <!-- EMPRESAS -->
+  <div id="page-empresas" class="page">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Entradas · mês</div><div class="stat-value italic green" id="em-entra">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Saídas · mês</div><div class="stat-value italic red" id="em-sai">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Sobra</div><div class="stat-value italic" id="em-sobra" style="color:var(--blue-soft)">$0</div></div>
+      <div class="stat-card"><div class="stat-label">Contratos ativos</div><div class="stat-value italic" id="em-contratos">0</div></div>
+    </div>
+    <div id="empresas-list"><div class="empty-state"><div class="empty-icon">▣</div>Nenhuma empresa</div></div>
+  </div>
+
+  <!-- RIEMANN -->
+  <div id="page-riemann" class="page">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Demonstrado</div><div class="stat-value italic green" id="ri-feito">0</div></div>
+      <div class="stat-card"><div class="stat-label">Em aberto</div><div class="stat-value italic amber" id="ri-aberto">0</div></div>
+      <div class="stat-card"><div class="stat-label">Bloqueado</div><div class="stat-value italic red" id="ri-bloq">0</div></div>
+      <div class="stat-card"><div class="stat-label">Quebras</div><div class="stat-value italic" id="ri-quebras" style="color:var(--muted-2)">0</div></div>
+    </div>
+    <div class="block">
+      <div class="block-title"><em>Backlog</em> <span class="block-sub">o que sobreviveu e o que trava</span></div>
+      <div class="rot-filters">
+        <button class="rot-chip active" data-rf="" onclick="filtraRiemann('')">Tudo</button>
+        <button class="rot-chip" data-rf="resultado" onclick="filtraRiemann('resultado')">Resultados</button>
+        <button class="rot-chip" data-rf="quebra" onclick="filtraRiemann('quebra')">Quebras</button>
+        <button class="rot-chip" data-rf="infra" onclick="filtraRiemann('infra')">Infra</button>
+        <button class="rot-chip" data-rf="lean" onclick="filtraRiemann('lean')">Lean</button>
+        <button class="rot-chip" data-rf="auditoria" onclick="filtraRiemann('auditoria')">Auditoria</button>
+        <button class="rot-chip" data-rf="edwards" onclick="filtraRiemann('edwards')">Edwards</button>
+        <button class="rot-chip" data-rf="linha" onclick="filtraRiemann('linha')">Linha</button>
+      </div>
+      <div id="riemann-list"><div class="empty-state"><div class="empty-icon">ζ</div>Nenhum item</div></div>
+    </div>
+  </div>
+
   <!-- ROTINA -->
   <div id="page-rotina" class="page">
     <div class="stats-grid">
@@ -464,9 +510,9 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
       <span class="drawer-num">I</span>
       <span class="drawer-text"><span class="drawer-label">Início</span><span class="drawer-sub">visão geral</span></span>
     </button>
-    <button class="drawer-item" data-page="kaizen" onclick="navigate('kaizen')">
+    <button class="drawer-item" data-page="rotina" onclick="navigate('rotina')">
       <span class="drawer-num">II</span>
-      <span class="drawer-text"><span class="drawer-label">Kaizen</span><span class="drawer-sub">melhoria contínua</span></span>
+      <span class="drawer-text"><span class="drawer-label">Rotina</span><span class="drawer-sub">o dia, bloco a bloco</span></span>
     </button>
     <button class="drawer-item" data-page="metas" onclick="navigate('metas')">
       <span class="drawer-num">III</span>
@@ -480,9 +526,21 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
       <span class="drawer-num">V</span>
       <span class="drawer-text"><span class="drawer-label">Estudos</span><span class="drawer-sub">certs · livros</span></span>
     </button>
-    <button class="drawer-item" data-page="rotina" onclick="navigate('rotina')">
+    <button class="drawer-item" data-page="academico" onclick="navigate('academico')">
       <span class="drawer-num">VI</span>
-      <span class="drawer-text"><span class="drawer-label">Rotina</span><span class="drawer-sub">o dia, bloco a bloco</span></span>
+      <span class="drawer-text"><span class="drawer-label">Acadêmico</span><span class="drawer-sub">formações · trilhas</span></span>
+    </button>
+    <button class="drawer-item" data-page="empresas" onclick="navigate('empresas')">
+      <span class="drawer-num">VII</span>
+      <span class="drawer-text"><span class="drawer-label">Empresas</span><span class="drawer-sub">contratos · receita</span></span>
+    </button>
+    <button class="drawer-item" data-page="riemann" onclick="navigate('riemann')">
+      <span class="drawer-num">VIII</span>
+      <span class="drawer-text"><span class="drawer-label">Riemann</span><span class="drawer-sub">hipótese · pesquisa</span></span>
+    </button>
+    <button class="drawer-item" data-page="kaizen" onclick="navigate('kaizen')">
+      <span class="drawer-num">IX</span>
+      <span class="drawer-text"><span class="drawer-label">Kaizen</span><span class="drawer-sub">melhoria contínua</span></span>
     </button>
   </nav>
 
@@ -511,6 +569,62 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
       <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="m-status"><option value="ativa">Ativa</option><option value="concluida">Concluída</option><option value="pausada">Pausada</option></select></div>
     </div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-meta')">Cancelar</button><button class="btn" id="m-submit" onclick="saveMeta()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-academico" onclick="if(event.target===this)closeModal('modal-academico')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-academico-title">Nova <em>Formação</em></div>
+    <div class="form-field"><div class="form-label">Nome</div><input class="form-input" id="ac-nome" placeholder="ex: MBA em IA"></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Instituição</div><input class="form-input" id="ac-inst" placeholder="opcional"></div>
+      <div class="form-field"><div class="form-label">Tipo</div><select class="form-input" id="ac-tipo"><option value="pos">Pós-graduação</option><option value="mba">MBA</option><option value="curso" selected>Curso</option><option value="mentoria">Mentoria</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Total de aulas</div><input class="form-input" type="number" id="ac-total" min="0" inputmode="numeric" placeholder="opcional"></div>
+      <div class="form-field"><div class="form-label">Aulas feitas</div><input class="form-input" type="number" id="ac-feitas" min="0" value="0" inputmode="numeric"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="ac-status"><option value="em_andamento">Em andamento</option><option value="pausado">Pausado</option><option value="concluido">Concluído</option></select></div>
+      <div class="form-field"><div class="form-label">Prazo</div><input class="form-input" type="date" id="ac-prazo"></div>
+    </div>
+    <div class="form-field"><div class="form-label">Detalhe</div><textarea class="form-input" id="ac-detalhe" rows="3"></textarea></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-academico')">Cancelar</button><button class="btn" onclick="saveAcademico()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-empresa" onclick="if(event.target===this)closeModal('modal-empresa')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-empresa-title">Nova <em>Empresa</em></div>
+    <div class="form-field"><div class="form-label">Nome</div><input class="form-input" id="em-nome" placeholder="ex: Datum"></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Papel</div><select class="form-input" id="em-papel"><option value="contratante">Contratante</option><option value="propria">Própria</option><option value="cliente">Cliente final</option></select></div>
+      <div class="form-field"><div class="form-label">Cliente final</div><input class="form-input" id="em-cliente" placeholder="opcional"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Valor mensal (R$)</div><input class="form-input" type="number" id="em-valor" step="0.01" inputmode="decimal" placeholder="negativo = saída"></div>
+      <div class="form-field"><div class="form-label">Pagamento</div><input class="form-input" id="em-dia" placeholder="ex: dia 20"></div>
+    </div>
+    <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="em-status"><option value="ativo">Ativo</option><option value="encerrado">Encerrado</option></select></div>
+    <div class="form-field"><div class="form-label">Detalhe</div><textarea class="form-input" id="em-detalhe" rows="3"></textarea></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-empresa')">Cancelar</button><button class="btn" onclick="saveEmpresa()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-riemann" onclick="if(event.target===this)closeModal('modal-riemann')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-riemann-title">Novo <em>Item</em></div>
+    <div class="form-field"><div class="form-label">Item</div><input class="form-input" id="ri-item" placeholder="ex: Formalizar o Teorema 4.2"></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Categoria</div><select class="form-input" id="ri-cat"><option value="resultado">Resultado</option><option value="quebra">Quebra</option><option value="infra">Infra</option><option value="lean">Lean</option><option value="auditoria">Auditoria</option><option value="edwards">Edwards</option><option value="linha">Linha</option></select></div>
+      <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="ri-status"><option value="aberto">Aberto</option><option value="feito">Feito</option><option value="bloqueado">Bloqueado</option><option value="fatal">Fatal</option></select></div>
+    </div>
+    <div class="form-field"><div class="form-label">Ordem</div><input class="form-input" type="number" id="ri-ordem" value="0" inputmode="numeric"></div>
+    <div class="form-field"><div class="form-label">Detalhe</div><textarea class="form-input" id="ri-detalhe" rows="3"></textarea></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-riemann')">Cancelar</button><button class="btn" onclick="saveRiemann()">Salvar</button></div>
   </div>
 </div>
 
@@ -712,7 +826,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',pieChartInst=null,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null,editingRotinaId=null,rotinaFiltro='',rotinaRows=[];
+let curPage='dashboard',estudosTab='certs',pieChartInst=null,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null,editingRotinaId=null,rotinaFiltro='',rotinaRows=[],editingAcademicoId=null,editingEmpresaId=null,editingRiemannId=null,riemannFiltro='',riemannRows=[];
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -720,7 +834,10 @@ const TOPBAR_CFG={
   metas:{title:'<em>Metas</em>',sub:'objetivos · trajetória',fab:true,modal:'modal-meta'},
   gastos:{title:'<em>Gastos</em>',sub:'controle financeiro',fab:true,modal:'modal-gasto'},
   estudos:{title:'<em>Estudos</em>',sub:'certificações · livros',fab:true},
-  rotina:{title:'<em>Rotina</em>',sub:'o dia, bloco a bloco',fab:true,modal:'modal-rotina'}
+  rotina:{title:'<em>Rotina</em>',sub:'o dia, bloco a bloco',fab:true,modal:'modal-rotina'},
+  academico:{title:'<em>Acadêmico</em>',sub:'formações · trilhas',fab:true,modal:'modal-academico'},
+  empresas:{title:'<em>Empresas</em>',sub:'contratos · receita',fab:true,modal:'modal-empresa'},
+  riemann:{title:'<em>Riemann</em>',sub:'hipótese · pesquisa',fab:true,modal:'modal-riemann'}
 };
 
 function navigate(page){
@@ -742,6 +859,9 @@ function navigate(page){
   if(page==='gastos')loadGastos();
   if(page==='estudos')loadEstudos();
   if(page==='rotina')loadRotina();
+  if(page==='academico')loadAcademico();
+  if(page==='empresas')loadEmpresas();
+  if(page==='riemann')loadRiemann();
 }
 
 function reloadCurrentPage(){
@@ -751,6 +871,9 @@ function reloadCurrentPage(){
   if(curPage==='gastos')loadGastos();
   if(curPage==='estudos')loadEstudos();
   if(curPage==='rotina')loadRotina();
+  if(curPage==='academico')loadAcademico();
+  if(curPage==='empresas')loadEmpresas();
+  if(curPage==='riemann')loadRiemann();
   toast('Informações recarregadas');
 }
 
@@ -759,6 +882,9 @@ function fabAction(){
   else if(curPage==='gastos')newGasto();
   else if(curPage==='estudos')estudosTab==='certs'?newCert():newLivro();
   else if(curPage==='rotina')newRotina();
+  else if(curPage==='academico')newAcademico();
+  else if(curPage==='empresas')newEmpresa();
+  else if(curPage==='riemann')newRiemann();
 }
 
 function switchEstudos(tab){
@@ -1276,6 +1402,218 @@ async function deleteLivro(id){
   });
 }
 
+// ── ACADEMICO ──
+const AC_TIPO={pos:'Pós',mba:'MBA',curso:'Curso',mentoria:'Mentoria'};
+const AC_ST={em_andamento:['Em andamento','tag-gold'],pausado:['Pausado','tag-gray'],concluido:['Concluído','tag-green']};
+
+async function loadAcademico(){
+  const{data,error}=await sb.from('academico').select('*').order('status',{ascending:true}).order('id',{ascending:true});
+  if(error)return toast(error.message,false);
+  const rows=data||[];
+  const pend=rows.reduce((a,x)=>a+Math.max(0,(x.total_aulas||0)-(x.aulas_feitas||0)),0);
+  document.getElementById('ac-frentes').textContent=rows.length;
+  document.getElementById('ac-pend').textContent=pend.toLocaleString('pt-BR');
+  document.getElementById('ac-and').textContent=rows.filter(x=>x.status==='em_andamento').length;
+  document.getElementById('ac-pausadas').textContent=rows.filter(x=>x.status==='pausado').length;
+  const el=document.getElementById('academico-list');
+  if(!rows.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✎</div>Nenhuma formação</div>';return;}
+  el.innerHTML=rows.map(x=>{
+    const[lbl,tg]=AC_ST[x.status]||['—','tag-gray'];
+    const tot=x.total_aulas||0, fez=x.aulas_feitas||0;
+    const pct=tot?Math.min(100,Math.round(fez/tot*100)):0;
+    const restam=Math.max(0,tot-fez);
+    return `<div class="item-card"><div class="item-header"><div class="item-name" style="flex:1;padding-right:8px">${escHtml(x.nome)}</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn btn-sm" onclick="openEditAcademico(${x.id})">✎</button><button class="btn btn-sm btn-danger" onclick="deleteAcademico(${x.id})">×</button></div></div>${x.detalhe?`<div class="item-desc">${escHtml(x.detalhe)}</div>`:''}${tot?`<div class="progress-bar"><div class="progress-fill ${pct>=100?'green':''}" style="width:${pct}%"></div></div>`:''}<div class="item-tags"><span class="tag ${tg}">${lbl}</span><span class="tag tag-gray">${AC_TIPO[x.tipo]||x.tipo}</span>${x.instituicao?`<span class="item-meta">${escHtml(x.instituicao)}</span>`:''}${tot?`<span class="item-meta">${fez} de ${tot} · faltam ${restam}</span>`:'<span class="item-meta">sem contagem de aulas</span>'}${x.prazo?`<span class="item-meta">${new Date(x.prazo+'T12:00:00').toLocaleDateString('pt-BR')}</span>`:''}</div></div>`;
+  }).join('');
+}
+function newAcademico(){
+  editingAcademicoId=null;
+  document.getElementById('modal-academico-title').innerHTML='Nova <em>Formação</em>';
+  ['ac-nome','ac-inst','ac-total','ac-detalhe','ac-prazo'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('ac-feitas').value=0;
+  document.getElementById('ac-tipo').value='curso';
+  document.getElementById('ac-status').value='em_andamento';
+  openModal('modal-academico');
+}
+async function openEditAcademico(id){
+  const{data,error}=await sb.from('academico').select('*').eq('id',id).single();
+  if(error||!data)return toast('Não foi possível carregar',false);
+  editingAcademicoId=id;
+  document.getElementById('modal-academico-title').innerHTML='Editar <em>Formação</em>';
+  document.getElementById('ac-nome').value=data.nome||'';
+  document.getElementById('ac-inst').value=data.instituicao||'';
+  document.getElementById('ac-tipo').value=data.tipo||'curso';
+  document.getElementById('ac-total').value=data.total_aulas??'';
+  document.getElementById('ac-feitas').value=data.aulas_feitas??0;
+  document.getElementById('ac-status').value=data.status||'em_andamento';
+  document.getElementById('ac-prazo').value=data.prazo||'';
+  document.getElementById('ac-detalhe').value=data.detalhe||'';
+  openModal('modal-academico');
+}
+async function saveAcademico(){
+  const nome=document.getElementById('ac-nome').value.trim();
+  if(!nome)return toast('Nome obrigatório',false);
+  const tot=document.getElementById('ac-total').value;
+  const payload={nome,instituicao:document.getElementById('ac-inst').value.trim()||null,
+    tipo:document.getElementById('ac-tipo').value,
+    total_aulas:tot===''?null:Number(tot),
+    aulas_feitas:Number(document.getElementById('ac-feitas').value||0),
+    status:document.getElementById('ac-status').value,
+    prazo:document.getElementById('ac-prazo').value||null,
+    detalhe:document.getElementById('ac-detalhe').value.trim()||null};
+  const{error}=editingAcademicoId==null?await sb.from('academico').insert(payload)
+    :await sb.from('academico').update(payload).eq('id',editingAcademicoId);
+  if(error)return toast(error.message,false);
+  closeModal('modal-academico');toast(editingAcademicoId==null?'Formação adicionada':'Formação atualizada');
+  editingAcademicoId=null;loadAcademico();
+}
+async function deleteAcademico(id){
+  confirmAction('Remover esta formação?',async()=>{
+    const{error}=await sb.from('academico').delete().eq('id',id);
+    if(error)return toast(error.message,false);
+    toast('Removido');loadAcademico();
+  });
+}
+
+// ── EMPRESAS ──
+const EM_PAPEL={contratante:['Contratante','tag-blue'],propria:['Própria','tag-gold'],cliente:['Cliente final','tag-gray']};
+function brl(v){return (v<0?'-':'')+'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});}
+
+async function loadEmpresas(){
+  const{data,error}=await sb.from('empresas').select('*').order('valor_mensal',{ascending:false});
+  if(error)return toast(error.message,false);
+  const rows=data||[];
+  const ativos=rows.filter(x=>x.status==='ativo');
+  const entra=ativos.reduce((a,x)=>a+Math.max(0,Number(x.valor_mensal)||0),0);
+  const sai=ativos.reduce((a,x)=>a+Math.min(0,Number(x.valor_mensal)||0),0);
+  document.getElementById('em-entra').textContent=brl(entra);
+  document.getElementById('em-sai').textContent=brl(Math.abs(sai));
+  document.getElementById('em-sobra').textContent=brl(entra+sai);
+  document.getElementById('em-contratos').textContent=ativos.filter(x=>x.papel==='contratante').length;
+  const el=document.getElementById('empresas-list');
+  if(!rows.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">▣</div>Nenhuma empresa</div>';return;}
+  el.innerHTML=rows.map(x=>{
+    const[lbl,tg]=EM_PAPEL[x.papel]||['—','tag-gray'];
+    const v=Number(x.valor_mensal)||0;
+    const cor=v>0?'text-green':(v<0?'text-red':'text-muted');
+    return `<div class="item-card"><div class="item-header"><div class="item-name" style="flex:1;padding-right:8px">${escHtml(x.nome)}</div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span class="mono ${cor}">${v?brl(v):'—'}</span><button class="btn btn-sm" onclick="openEditEmpresa(${x.id})">✎</button><button class="btn btn-sm btn-danger" onclick="deleteEmpresa(${x.id})">×</button></div></div>${x.detalhe?`<div class="item-desc">${escHtml(x.detalhe)}</div>`:''}<div class="item-tags"><span class="tag ${tg}">${lbl}</span>${x.status!=='ativo'?'<span class="tag tag-gray">Encerrado</span>':''}${x.cliente_final?`<span class="item-meta">cliente: ${escHtml(x.cliente_final)}</span>`:''}${x.dia_pagamento?`<span class="item-meta">${escHtml(x.dia_pagamento)}</span>`:''}</div></div>`;
+  }).join('');
+}
+function newEmpresa(){
+  editingEmpresaId=null;
+  document.getElementById('modal-empresa-title').innerHTML='Nova <em>Empresa</em>';
+  ['em-nome','em-cliente','em-valor','em-dia','em-detalhe'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('em-papel').value='contratante';
+  document.getElementById('em-status').value='ativo';
+  openModal('modal-empresa');
+}
+async function openEditEmpresa(id){
+  const{data,error}=await sb.from('empresas').select('*').eq('id',id).single();
+  if(error||!data)return toast('Não foi possível carregar',false);
+  editingEmpresaId=id;
+  document.getElementById('modal-empresa-title').innerHTML='Editar <em>Empresa</em>';
+  document.getElementById('em-nome').value=data.nome||'';
+  document.getElementById('em-papel').value=data.papel||'contratante';
+  document.getElementById('em-cliente').value=data.cliente_final||'';
+  document.getElementById('em-valor').value=data.valor_mensal??'';
+  document.getElementById('em-dia').value=data.dia_pagamento||'';
+  document.getElementById('em-status').value=data.status||'ativo';
+  document.getElementById('em-detalhe').value=data.detalhe||'';
+  openModal('modal-empresa');
+}
+async function saveEmpresa(){
+  const nome=document.getElementById('em-nome').value.trim();
+  if(!nome)return toast('Nome obrigatório',false);
+  const payload={nome,papel:document.getElementById('em-papel').value,
+    cliente_final:document.getElementById('em-cliente').value.trim()||null,
+    valor_mensal:Number(document.getElementById('em-valor').value||0),
+    dia_pagamento:document.getElementById('em-dia').value.trim()||null,
+    status:document.getElementById('em-status').value,
+    detalhe:document.getElementById('em-detalhe').value.trim()||null};
+  const{error}=editingEmpresaId==null?await sb.from('empresas').insert(payload)
+    :await sb.from('empresas').update(payload).eq('id',editingEmpresaId);
+  if(error)return toast(error.message,false);
+  closeModal('modal-empresa');toast(editingEmpresaId==null?'Empresa adicionada':'Empresa atualizada');
+  editingEmpresaId=null;loadEmpresas();
+}
+async function deleteEmpresa(id){
+  confirmAction('Remover esta empresa?',async()=>{
+    const{error}=await sb.from('empresas').delete().eq('id',id);
+    if(error)return toast(error.message,false);
+    toast('Removido');loadEmpresas();
+  });
+}
+
+// ── RIEMANN ──
+const RI_CAT={resultado:'Resultado',quebra:'Quebra',infra:'Infra',lean:'Lean',auditoria:'Auditoria',edwards:'Edwards',linha:'Linha'};
+const RI_ST={feito:['Demonstrado','tag-green'],aberto:['Aberto','tag-gold'],bloqueado:['Bloqueado','tag-red'],fatal:['Fatal','tag-red']};
+
+async function loadRiemann(){
+  const{data,error}=await sb.from('riemann').select('*').order('ordem',{ascending:true});
+  if(error)return toast(error.message,false);
+  riemannRows=data||[];
+  renderRiemann();
+}
+function renderRiemann(){
+  const rows=riemannRows;
+  document.getElementById('ri-feito').textContent=rows.filter(x=>x.status==='feito').length;
+  document.getElementById('ri-aberto').textContent=rows.filter(x=>x.status==='aberto').length;
+  document.getElementById('ri-bloq').textContent=rows.filter(x=>x.status==='bloqueado').length;
+  document.getElementById('ri-quebras').textContent=rows.filter(x=>x.categoria==='quebra').length;
+  const vis=riemannFiltro?rows.filter(x=>x.categoria===riemannFiltro):rows;
+  const el=document.getElementById('riemann-list');
+  if(!vis.length){el.innerHTML='<div class="empty-state" style="padding:18px 12px"><div class="empty-icon">ζ</div>Nenhum item neste filtro</div>';return;}
+  el.innerHTML=vis.map(x=>{
+    const[lbl,tg]=RI_ST[x.status]||['—','tag-gray'];
+    return `<div class="item-card" style="margin-bottom:8px;padding:12px 14px"><div class="item-header" style="align-items:flex-start"><div class="item-name" style="flex:1;padding-right:8px;font-size:14px">${escHtml(x.item)}</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn btn-sm" onclick="openEditRiemann(${x.id})">✎</button><button class="btn btn-sm btn-danger" onclick="deleteRiemann(${x.id})">×</button></div></div>${x.detalhe?`<div class="item-desc" style="margin-top:6px">${escHtml(x.detalhe)}</div>`:''}<div class="item-tags"><span class="tag ${tg}">${lbl}</span><span class="tag tag-gray">${RI_CAT[x.categoria]||x.categoria}</span></div></div>`;
+  }).join('');
+}
+function filtraRiemann(f){
+  riemannFiltro=f;
+  document.querySelectorAll('[data-rf]').forEach(c=>c.classList.toggle('active',(c.dataset.rf||'')===f));
+  renderRiemann();
+}
+function newRiemann(){
+  editingRiemannId=null;
+  document.getElementById('modal-riemann-title').innerHTML='Novo <em>Item</em>';
+  ['ri-item','ri-detalhe'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('ri-cat').value='lean';
+  document.getElementById('ri-status').value='aberto';
+  document.getElementById('ri-ordem').value=(riemannRows.reduce((a,x)=>Math.max(a,x.ordem||0),0)+1);
+  openModal('modal-riemann');
+}
+async function openEditRiemann(id){
+  const r=riemannRows.find(x=>x.id===id);
+  if(!r)return toast('Item não encontrado',false);
+  editingRiemannId=id;
+  document.getElementById('modal-riemann-title').innerHTML='Editar <em>Item</em>';
+  document.getElementById('ri-item').value=r.item||'';
+  document.getElementById('ri-cat').value=r.categoria||'lean';
+  document.getElementById('ri-status').value=r.status||'aberto';
+  document.getElementById('ri-ordem').value=r.ordem??0;
+  document.getElementById('ri-detalhe').value=r.detalhe||'';
+  openModal('modal-riemann');
+}
+async function saveRiemann(){
+  const item=document.getElementById('ri-item').value.trim();
+  if(!item)return toast('Item obrigatório',false);
+  const payload={item,categoria:document.getElementById('ri-cat').value,
+    status:document.getElementById('ri-status').value,
+    ordem:Number(document.getElementById('ri-ordem').value||0),
+    detalhe:document.getElementById('ri-detalhe').value.trim()||null};
+  const{error}=editingRiemannId==null?await sb.from('riemann').insert(payload)
+    :await sb.from('riemann').update(payload).eq('id',editingRiemannId);
+  if(error)return toast(error.message,false);
+  closeModal('modal-riemann');toast(editingRiemannId==null?'Item adicionado':'Item atualizado');
+  editingRiemannId=null;loadRiemann();
+}
+async function deleteRiemann(id){
+  confirmAction('Remover este item do backlog?',async()=>{
+    const{error}=await sb.from('riemann').delete().eq('id',id);
+    if(error)return toast(error.message,false);
+    toast('Removido');loadRiemann();
+  });
+}
+
 // ── ROTINA ──
 const ROT_TAG={trabalho:'tag-blue',refeicao:'tag-amber',treino:'tag-green',estudo:'tag-purple',pessoal:'tag-gold',sono:'tag-gray'};
 const ROT_LABEL={trabalho:'Contrato',refeicao:'Refeição',treino:'Treino',estudo:'Estudo',pessoal:'Pessoal',sono:'Sono'};
@@ -1373,7 +1711,7 @@ function renderRotina(){
 
 function filtraRotina(f){
   rotinaFiltro=f;
-  document.querySelectorAll('.rot-chip').forEach(c=>c.classList.toggle('active',(c.dataset.f||'')===f));
+  document.querySelectorAll('[data-f]').forEach(c=>c.classList.toggle('active',(c.dataset.f||'')===f));
   renderRotina();
 }
 
