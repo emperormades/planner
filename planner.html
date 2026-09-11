@@ -158,6 +158,18 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .tag-amber{border-color:var(--amber);color:var(--gold);background:rgba(184,138,46,0.08);}
 .tag-red{border-color:var(--red-light);color:var(--red-light);background:rgba(196,122,122,0.06);}
 .tag-gray{border-color:rgba(107,100,85,0.4);color:var(--muted-2);}
+.bib-row{display:grid;grid-template-columns:1fr auto;gap:2px 14px;padding:11px 12px;border-top:1px solid var(--line);border-left:2px solid transparent;align-items:baseline;cursor:pointer;transition:background .15s;}
+.bib-row:hover{background:rgba(201,168,76,0.03);}
+.bib-row.nucleo{border-left-color:var(--gold);}
+.bib-row.lido .bib-t{color:var(--green-light);text-decoration:line-through;text-decoration-color:rgba(143,176,154,0.4);}
+.bib-t{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--paper);line-height:1.3;}
+.bib-a{font-family:var(--display);font-style:italic;color:var(--paper-dim);font-size:13px;}
+.bib-a::before{content:" · ";color:var(--muted);font-style:normal;}
+.bib-m{grid-column:2;grid-row:1;font-family:var(--mono);font-size:9.5px;color:var(--muted);white-space:nowrap;}
+.bib-w{grid-column:1/-1;margin-top:4px;font-family:var(--serif);font-size:12.5px;color:var(--muted-2);line-height:1.5;}
+.bib-grp{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);padding:14px 2px 6px;}
+.bib-grp span{color:var(--muted);letter-spacing:0.06em;text-transform:none;font-family:var(--serif);font-style:italic;font-size:11px;}
+.bib-row:last-child{border-bottom:1px solid var(--line);}
 .tag-purple{border-color:#9a86c4;color:#9a86c4;background:rgba(154,134,196,0.06);}
 .rot-group{margin-bottom:16px;}
 .rot-group-label{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);padding:0 2px 8px;border-bottom:1px solid var(--line);margin-bottom:10px;}
@@ -444,6 +456,11 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
 
   <!-- RIEMANN -->
   <div id="page-riemann" class="page">
+    <div class="etabs">
+      <button class="etab active" id="etab-ri-backlog" onclick="switchRiemann('backlog')">Backlog</button>
+      <button class="etab" id="etab-ri-biblio" onclick="switchRiemann('biblio')">Bibliografia</button>
+    </div>
+    <div id="panel-ri-backlog">
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-label">Demonstrado</div><div class="stat-value italic green" id="ri-feito">0</div></div>
       <div class="stat-card"><div class="stat-label">Em aberto</div><div class="stat-value italic amber" id="ri-aberto">0</div></div>
@@ -463,6 +480,38 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
         <button class="rot-chip" data-rf="linha" onclick="filtraRiemann('linha')">Linha</button>
       </div>
       <div id="riemann-list"><div class="empty-state"><div class="empty-icon">ζ</div>Nenhum item</div></div>
+    </div>
+    </div>
+    <div id="panel-ri-biblio" style="display:none">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Itens</div><div class="stat-value italic" id="bi-total">0</div></div>
+        <div class="stat-card"><div class="stat-label">Núcleo</div><div class="stat-value italic" id="bi-nucleo" style="color:var(--gold)">0</div></div>
+        <div class="stat-card"><div class="stat-label">Lidos</div><div class="stat-value italic green" id="bi-lidos">0</div></div>
+        <div class="stat-card"><div class="stat-label">Programas</div><div class="stat-value italic" id="bi-prog" style="color:var(--blue-soft)">0</div></div>
+      </div>
+      <div class="block" style="margin-bottom:14px">
+        <div class="block-title"><em>Trilha</em> <span class="block-sub">ordem sugerida</span></div>
+        <table class="data-table"><thead><tr><th>Fase</th><th>Foco</th><th>Núcleo</th></tr></thead><tbody id="trilha-list"><tr><td colspan="3" class="empty-state">—</td></tr></tbody></table>
+      </div>
+      <div class="block">
+        <div class="block-title"><em>Bibliografia</em> <span class="block-sub">clique para marcar como lido</span></div>
+        <div class="rot-filters">
+          <button class="rot-chip active" data-bf="" onclick="filtraBiblio('')">Tudo</button>
+          <button class="rot-chip" data-bf="camada0" onclick="filtraBiblio('camada0')">Fundação</button>
+          <button class="rot-chip" data-bf="camada1" onclick="filtraBiblio('camada1')">Cânone</button>
+          <button class="rot-chip" data-bf="A" onclick="filtraBiblio('A')">A · Corpos</button>
+          <button class="rot-chip" data-bf="B" onclick="filtraBiblio('B')">B · Matrizes</button>
+          <button class="rot-chip" data-bf="C" onclick="filtraBiblio('C')">C · Espectral</button>
+          <button class="rot-chip" data-bf="D" onclick="filtraBiblio('D')">D · Connes</button>
+          <button class="rot-chip" data-bf="E" onclick="filtraBiblio('E')">E · de Branges</button>
+          <button class="rot-chip" data-bf="F" onclick="filtraBiblio('F')">F · Langlands</button>
+          <button class="rot-chip" data-bf="G" onclick="filtraBiblio('G')">G · Positividade</button>
+          <button class="rot-chip" data-bf="camada3" onclick="filtraBiblio('camada3')">Bancada</button>
+          <button class="rot-chip" data-bf="camada4" onclick="filtraBiblio('camada4')">Bússola</button>
+          <button class="rot-chip" id="chip-nucleo" onclick="toggleNucleo()">Só núcleo</button>
+        </div>
+        <div id="biblio-list"><div class="empty-state"><div class="empty-icon">§</div>Nenhum item</div></div>
+      </div>
     </div>
   </div>
 
@@ -610,6 +659,24 @@ select.form-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://
     <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="em-status"><option value="ativo">Ativo</option><option value="encerrado">Encerrado</option></select></div>
     <div class="form-field"><div class="form-label">Detalhe</div><textarea class="form-input" id="em-detalhe" rows="3"></textarea></div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-empresa')">Cancelar</button><button class="btn" onclick="saveEmpresa()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-biblio" onclick="if(event.target===this)closeModal('modal-biblio')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-biblio-title">Novo <em>Item</em></div>
+    <div class="form-field"><div class="form-label">Título</div><input class="form-input" id="bi-titulo" placeholder="ex: Complex Analysis"></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Autor</div><input class="form-input" id="bi-autor" placeholder="ex: Lars Ahlfors"></div>
+      <div class="form-field"><div class="form-label">Publicação</div><input class="form-input" id="bi-pub" placeholder="ex: McGraw-Hill · 1979"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Grupo</div><select class="form-input" id="bi-grupo"><option value="camada0">Camada 0 · Fundação</option><option value="camada1">Camada 1 · Cânone</option><option value="A">Programa A · Corpos de funções</option><option value="B">Programa B · Matrizes aleatórias</option><option value="C">Programa C · Espectral</option><option value="D">Programa D · Connes</option><option value="E">Programa E · de Branges</option><option value="F">Programa F · Langlands</option><option value="G">Programa G · Positividade</option><option value="camada3">Camada 3 · Bancada</option><option value="camada4">Camada 4 · Bússola</option></select></div>
+      <div class="form-field"><div class="form-label">Prioridade</div><select class="form-input" id="bi-nuc"><option value="false">Complementar</option><option value="true">Núcleo inegociável</option></select></div>
+    </div>
+    <div class="form-field"><div class="form-label">Nota</div><textarea class="form-input" id="bi-nota" rows="3"></textarea></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-biblio')">Cancelar</button><button class="btn btn-danger" id="bi-del" onclick="deleteBiblio()">Remover</button><button class="btn" onclick="saveBiblio()">Salvar</button></div>
   </div>
 </div>
 
@@ -826,7 +893,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',pieChartInst=null,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null,editingRotinaId=null,rotinaFiltro='',rotinaRows=[],editingAcademicoId=null,editingEmpresaId=null,editingRiemannId=null,riemannFiltro='',riemannRows=[];
+let curPage='dashboard',estudosTab='certs',pieChartInst=null,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null,editingRotinaId=null,rotinaFiltro='',rotinaRows=[],editingAcademicoId=null,editingEmpresaId=null,editingRiemannId=null,riemannFiltro='',riemannRows=[],riemannTab='backlog',biblioRows=[],trilhaRows=[],biblioFiltro='',biblioSoNucleo=false,editingBiblioId=null;
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -861,7 +928,7 @@ function navigate(page){
   if(page==='rotina')loadRotina();
   if(page==='academico')loadAcademico();
   if(page==='empresas')loadEmpresas();
-  if(page==='riemann')loadRiemann();
+  if(page==='riemann'){loadRiemann();loadBiblio();}
 }
 
 function reloadCurrentPage(){
@@ -873,7 +940,7 @@ function reloadCurrentPage(){
   if(curPage==='rotina')loadRotina();
   if(curPage==='academico')loadAcademico();
   if(curPage==='empresas')loadEmpresas();
-  if(curPage==='riemann')loadRiemann();
+  if(curPage==='riemann'){loadRiemann();loadBiblio();}
   toast('Informações recarregadas');
 }
 
@@ -884,7 +951,7 @@ function fabAction(){
   else if(curPage==='rotina')newRotina();
   else if(curPage==='academico')newAcademico();
   else if(curPage==='empresas')newEmpresa();
-  else if(curPage==='riemann')newRiemann();
+  else if(curPage==='riemann')riemannTab==='biblio'?newBiblio():newRiemann();
 }
 
 function switchEstudos(tab){
@@ -1611,6 +1678,135 @@ async function deleteRiemann(id){
     const{error}=await sb.from('riemann').delete().eq('id',id);
     if(error)return toast(error.message,false);
     toast('Removido');loadRiemann();
+  });
+}
+
+// ── RIEMANN · BIBLIOGRAFIA ──
+const BIB_GRUPO={
+  camada0:['Camada 0 · A fundação','análise, no nível em que o problema é formulado'],
+  camada1:['Camada 1 · O cânone','teoria analítica dos números'],
+  A:['Programa A · Corpos de funções','provado neste universo · aposta da maioria'],
+  B:['Programa B · Matrizes aleatórias','vivíssimo · dá estrutura, não dá prova'],
+  C:['Programa C · Espectral','viva · sem candidato a operador em um século'],
+  D:['Programa D · Connes','viva · travada no mesmo ponto há 25 anos'],
+  E:['Programa E · de Branges','morto como prova · vivo como teoria'],
+  F:['Programa F · Langlands','vivíssima · generaliza o problema, não o resolve'],
+  G:['Programa G · Positividade','produz teoremas de verdade · progresso incremental'],
+  camada3:['Camada 3 · Bancada','computação, dados e experimentação'],
+  camada4:['Camada 4 · Bússola','orientação: leia isto primeiro, não por último']
+};
+
+function switchRiemann(tab){
+  riemannTab=tab;
+  document.getElementById('panel-ri-backlog').style.display=tab==='backlog'?'block':'none';
+  document.getElementById('panel-ri-biblio').style.display=tab==='biblio'?'block':'none';
+  document.getElementById('etab-ri-backlog').className='etab'+(tab==='backlog'?' active':'');
+  document.getElementById('etab-ri-biblio').className='etab'+(tab==='biblio'?' active':'');
+}
+
+async function loadBiblio(){
+  const[b,t]=await Promise.all([
+    sb.from('riemann_biblio').select('*').order('ordem',{ascending:true}),
+    sb.from('riemann_trilha').select('*').order('ordem',{ascending:true})
+  ]);
+  if(b.error)return toast(b.error.message,false);
+  biblioRows=b.data||[];trilhaRows=t.data||[];
+  renderTrilha();renderBiblio();
+}
+function renderTrilha(){
+  const el=document.getElementById('trilha-list');
+  if(!trilhaRows.length){el.innerHTML='<tr><td colspan="3" class="empty-state">—</td></tr>';return;}
+  el.innerHTML=trilhaRows.map(x=>`<tr><td class="mono" style="color:var(--gold);white-space:nowrap">${escHtml(x.fase)}</td><td>${escHtml(x.foco)}</td><td style="color:var(--muted-2);font-size:12px">${escHtml(x.nucleo||'—')}</td></tr>`).join('');
+}
+function renderBiblio(){
+  const rows=biblioRows;
+  document.getElementById('bi-total').textContent=rows.length;
+  document.getElementById('bi-nucleo').textContent=rows.filter(x=>x.nucleo).length;
+  document.getElementById('bi-lidos').textContent=rows.filter(x=>x.lido).length;
+  document.getElementById('bi-prog').textContent=new Set(rows.map(x=>x.grupo).filter(g=>g.length===1)).size;
+  let vis=biblioFiltro?rows.filter(x=>x.grupo===biblioFiltro):rows;
+  if(biblioSoNucleo)vis=vis.filter(x=>x.nucleo);
+  const el=document.getElementById('biblio-list');
+  if(!vis.length){el.innerHTML='<div class="empty-state" style="padding:18px 12px"><div class="empty-icon">§</div>Nenhum item neste filtro</div>';return;}
+  let html='',grp=null;
+  vis.forEach(x=>{
+    if(x.grupo!==grp){
+      grp=x.grupo;
+      const[n,d]=BIB_GRUPO[grp]||[grp,''];
+      html+=`<div class="bib-grp">${escHtml(n)} <span>${escHtml(d)}</span></div>`;
+    }
+    html+=`<div class="bib-row${x.nucleo?' nucleo':''}${x.lido?' lido':''}" onclick="toggleLido(${x.id})" oncontextmenu="event.preventDefault();openEditBiblio(${x.id})">
+      <div><span class="bib-t">${escHtml(x.titulo)}</span>${x.autor?`<span class="bib-a">${escHtml(x.autor)}</span>`:''}</div>
+      <div class="bib-m">${escHtml(x.publicacao||'')}</div>
+      ${x.nota?`<div class="bib-w">${escHtml(x.nota)}</div>`:''}
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function filtraBiblio(f){
+  biblioFiltro=f;
+  document.querySelectorAll('[data-bf]').forEach(c=>c.classList.toggle('active',(c.dataset.bf||'')===f));
+  renderBiblio();
+}
+function toggleNucleo(){
+  biblioSoNucleo=!biblioSoNucleo;
+  document.getElementById('chip-nucleo').classList.toggle('active',biblioSoNucleo);
+  renderBiblio();
+}
+async function toggleLido(id){
+  const r=biblioRows.find(x=>x.id===id);
+  if(!r)return;
+  const novo=!r.lido;
+  const{error}=await sb.from('riemann_biblio').update({lido:novo}).eq('id',id);
+  if(error)return toast(error.message,false);
+  r.lido=novo;renderBiblio();
+  toast(novo?'Marcado como lido':'Desmarcado');
+}
+function newBiblio(){
+  editingBiblioId=null;
+  document.getElementById('modal-biblio-title').innerHTML='Novo <em>Item</em>';
+  ['bi-titulo','bi-autor','bi-pub','bi-nota'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('bi-grupo').value='camada0';
+  document.getElementById('bi-nuc').value='false';
+  document.getElementById('bi-del').style.display='none';
+  openModal('modal-biblio');
+}
+function openEditBiblio(id){
+  const r=biblioRows.find(x=>x.id===id);
+  if(!r)return;
+  editingBiblioId=id;
+  document.getElementById('modal-biblio-title').innerHTML='Editar <em>Item</em>';
+  document.getElementById('bi-titulo').value=r.titulo||'';
+  document.getElementById('bi-autor').value=r.autor||'';
+  document.getElementById('bi-pub').value=r.publicacao||'';
+  document.getElementById('bi-grupo').value=r.grupo||'camada0';
+  document.getElementById('bi-nuc').value=r.nucleo?'true':'false';
+  document.getElementById('bi-nota').value=r.nota||'';
+  document.getElementById('bi-del').style.display='';
+  openModal('modal-biblio');
+}
+async function saveBiblio(){
+  const titulo=document.getElementById('bi-titulo').value.trim();
+  if(!titulo)return toast('Título obrigatório',false);
+  const payload={titulo,autor:document.getElementById('bi-autor').value.trim()||null,
+    publicacao:document.getElementById('bi-pub').value.trim()||null,
+    grupo:document.getElementById('bi-grupo').value,
+    nucleo:document.getElementById('bi-nuc').value==='true',
+    nota:document.getElementById('bi-nota').value.trim()||null};
+  if(editingBiblioId==null)payload.ordem=biblioRows.reduce((a,x)=>Math.max(a,x.ordem||0),0)+1;
+  const{error}=editingBiblioId==null?await sb.from('riemann_biblio').insert(payload)
+    :await sb.from('riemann_biblio').update(payload).eq('id',editingBiblioId);
+  if(error)return toast(error.message,false);
+  closeModal('modal-biblio');toast(editingBiblioId==null?'Item adicionado':'Item atualizado');
+  editingBiblioId=null;loadBiblio();
+}
+async function deleteBiblio(){
+  if(editingBiblioId==null)return;
+  const id=editingBiblioId;
+  confirmAction('Remover este item da bibliografia?',async()=>{
+    const{error}=await sb.from('riemann_biblio').delete().eq('id',id);
+    if(error)return toast(error.message,false);
+    closeModal('modal-biblio');editingBiblioId=null;toast('Removido');loadBiblio();
   });
 }
 

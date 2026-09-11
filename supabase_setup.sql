@@ -177,6 +177,33 @@ CREATE TABLE IF NOT EXISTS public.riemann (
 );
 CREATE INDEX IF NOT EXISTS idx_riemann_ordem ON public.riemann (ordem);
 
+-- ──────────────── RIEMANN · BIBLIOGRAFIA ────────────────
+-- Os 79 itens do arsenal, por camada e programa. nucleo = inegociável.
+CREATE TABLE IF NOT EXISTS public.riemann_biblio (
+  id bigserial PRIMARY KEY,
+  titulo text NOT NULL,
+  autor text,
+  publicacao text,
+  grupo text NOT NULL DEFAULT 'camada0',
+  nucleo boolean NOT NULL DEFAULT false,
+  nota text,
+  lido boolean NOT NULL DEFAULT false,
+  ordem int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_biblio_grupo ON public.riemann_biblio (grupo);
+CREATE INDEX IF NOT EXISTS idx_biblio_ordem ON public.riemann_biblio (ordem);
+
+-- ──────────────── RIEMANN · TRILHA ────────────────
+CREATE TABLE IF NOT EXISTS public.riemann_trilha (
+  id bigserial PRIMARY KEY,
+  fase text NOT NULL,
+  foco text NOT NULL,
+  nucleo text,
+  ordem int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
 -- ──────────────── AULAS (Curso SQL) ────────────────
 -- Progresso e notas das aulas do SQL Impressionador.
 -- Catálogo (módulos + nomes das aulas) fica no JS — não armazenado.
@@ -206,6 +233,8 @@ ALTER TABLE public.rotina        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.academico     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.empresas      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.riemann       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.riemann_biblio ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.riemann_trilha ENABLE ROW LEVEL SECURITY;
 
 -- Limpa policies antigas (caso já existam de tentativas anteriores)
 DROP POLICY IF EXISTS "allow all"       ON public.metas;
@@ -224,6 +253,8 @@ DROP POLICY IF EXISTS "auth_all_rotina" ON public.rotina;
 DROP POLICY IF EXISTS "auth_all_academico" ON public.academico;
 DROP POLICY IF EXISTS "auth_all_empresas" ON public.empresas;
 DROP POLICY IF EXISTS "auth_all_riemann" ON public.riemann;
+DROP POLICY IF EXISTS "auth_all_riemann_biblio" ON public.riemann_biblio;
+DROP POLICY IF EXISTS "auth_all_riemann_trilha" ON public.riemann_trilha;
 
 -- Cria policies novas — só authenticated
 CREATE POLICY "auth_all_metas"  ON public.metas
@@ -260,4 +291,10 @@ CREATE POLICY "auth_all_empresas" ON public.empresas
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_riemann" ON public.riemann
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_riemann_biblio" ON public.riemann_biblio
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_riemann_trilha" ON public.riemann_trilha
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
