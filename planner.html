@@ -160,6 +160,26 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .tag-amber{border-color:var(--amber);color:var(--gold);background:rgba(184,138,46,0.08);}
 .tag-red{border-color:var(--red-light);color:var(--red-light);background:rgba(196,122,122,0.06);}
 .tag-gray{border-color:rgba(107,100,85,0.4);color:var(--muted-2);}
+.tag-purple{border-color:#9a86c4;color:#9a86c4;background:rgba(154,134,196,0.06);}
+.rot-group{margin-bottom:16px;}
+.rot-group-label{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);padding:0 2px 8px;border-bottom:1px solid var(--line);margin-bottom:10px;}
+.rot-row{display:flex;gap:12px;align-items:flex-start;padding:9px 10px;border-radius:6px;border:1px solid transparent;transition:background .15s,border-color .15s;}
+.rot-row+.rot-row{margin-top:2px;}
+.rot-row:hover{background:rgba(201,168,76,0.03);}
+.rot-row.rot-now{border-color:var(--line-2);background:var(--gold-soft);}
+.rot-time{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;padding-top:2px;min-width:84px;flex-shrink:0;letter-spacing:0.03em;}
+.rot-row.rot-now .rot-time{color:var(--gold);}
+.rot-body{flex:1;min-width:0;}
+.rot-title{font-size:14px;color:var(--paper);line-height:1.35;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.rot-detail{font-size:12px;color:var(--muted-2);line-height:1.5;margin-top:4px;}
+.rot-acts{display:flex;gap:4px;flex-shrink:0;opacity:0;transition:opacity .15s;}
+.rot-row:hover .rot-acts,.rot-row.rot-now .rot-acts{opacity:1;}
+.rot-dur{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.08em;}
+.rot-now-badge{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;color:var(--ink);background:var(--gold);padding:2px 6px;border-radius:3px;text-transform:uppercase;}
+.rot-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.rot-chip{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;padding:6px 11px;border-radius:20px;border:1px solid var(--line);background:transparent;color:var(--muted-2);cursor:pointer;}
+.rot-chip.active{border-color:var(--line-2);color:var(--gold);background:var(--gold-soft);}
+@media(max-width:520px){.rot-acts{opacity:1;}.rot-time{min-width:72px;font-size:10px;}}
 
 /* ── PROGRESS ── */
 .progress-bar{height:3px;background:rgba(201,168,76,0.08);overflow:hidden;margin-top:8px;}
@@ -546,6 +566,29 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
   </div>
 
   <!-- CURSO SQL -->
+  <!-- ROTINA -->
+  <div id="page-rotina" class="page">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Sono</div><div class="stat-value italic" id="rot-sono" style="color:var(--blue-soft)">—</div></div>
+      <div class="stat-card"><div class="stat-label">Contratos</div><div class="stat-value italic" id="rot-trab">—</div></div>
+      <div class="stat-card"><div class="stat-label">Treino</div><div class="stat-value italic green" id="rot-treino">—</div></div>
+      <div class="stat-card"><div class="stat-label">Estudo</div><div class="stat-value italic" id="rot-estudo" style="color:#9a86c4">—</div></div>
+    </div>
+    <div class="block">
+      <div class="block-title"><em>O dia</em> <span class="block-sub" id="rot-agora-sub">—</span></div>
+      <div class="rot-filters">
+        <button class="rot-chip active" data-f="" onclick="filtraRotina('')">Tudo</button>
+        <button class="rot-chip" data-f="trabalho" onclick="filtraRotina('trabalho')">Contratos</button>
+        <button class="rot-chip" data-f="refeicao" onclick="filtraRotina('refeicao')">Dieta</button>
+        <button class="rot-chip" data-f="treino" onclick="filtraRotina('treino')">Treino</button>
+        <button class="rot-chip" data-f="estudo" onclick="filtraRotina('estudo')">Estudo</button>
+        <button class="rot-chip" data-f="pessoal" onclick="filtraRotina('pessoal')">Pessoal</button>
+        <button class="rot-chip" data-f="sono" onclick="filtraRotina('sono')">Sono</button>
+      </div>
+      <div id="rotina-list"><div class="empty-state"><div class="empty-icon">◷</div>Nenhum bloco na rotina</div></div>
+    </div>
+  </div>
+
   <div id="page-curso" class="page">
     <!-- estado: lista de módulos -->
     <div id="curso-home">
@@ -635,6 +678,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <span class="drawer-num">VII</span>
       <span class="drawer-text"><span class="drawer-label">Curso SQL</span><span class="drawer-sub">SQL Impressionador · 828 aulas</span></span>
     </button>
+    <button class="drawer-item" data-page="rotina" onclick="navigate('rotina')">
+      <span class="drawer-num">VIII</span>
+      <span class="drawer-text"><span class="drawer-label">Rotina</span><span class="drawer-sub">o dia, bloco a bloco</span></span>
+    </button>
   </nav>
 
   <div class="drawer-foot">
@@ -662,6 +709,30 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--gold
       <div class="form-field"><div class="form-label">Status</div><select class="form-input" id="m-status"><option value="ativa">Ativa</option><option value="concluida">Concluída</option><option value="pausada">Pausada</option></select></div>
     </div>
     <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-meta')">Cancelar</button><button class="btn" id="m-submit" onclick="saveMeta()">Salvar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-rotina" onclick="if(event.target===this)closeModal('modal-rotina')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-rotina-title">Novo <em>Bloco</em></div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Início</div><input class="form-input" type="time" id="rt-inicio"></div>
+      <div class="form-field"><div class="form-label">Fim (opcional)</div><input class="form-input" type="time" id="rt-fim"></div>
+    </div>
+    <div class="form-field"><div class="form-label">Título</div><input class="form-input" id="rt-titulo" placeholder="ex: Musculação e esteira"></div>
+    <div class="form-field"><div class="form-label">Tipo</div>
+      <select class="form-input" id="rt-tipo">
+        <option value="trabalho">Contrato</option>
+        <option value="refeicao">Refeição</option>
+        <option value="treino">Treino</option>
+        <option value="estudo">Estudo</option>
+        <option value="pessoal" selected>Pessoal</option>
+        <option value="sono">Sono</option>
+      </select>
+    </div>
+    <div class="form-field"><div class="form-label">Detalhe</div><textarea class="form-input" id="rt-detalhe" rows="3" placeholder="O que entra neste bloco…"></textarea></div>
+    <div class="form-actions"><button class="btn btn-ghost" onclick="closeModal('modal-rotina')">Cancelar</button><button class="btn" onclick="saveRotina()">Salvar</button></div>
   </div>
 </div>
 
@@ -856,7 +927,7 @@ sb.auth.getSession().then(({data})=>{
 });
 
 // ── STATE ──
-let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null;
+let curPage='dashboard',estudosTab='certs',simChartInst=null,pieChartInst=null,simInit=false,editingGastoId=null,editingCertId=null,editingLivroId=null,editingKaizenId=null,editingRotinaId=null,rotinaFiltro='',rotinaRows=[];
 
 const TOPBAR_CFG={
   dashboard:{title:'Início',sub:'visão geral',fab:false},
@@ -865,7 +936,8 @@ const TOPBAR_CFG={
   gastos:{title:'<em>Gastos</em>',sub:'controle financeiro',fab:true,modal:'modal-gasto'},
   estudos:{title:'<em>Estudos</em>',sub:'certificações · livros',fab:true},
   simulador:{title:'<em>Simulador</em>',sub:'projeção · 20 meses',fab:false},
-  curso:{title:'<em>Curso SQL</em>',sub:'SQL Impressionador',fab:false}
+  curso:{title:'<em>Curso SQL</em>',sub:'SQL Impressionador',fab:false},
+  rotina:{title:'<em>Rotina</em>',sub:'o dia, bloco a bloco',fab:true,modal:'modal-rotina'}
 };
 
 function navigate(page){
@@ -889,6 +961,7 @@ function navigate(page){
   if(page==='simulador'&&!simInit){initSim();simInit=true;}
   else if(page==='simulador')runSim();
   if(page==='curso')loadCurso();
+  if(page==='rotina')loadRotina();
 }
 
 function reloadCurrentPage(){
@@ -899,6 +972,7 @@ function reloadCurrentPage(){
   if(curPage==='estudos')loadEstudos();
   if(curPage==='simulador')runSim();
   if(curPage==='curso')loadCurso();
+  if(curPage==='rotina')loadRotina();
   toast('Informações recarregadas');
 }
 
@@ -906,6 +980,7 @@ function fabAction(){
   if(curPage==='metas')newMeta();
   else if(curPage==='gastos')newGasto();
   else if(curPage==='estudos')estudosTab==='certs'?newCert():newLivro();
+  else if(curPage==='rotina')newRotina();
 }
 
 function switchEstudos(tab){
@@ -1795,6 +1870,163 @@ async function saveAulaNota(){
   }
   toast('Nota salva');closeModal('modal-aula-nota');
   if(cursoMod)renderCursoLessons();
+}
+
+// ── ROTINA ──
+const ROT_TAG={trabalho:'tag-blue',refeicao:'tag-amber',treino:'tag-green',estudo:'tag-purple',pessoal:'tag-gold',sono:'tag-gray'};
+const ROT_LABEL={trabalho:'Contrato',refeicao:'Refeição',treino:'Treino',estudo:'Estudo',pessoal:'Pessoal',sono:'Sono'};
+
+function rotHM(t){return t?String(t).slice(0,5):'';}
+function rotMin(t){const[h,m]=rotHM(t).split(':').map(Number);return h*60+m;}
+function rotDur(a,b){
+  if(!b)return null;
+  let d=rotMin(b)-rotMin(a);
+  if(d<0)d+=1440;
+  const h=Math.floor(d/60),m=d%60;
+  return h&&m?`${h}h${String(m).padStart(2,'0')}`:h?`${h}h`:`${m}min`;
+}
+function rotPeriodo(t){
+  const m=rotMin(t);
+  if(m<12*60)return'Manhã';
+  if(m<18*60)return'Tarde';
+  return'Noite';
+}
+function rotAgoraId(rows){
+  const d=new Date(),now=d.getHours()*60+d.getMinutes();
+  let melhor=null;
+  rows.forEach(r=>{
+    const ini=rotMin(r.hora_inicio);
+    if(r.hora_fim){
+      let fim=rotMin(r.hora_fim);
+      const cruza=fim<ini;
+      const dentro=cruza?(now>=ini||now<fim):(now>=ini&&now<fim);
+      if(dentro&&(!melhor||ini>=rotMin(melhor.hora_inicio)))melhor=r;
+    }
+  });
+  if(melhor)return melhor.id;
+  const passados=rows.filter(r=>rotMin(r.hora_inicio)<=now);
+  return passados.length?passados[passados.length-1].id:null;
+}
+
+async function loadRotina(){
+  const{data,error}=await sb.from('rotina').select('*').eq('ativo',true).order('hora_inicio',{ascending:true});
+  if(error){toast(error.message,false);return;}
+  rotinaRows=data||[];
+  renderRotina();
+}
+
+function renderRotina(){
+  const rows=rotinaRows;
+  const el=document.getElementById('rotina-list');
+  const soma={};
+  rows.forEach(r=>{
+    if(!r.hora_fim)return;
+    let d=rotMin(r.hora_fim)-rotMin(r.hora_inicio);
+    if(d<0)d+=1440;
+    soma[r.tipo]=(soma[r.tipo]||0)+d;
+  });
+  const hm=m=>{if(!m)return'—';const h=Math.floor(m/60),x=m%60;return x?`${h}h${String(x).padStart(2,'0')}`:`${h}h`;};
+  // sono: da hora de dormir ate a de acordar, que cruza a meia-noite
+  const dormir=rows.find(r=>r.tipo==='sono'&&/dormir/i.test(r.titulo));
+  const acordar=rows.find(r=>r.tipo==='sono'&&/acordar/i.test(r.titulo));
+  let sonoMin=soma.sono||0;
+  if(dormir&&acordar){sonoMin=rotMin(acordar.hora_inicio)-rotMin(dormir.hora_inicio);if(sonoMin<0)sonoMin+=1440;}
+  document.getElementById('rot-sono').textContent=hm(sonoMin);
+  document.getElementById('rot-trab').textContent=hm(soma.trabalho);
+  document.getElementById('rot-treino').textContent=hm(soma.treino);
+  document.getElementById('rot-estudo').textContent=hm(soma.estudo);
+
+  const agoraId=rotAgoraId(rows);
+  const atual=rows.find(r=>r.id===agoraId);
+  document.getElementById('rot-agora-sub').textContent=atual?`agora: ${atual.titulo.toLowerCase()}`:'o dia, bloco a bloco';
+
+  const vis=rotinaFiltro?rows.filter(r=>r.tipo===rotinaFiltro):rows;
+  if(!vis.length){el.innerHTML='<div class="empty-state" style="padding:18px 12px"><div class="empty-icon">◷</div>Nenhum bloco neste filtro</div>';return;}
+
+  let html='',grupo='';
+  vis.forEach(r=>{
+    const per=rotPeriodo(r.hora_inicio);
+    if(per!==grupo){
+      if(grupo)html+='</div>';
+      html+=`<div class="rot-group"><div class="rot-group-label">${per}</div>`;
+      grupo=per;
+    }
+    const dur=rotDur(r.hora_inicio,r.hora_fim);
+    const faixa=r.hora_fim?`${rotHM(r.hora_inicio)} – ${rotHM(r.hora_fim)}`:rotHM(r.hora_inicio);
+    const isNow=r.id===agoraId;
+    html+=`<div class="rot-row${isNow?' rot-now':''}">
+      <div class="rot-time">${faixa}${dur?`<div class="rot-dur">${dur}</div>`:''}</div>
+      <div class="rot-body">
+        <div class="rot-title">${escHtml(r.titulo)}<span class="tag ${ROT_TAG[r.tipo]||'tag-gray'}">${ROT_LABEL[r.tipo]||r.tipo}</span>${isNow?'<span class="rot-now-badge">agora</span>':''}</div>
+        ${r.detalhe?`<div class="rot-detail">${escHtml(r.detalhe)}</div>`:''}
+      </div>
+      <div class="rot-acts"><button class="btn btn-sm" onclick="openEditRotina(${r.id})">✎</button><button class="btn btn-sm btn-danger" onclick="deleteRotina(${r.id})">×</button></div>
+    </div>`;
+  });
+  if(grupo)html+='</div>';
+  el.innerHTML=html;
+}
+
+function filtraRotina(f){
+  rotinaFiltro=f;
+  document.querySelectorAll('.rot-chip').forEach(c=>c.classList.toggle('active',(c.dataset.f||'')===f));
+  renderRotina();
+}
+
+function newRotina(){
+  editingRotinaId=null;
+  document.getElementById('modal-rotina-title').innerHTML='Novo <em>Bloco</em>';
+  document.getElementById('rt-inicio').value='';
+  document.getElementById('rt-fim').value='';
+  document.getElementById('rt-titulo').value='';
+  document.getElementById('rt-detalhe').value='';
+  document.getElementById('rt-tipo').value='pessoal';
+  openModal('modal-rotina');
+}
+
+async function openEditRotina(id){
+  const r=rotinaRows.find(x=>x.id===id);
+  if(!r)return toast('Bloco não encontrado',false);
+  editingRotinaId=id;
+  document.getElementById('modal-rotina-title').innerHTML='Editar <em>Bloco</em>';
+  document.getElementById('rt-inicio').value=rotHM(r.hora_inicio);
+  document.getElementById('rt-fim').value=rotHM(r.hora_fim);
+  document.getElementById('rt-titulo').value=r.titulo||'';
+  document.getElementById('rt-detalhe').value=r.detalhe||'';
+  document.getElementById('rt-tipo').value=r.tipo||'pessoal';
+  openModal('modal-rotina');
+}
+
+async function saveRotina(){
+  const hora_inicio=document.getElementById('rt-inicio').value;
+  const titulo=document.getElementById('rt-titulo').value.trim();
+  if(!hora_inicio)return toast('Hora de início obrigatória',false);
+  if(!titulo)return toast('Título obrigatório',false);
+  const payload={
+    hora_inicio,
+    hora_fim:document.getElementById('rt-fim').value||null,
+    titulo,
+    detalhe:document.getElementById('rt-detalhe').value.trim()||null,
+    tipo:document.getElementById('rt-tipo').value
+  };
+  const{error}=editingRotinaId==null
+    ?await sb.from('rotina').insert(payload)
+    :await sb.from('rotina').update(payload).eq('id',editingRotinaId);
+  if(error)return toast(error.message,false);
+  closeModal('modal-rotina');
+  toast(editingRotinaId==null?'Bloco adicionado':'Bloco atualizado');
+  editingRotinaId=null;
+  loadRotina();
+}
+
+async function deleteRotina(id){
+  const r=rotinaRows.find(x=>x.id===id);
+  confirmAction(`Remover "${r?r.titulo:'este bloco'}" da rotina?`,async()=>{
+    const{error}=await sb.from('rotina').delete().eq('id',id);
+    if(error)return toast(error.message,false);
+    toast('Removido');
+    loadRotina();
+  });
 }
 
 // ── INIT ──

@@ -119,6 +119,22 @@ ALTER TABLE public.kaizen ALTER COLUMN momento SET NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_kaizen_created_at ON public.kaizen (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_kaizen_momento ON public.kaizen (momento DESC);
 
+-- ──────────────── ROTINA (blocos do dia) ────────────────
+-- Um registro = um bloco fixo do dia. Refeições, treino, contratos, estudo e sono.
+-- hora_fim é opcional: refeição é instante, contrato e treino são faixa.
+CREATE TABLE IF NOT EXISTS public.rotina (
+  id          bigserial   PRIMARY KEY,
+  hora_inicio time        NOT NULL,
+  hora_fim    time,
+  titulo      text        NOT NULL,
+  detalhe     text,
+  tipo        text        NOT NULL DEFAULT 'pessoal',
+  ativo       boolean     NOT NULL DEFAULT true,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_rotina_hora ON public.rotina (hora_inicio);
+CREATE INDEX IF NOT EXISTS idx_rotina_tipo ON public.rotina (tipo);
+
 -- ──────────────── AULAS (Curso SQL) ────────────────
 -- Progresso e notas das aulas do SQL Impressionador.
 -- Catálogo (módulos + nomes das aulas) fica no JS — não armazenado.
@@ -144,6 +160,7 @@ ALTER TABLE public.certificacoes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.livros        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.aulas         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.kaizen        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rotina        ENABLE ROW LEVEL SECURITY;
 
 -- Limpa policies antigas (caso já existam de tentativas anteriores)
 DROP POLICY IF EXISTS "allow all"       ON public.metas;
@@ -158,6 +175,7 @@ DROP POLICY IF EXISTS "allow all"       ON public.livros;
 DROP POLICY IF EXISTS "auth_all_livros" ON public.livros;
 DROP POLICY IF EXISTS "auth_all_aulas"  ON public.aulas;
 DROP POLICY IF EXISTS "auth_all_kaizen" ON public.kaizen;
+DROP POLICY IF EXISTS "auth_all_rotina" ON public.rotina;
 
 -- Cria policies novas — só authenticated
 CREATE POLICY "auth_all_metas"  ON public.metas
@@ -182,4 +200,7 @@ CREATE POLICY "auth_all_aulas"  ON public.aulas
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 CREATE POLICY "auth_all_kaizen" ON public.kaizen
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "auth_all_rotina" ON public.rotina
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
