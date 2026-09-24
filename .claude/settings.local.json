@@ -4,15 +4,7 @@
       "Bash(npm install *)",
       "Bash(npx supabase *)",
       "Bash(node *)",
-      "Bash(curl -i -s \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/.well-known/oauth-protected-resource\")",
-      "Bash(curl -s -o /dev/null -w \"raiz: %{http_code}\\\\n\" \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp\" -X POST)",
-      "Bash(curl -s -o /dev/null -w \"as: %{http_code}\\\\n\" \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/.well-known/oauth-authorization-server\")",
-      "Bash(curl -s -o /dev/null -w \"pr: %{http_code}\\\\n\" \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/.well-known/oauth-protected-resource\")",
-      "Bash(curl -s -o /dev/null -w \"auth: %{http_code}\\\\n\" \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/authorize\")",
-      "Bash(curl -s \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/.well-known/oauth-authorization-server\")",
       "Bash(python -m json.tool)",
-      "Bash(curl -s \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/.well-known/oauth-protected-resource\")",
-      "Bash(curl -s -X POST \"https://qfjnoyphkhifhhnwzukw.supabase.co/functions/v1/mcp/register\" -H \"Content-Type: application/json\" -d '{\"redirect_uris\":[\"https://claude.ai/api/oauth/callback\"]}')",
       "Bash(curl *)",
       "Bash(xxd)",
       "Bash(awk 'NR<638 && /\\\\bsb\\\\b/' C:/Users/mades/Documents/planner/planner.html)",
@@ -27,9 +19,7 @@
       "Bash(rm -f C:/Users/mades/Documents/planner/.env.tmp C:/Users/mades/Documents/planner/.env.local)",
       "Bash(supabase *)",
       "PowerShell(supabase *)",
-      "PowerShell(npx --yes supabase --version)",
-      "PowerShell(npx supabase projects list 2>&1 | Select-Object -First 30)",
-      "PowerShell(npx supabase functions deploy mcp)"
+      "PowerShell(npx --yes supabase --version)"
     ]
   }
 }
