@@ -858,7 +858,9 @@ async function signOut(){
   await sb.auth.signOut();
   showAuth();
 }
+let appShown=false;
 function showAuth(){
+  appShown=false;
   document.getElementById('auth-screen').style.display='flex';
   document.getElementById('app').style.display='none';
 }
@@ -870,7 +872,11 @@ function showApp(){
   sb.auth.getUser().then(({data})=>{
     document.getElementById('drawer-email').textContent='Mades';
   });
-  navigate('dashboard');
+  // o Supabase chama showApp de novo a cada renovação de token; só navega na primeira vez
+  if(appShown)return;
+  appShown=true;
+  const hashPage=location.hash.slice(1);
+  navigate(TOPBAR_CFG[hashPage]?hashPage:'dashboard');
 }
 
 // ── DRAWER ──
@@ -913,6 +919,8 @@ function navigate(page){
   document.getElementById('page-'+page).classList.add('active');
   document.querySelector(`.drawer-item[data-page="${page}"]`)?.classList.add('active');
   curPage=page;
+  // guarda a página na URL para o F5 voltar nela, e não no Início
+  history.replaceState(null,'',page==='dashboard'?location.pathname+location.search:'#'+page);
   const cfg=TOPBAR_CFG[page]||{};
   document.getElementById('topbar-title').innerHTML=cfg.title||page;
   document.getElementById('topbar-sub').textContent=cfg.sub||'';
